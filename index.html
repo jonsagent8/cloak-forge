@@ -1,7 +1,7 @@
 <title>Cloak Forge</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Cloak Forge sets up private AI automation on your own machine — local models, no cloud, no per-token billing. Remote setup, mail-in SSD processing, and one-on-one tutoring.">
-<meta name="theme-color" content="#0c1730">
+<meta name="theme-color" content="#081132">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
@@ -21,19 +21,22 @@
     --line:#3a5a8c;
     --line-soft:#22406e;
 
-    /* the brushed-metal Tanzanite paint texture, reused by the page and the hero */
-    --metal-tex:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1400' height='900'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0.3' y2='1'%3E%3Cstop offset='0' stop-color='rgb(40,58,106)'/%3E%3Cstop offset='0.42' stop-color='rgb(16,29,64)'/%3E%3Cstop offset='1' stop-color='rgb(6,11,30)'/%3E%3C/linearGradient%3E%3Cfilter id='b' x='-2%25' y='-2%25' width='104%25' height='104%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.0022 1.3' numOctaves='3' seed='11' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.8 0 0 0 0 0.86 0 0 0 0 1 0 0 0 0.85 0'/%3E%3C/filter%3E%3C/defs%3E%3Crect width='1400' height='900' fill='url(%23g)'/%3E%3Crect width='1400' height='900' filter='url(%23b)' opacity='0.3'/%3E%3C/svg%3E");
-
-    /* brushed / cast metal plate: fine brush lines + bright lit corner -> deep shadowed corner */
+    /* contoured metallic-blue paint: a lit curved panel, electric near the light, midnight in shadow */
+    /* a tall dark metallic-blue sweep — the viewport pans down it as you scroll, so the
+       blue drifts in temperature: steel near the top, through indigo, to violet-navy */
+    --paint:linear-gradient(172deg,
+      #1c3d73 0%,#1a3a74 10%,#1b3f86 18%,
+      #3866b8 25%,#5b8ad8 29%,#3a63b0 33%,   /* bright specular band that sweeps through on scroll */
+      #1d3a80 40%,#182c72 52%,#1b2866 63%,
+      #1e2558 73%,#1b2050 82%,#161a41 92%,#0e1230 100%);
+    /* metal plate: soft top-left highlight falling to a shadowed base — no lines */
     --panel:
-      repeating-linear-gradient(93deg,rgba(255,255,255,.035) 0 1px,transparent 1px 4px),
-      linear-gradient(146deg,rgba(214,228,255,.26) 0%,rgba(214,228,255,.05) 13%,rgba(255,255,255,0) 34%,rgba(0,0,0,.12) 74%,rgba(0,0,0,.26) 100%);
+      radial-gradient(130% 100% at 14% -8%,rgba(150,196,255,.18),transparent 52%),
+      linear-gradient(162deg,rgba(126,170,255,.10) 0%,rgba(255,255,255,0) 30%,rgba(0,0,0,.10) 72%,rgba(0,0,0,.22) 100%);
     --panel-edge:
-      inset 0 1px 0 rgba(224,235,255,.4),
-      inset 1px 0 0 rgba(200,218,255,.16),
-      inset 0 -1px 0 rgba(0,0,0,.55),
-      inset -1px 0 0 rgba(0,0,0,.4),
-      0 16px 32px -14px rgba(0,0,0,.6);
+      inset 0 1px 0 rgba(210,228,255,.32),
+      inset 0 -1px 0 rgba(0,0,0,.5),
+      0 16px 34px -16px rgba(0,0,0,.6);
 
     /* tinted orange glass — luminous, translucent, backlit */
     --glass:linear-gradient(135deg,rgba(255,140,62,.5),rgba(255,120,50,.2) 55%,rgba(255,170,100,.36));
@@ -50,7 +53,7 @@
 
   body{
     margin:0;
-    background:#070f26;
+    background:#070c26;
     color:var(--ink);
     font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
     font-size:1rem;
@@ -58,25 +61,25 @@
     -webkit-font-smoothing:antialiased;
     text-rendering:optimizeLegibility;
   }
-  /* brushed-metal Tanzanite paint — real SVG grain, fixed like a light source */
+  /* metallic-blue paint — the viewport pans down a tall gradient as you scroll,
+     so the blue changes with scroll position */
   body::before{
     content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;
-    background:
-      radial-gradient(1200px 900px at 78% -16%,rgba(120,158,238,.28),transparent 54%),
-      radial-gradient(1400px 1000px at 50% 120%,rgba(4,8,22,.55),transparent 55%),
-      var(--metal-tex);
-    background-size:cover,cover,cover;
-    background-position:center;
+    background:var(--paint);
+    background-size:100% 250%;
+    background-position:center calc(var(--sy,0) * -0.17);
+    background-repeat:no-repeat;
+    will-change:background-position;
   }
-  /* clearcoat gloss — a broad reflection that drifts as you scroll, plus a slow ambient shimmer */
+  /* fixed light: a soft top highlight + a gentle edge vignette so text stays legible */
   body::after{
-    content:"";position:fixed;inset:-30% -15%;z-index:-1;pointer-events:none;
-    background:linear-gradient(112deg,transparent 26%,rgba(176,202,255,.12) 40%,rgba(176,202,255,.03) 49%,transparent 60%,rgba(176,202,255,.05) 72%,transparent 84%);
-    transform:translate3d(calc(var(--sy,0) * -.06),calc(var(--sy,0) * -.08),0);
-    will-change:transform;animation:sheen 16s ease-in-out infinite;
+    content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background:
+      radial-gradient(1000px 700px at 24% 12%,rgba(150,200,255,.14),transparent 60%),
+      radial-gradient(1400px 1100px at 50% 60%,transparent 40%,rgba(6,10,32,.5) 100%);
   }
   @keyframes sheen{
-    0%,100%{filter:opacity(.7)}
+    0%,100%{filter:opacity(.72)}
     50%{filter:opacity(1)}
   }
   img{max-width:100%;display:block}
@@ -129,12 +132,8 @@
   .wordmark:hover{text-decoration:none}
   .wordmark svg,.footer-brand svg{color:var(--ember)}
 
-  /* hero — brushed metal, darkened so the glass wall still glows against it */
-  .hero{
-    position:relative;overflow:hidden;isolation:isolate;
-    background:linear-gradient(180deg,rgba(6,11,28,.42),rgba(6,11,28,.72)),var(--metal-tex);
-    background-size:cover,cover;background-position:center;
-  }
+  /* hero — transparent so the paint shows and the glass wall glows against it */
+  .hero{position:relative;overflow:hidden}
   .hero canvas{
     position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;
     -webkit-mask:linear-gradient(to top,transparent,#000 16%,#000 66%,transparent);
@@ -181,8 +180,8 @@
   .card:hover{
     transform:translateY(-3px);border-color:rgba(255,140,70,.42);
     background:
-      repeating-linear-gradient(93deg,rgba(255,255,255,.05) 0 1px,transparent 1px 4px),
-      linear-gradient(140deg,rgba(224,236,255,.36) 0%,rgba(224,236,255,.07) 14%,rgba(255,255,255,0) 36%,rgba(0,0,0,.12) 74%,rgba(0,0,0,.26) 100%),
+      radial-gradient(130% 100% at 14% -8%,rgba(170,208,255,.26),transparent 52%),
+      linear-gradient(162deg,rgba(140,182,255,.14) 0%,rgba(255,255,255,0) 30%,rgba(0,0,0,.10) 72%,rgba(0,0,0,.22) 100%),
       var(--surface);
   }
   .card-kicker{font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ember)}
@@ -333,6 +332,7 @@
     html{scroll-behavior:auto}
     *{animation-duration:.001ms!important;transition-duration:.001ms!important}
     .glasswall i,.rig.is-rec::after,.case::before,body::after{transform:none!important;animation:none!important}
+    body::before{background-position:center -34%!important}
   }
 </style>
 
