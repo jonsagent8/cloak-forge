@@ -1,24 +1,36 @@
 <title>Cloak Forge</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Cloak Forge sets up private AI automation on your own machine — local models, no cloud, no per-token billing. Remote setup, mail-in SSD processing, and one-on-one tutoring.">
-<meta name="theme-color" content="#0b1a30">
+<meta name="theme-color" content="#0c1730">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 
 <style>
   :root{
-    --bg:#0b1a30;
-    --surface:#122844;
-    --surface-2:#1a3557;
-    --ink:#f2eee6;
-    --ink-dim:#a7b4c6;
-    --ink-faint:#6a7c93;
+    /* Tanzanite-blue metallic */
+    --bg:#0f1d3a;
+    --surface:#223a70;
+    --surface-2:#2c4988;
+    --ink:#f1eee7;
+    --ink-dim:#aeb9cf;
+    --ink-faint:#7484a1;
     --ember:#ff7d33;
     --ember-soft:#ffa25e;
-    --steel:#8fa6b6;
-    --line:#274264;
-    --line-soft:#17304c;
+    --steel:#93a8bd;
+    --line:#3a5a8c;
+    --line-soft:#22406e;
+
+    /* brushed / cast metal plate: fine brush lines + bright lit corner -> deep shadowed corner */
+    --panel:
+      repeating-linear-gradient(93deg,rgba(255,255,255,.035) 0 1px,transparent 1px 4px),
+      linear-gradient(146deg,rgba(214,228,255,.26) 0%,rgba(214,228,255,.05) 13%,rgba(255,255,255,0) 34%,rgba(0,0,0,.12) 74%,rgba(0,0,0,.26) 100%);
+    --panel-edge:
+      inset 0 1px 0 rgba(224,235,255,.4),
+      inset 1px 0 0 rgba(200,218,255,.16),
+      inset 0 -1px 0 rgba(0,0,0,.55),
+      inset -1px 0 0 rgba(0,0,0,.4),
+      0 16px 32px -14px rgba(0,0,0,.6);
 
     /* tinted orange glass — luminous, translucent, backlit */
     --glass:linear-gradient(135deg,rgba(255,140,62,.5),rgba(255,120,50,.2) 55%,rgba(255,170,100,.36));
@@ -35,13 +47,36 @@
 
   body{
     margin:0;
-    background:var(--bg);
+    background-color:#070f26;
+    background-image:
+      radial-gradient(1300px 950px at 74% -12%,rgba(126,164,240,.5),rgba(60,92,168,.16) 34%,transparent 62%),
+      radial-gradient(820px 940px at -4% 112%,rgba(24,44,96,.4),transparent 58%),
+      linear-gradient(160deg,#1b2f5c 0%,#0e1d3c 40%,#070f26 100%);
+    background-attachment:fixed;
     color:var(--ink);
     font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
     font-size:1rem;
     line-height:1.65;
     -webkit-font-smoothing:antialiased;
     text-rendering:optimizeLegibility;
+  }
+  /* metallic flake — visible sparkle grain over the paint */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:.24;
+    mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='70' height='70'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size:70px 70px;
+  }
+  /* clearcoat gloss — a broad reflection that drifts as you scroll, plus a slow ambient shimmer */
+  body::after{
+    content:"";position:fixed;inset:-30% -15%;z-index:-1;pointer-events:none;
+    background:linear-gradient(112deg,transparent 24%,rgba(176,202,255,.18) 40%,rgba(176,202,255,.04) 49%,transparent 60%,rgba(176,202,255,.08) 72%,transparent 84%);
+    transform:translate3d(calc(var(--sy,0) * -.06),calc(var(--sy,0) * -.08),0);
+    will-change:transform;animation:sheen 16s ease-in-out infinite;
+  }
+  @keyframes sheen{
+    0%,100%{filter:opacity(.7)}
+    50%{filter:opacity(1)}
   }
   img{max-width:100%;display:block}
   a{color:var(--ember-soft);text-decoration:none}
@@ -94,23 +129,34 @@
   .wordmark svg,.footer-brand svg{color:var(--ember)}
 
   /* hero */
-  .hero{position:relative;overflow:hidden;isolation:isolate;background:var(--bg)}
+  .hero{
+    position:relative;overflow:hidden;isolation:isolate;
+    background:
+      radial-gradient(720px 520px at 10% 6%,rgba(108,144,216,.20),transparent 60%),
+      linear-gradient(168deg,#122344 0%,#0d1a37 52%,#0a1530 100%);
+  }
   .hero canvas{
     position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;
     -webkit-mask:linear-gradient(to top,transparent,#000 16%,#000 66%,transparent);
     mask:linear-gradient(to top,transparent,#000 16%,#000 66%,transparent);
   }
-  /* a wall of tinted orange glass across the right of the frame — backlit look via screen blend */
-  .hero::before{
-    content:"";position:absolute;top:0;bottom:0;right:0;width:min(46%,540px);z-index:0;
-    pointer-events:none;mix-blend-mode:screen;
+  /* a wall of tinted orange glass across the right of the frame — backlit via screen blend */
+  .glasswall{
+    position:absolute;top:0;bottom:0;right:0;width:min(46%,540px);z-index:0;
+    pointer-events:none;mix-blend-mode:screen;overflow:hidden;
     border-left:1px solid rgba(255,205,160,.7);
     background:
-      linear-gradient(180deg,transparent 32%,rgba(255,246,232,.55) 38%,rgba(255,246,232,.08) 43%,transparent 48%),
       repeating-linear-gradient(90deg,transparent 0 calc(50% - 1px),rgba(255,205,165,.28) 50%,transparent calc(50% + 1px) 100%),
       var(--glass);
     -webkit-mask:linear-gradient(to bottom,transparent,#000 8%,#000 92%,transparent);
     mask:linear-gradient(to bottom,transparent,#000 8%,#000 92%,transparent);
+  }
+  /* the reflection band — slides down the glass as the page scrolls */
+  .glasswall i{
+    position:absolute;left:-12%;right:-12%;height:42%;top:-24%;
+    background:linear-gradient(180deg,transparent,rgba(255,232,204,.42) 44%,rgba(255,224,190,.05) 62%,transparent);
+    transform:translateY(calc(var(--sy,0) * .16));
+    will-change:transform;
   }
   .hero::after{
     content:"";position:absolute;left:50%;bottom:-32%;width:120%;height:72%;
@@ -119,7 +165,7 @@
   }
   .hero-content{position:relative;z-index:1;max-width:53rem;padding-block:clamp(5rem,14vw,9rem)}
   @media (max-width:720px){
-    .hero::before{width:64%;opacity:.5}
+    .glasswall{width:64%;opacity:.5}
   }
   .lead{margin-top:1.6rem;font-size:clamp(1.05rem,1.7vw,1.3rem);color:var(--ink-dim);max-width:56ch}
   .hero-cta{margin-top:2.4rem;display:flex;flex-wrap:wrap;gap:.9rem}
@@ -128,10 +174,17 @@
   .cards{margin-top:2.6rem;display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(255px,1fr))}
   .card{
     display:flex;flex-direction:column;gap:.85rem;
-    background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:1.7rem;
+    background:var(--panel),var(--surface);border:1px solid var(--line);border-radius:10px;padding:1.7rem;
+    box-shadow:var(--panel-edge);
     transition:transform .15s ease,border-color .2s ease;
   }
-  .card:hover{transform:translateY(-3px);border-color:rgba(255,140,70,.42)}
+  .card:hover{
+    transform:translateY(-3px);border-color:rgba(255,140,70,.42);
+    background:
+      repeating-linear-gradient(93deg,rgba(255,255,255,.05) 0 1px,transparent 1px 4px),
+      linear-gradient(140deg,rgba(224,236,255,.36) 0%,rgba(224,236,255,.07) 14%,rgba(255,255,255,0) 36%,rgba(0,0,0,.12) 74%,rgba(0,0,0,.26) 100%),
+      var(--surface);
+  }
   .card-kicker{font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ember)}
   .card-desc{color:var(--ink-dim);font-size:.96rem}
   .price{margin-top:auto;padding-top:.5rem;display:flex;flex-direction:column;gap:.15rem}
@@ -153,7 +206,7 @@
 
   /* hardware */
   .hw-intro{margin-top:1rem;color:var(--ink-dim);max-width:60ch}
-  .mem{margin-top:2.6rem;overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+  .mem{margin-top:2.6rem;overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--panel),var(--surface);box-shadow:var(--panel-edge)}
   .mem table{border-collapse:collapse;width:100%;min-width:660px;font-size:.95rem;table-layout:fixed}
   .mem col.c-mem{width:12rem}
   .mem col.c-fit{width:12rem}
@@ -173,7 +226,8 @@
 
   .rigs{margin-top:1.75rem;display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
   .rig{
-    background:var(--surface);border:1px solid var(--line);border-radius:10px;
+    background:var(--panel),var(--surface);border:1px solid var(--line);border-radius:10px;
+    box-shadow:var(--panel-edge);
     padding:1.7rem;display:flex;flex-direction:column;gap:.65rem;
   }
   .rig.is-rec{
@@ -183,7 +237,8 @@
     position:relative;overflow:hidden;
   }
   .rig.is-rec::after{
-    content:"";position:absolute;inset:0;pointer-events:none;z-index:0;background:var(--glass-sheen);
+    content:"";position:absolute;inset:0 -45%;pointer-events:none;z-index:0;background:var(--glass-sheen);
+    transform:translateX(calc(-22% + var(--sy,0) * .028));will-change:transform;
   }
   .rig.is-rec > *{position:relative;z-index:1}
   .rig.is-rec p{color:#ece3d6}
@@ -203,8 +258,9 @@
     display:grid;gap:clamp(1.6rem,4vw,2.6rem);
   }
   .case::before{
-    content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
-    background:linear-gradient(120deg,transparent 52%,rgba(255,236,218,.09) 60%,transparent 67%);
+    content:"";position:absolute;inset:0 -45%;pointer-events:none;z-index:0;
+    background:linear-gradient(118deg,transparent 46%,rgba(255,238,220,.13) 54%,transparent 62%);
+    transform:translateX(calc(-20% + var(--sy,0) * .022));will-change:transform;
   }
   .case > *{position:relative;z-index:1}
   @media (min-width:860px){ .case{grid-template-columns:1.05fr 1fr;align-items:start} }
@@ -242,7 +298,8 @@
   .contact-facts li>span{font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint)}
 
   .booking{
-    background:var(--surface);border:1px solid var(--line);border-radius:10px;
+    background:var(--panel),var(--surface);border:1px solid var(--line);border-radius:10px;
+    box-shadow:var(--panel-edge);
     padding:clamp(1.4rem,3vw,2rem);display:flex;flex-direction:column;gap:1.1rem;
   }
   .field{display:flex;flex-direction:column;gap:.4rem}
@@ -264,7 +321,7 @@
   }
 
   /* footer */
-  .site-footer{border-top:1px solid var(--line);background:var(--surface)}
+  .site-footer{border-top:1px solid var(--line);background:var(--panel),var(--surface)}
   .footer-inner{padding-block:clamp(2.5rem,6vw,4rem);display:grid;gap:2rem}
   .footer-brand{display:flex;align-items:center;gap:.55rem;font-family:"Archivo",sans-serif;font-weight:800}
   .footer-cols{display:grid;gap:1.5rem;grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
@@ -275,6 +332,7 @@
   @media (prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
     *{animation-duration:.001ms!important;transition-duration:.001ms!important}
+    .glasswall i,.rig.is-rec::after,.case::before,body::after{transform:none!important;animation:none!important}
   }
 </style>
 
@@ -291,6 +349,7 @@
 <main>
   <section class="hero" id="top">
     <canvas id="embers" aria-hidden="true"></canvas>
+    <div class="glasswall" aria-hidden="true"><i></i></div>
     <div class="wrap">
       <div class="hero-content">
         <p class="eyebrow">Local &middot; Air-gapped &middot; Yours</p>
@@ -546,9 +605,23 @@
 (function(){
   "use strict";
 
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  /* ---- scroll position -> --sy, drives the tinted-glass reflections ---- */
+  if (!reduce.matches) {
+    var root = document.documentElement, ticking = false;
+    function syncScroll(){
+      root.style.setProperty("--sy", window.scrollY.toFixed(1) + "px");
+      ticking = false;
+    }
+    window.addEventListener("scroll", function(){
+      if (!ticking) { ticking = true; requestAnimationFrame(syncScroll); }
+    }, { passive: true });
+    syncScroll();
+  }
+
   /* ---- ember drift in the hero ---- */
   var canvas = document.getElementById("embers");
-  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
   if (canvas && canvas.getContext && !reduce.matches) {
     var ctx = canvas.getContext("2d");
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
