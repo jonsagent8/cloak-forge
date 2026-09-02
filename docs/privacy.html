@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Privacy — Cloak Forge</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="How Cloak Forge handles the information you send through this site.">
+<meta name="theme-color" content="#12100e">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+  :root{
+    --bg:#12100e;
+    --surface:#1a1714;
+    --surface-2:#221e19;
+    --ink:#f3eee5;
+    --ink-dim:#a89d8d;
+    --ink-faint:#6f6557;
+    --ember:#f26a29;
+    --ember-soft:#ff8a4c;
+    --steel:#8fa6b6;
+    --line:#33302a;
+    --line-soft:#242019;
+    color-scheme:dark;
+  }
+
+  *,*::before,*::after{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  #top,#services,#why,#hardware,#showcase,#contact{scroll-margin-top:5rem}
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
+    font-size:1rem;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  img{max-width:100%;display:block}
+  a{color:var(--ember-soft);text-decoration:none}
+  a:hover{text-decoration:underline}
+  :focus-visible{outline:2px solid var(--steel);outline-offset:3px;border-radius:2px}
+
+  .wrap{max-width:1080px;margin:0 auto;padding-inline:clamp(1.25rem,5vw,2rem)}
+  .section{padding-block:clamp(4rem,10vw,7rem);border-top:1px solid var(--line-soft)}
+
+  .eyebrow{
+    font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:.72rem;font-weight:500;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--ember);margin:0 0 1.1rem;
+  }
+  h1,h2,h3{font-family:"Archivo",system-ui,sans-serif;text-wrap:balance;margin:0}
+  h1{font-size:clamp(2.5rem,6.2vw,4.5rem);font-weight:800;line-height:1.02;letter-spacing:-.022em}
+  h2{font-size:clamp(1.8rem,3.6vw,2.6rem);font-weight:700;line-height:1.08;letter-spacing:-.015em}
+  h3{font-size:1.24rem;font-weight:700;letter-spacing:-.01em}
+  p{margin:0}
+
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:.5em;
+    font-family:"IBM Plex Sans",sans-serif;font-size:.98rem;font-weight:600;
+    line-height:1;padding:.85em 1.4em;border-radius:4px;border:1px solid transparent;
+    cursor:pointer;text-align:center;
+    transition:transform .12s ease,box-shadow .2s ease,background .2s ease,border-color .2s ease,color .2s ease;
+  }
+  .btn-primary{background:var(--ember);color:#1c0d04}
+  .btn-primary:hover{background:var(--ember-soft);transform:translateY(-1px);box-shadow:0 10px 34px -10px rgba(242,106,41,.55);text-decoration:none}
+  .btn-ghost{background:transparent;color:var(--ember-soft);border-color:var(--line)}
+  .btn-ghost:hover{border-color:var(--ember);background:rgba(242,106,41,.08);text-decoration:none}
+  .btn-block{width:100%}
+  .btn-sm{padding:.6em 1.05em;font-size:.88rem}
+
+  /* header */
+  .site-header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(18,16,14,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line-soft);
+  }
+  .header-inner{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding-block:.8rem}
+  .wordmark{display:inline-flex;align-items:center;gap:.55rem;color:var(--ink);font-family:"Archivo",sans-serif;font-weight:800;font-size:1.02rem}
+  .wordmark:hover{text-decoration:none}
+  .wordmark svg,.footer-brand svg{color:var(--ember)}
+
+  /* hero */
+  .hero{position:relative;overflow:hidden}
+  .hero canvas{
+    position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;
+    -webkit-mask:linear-gradient(to top,transparent,#000 16%,#000 66%,transparent);
+    mask:linear-gradient(to top,transparent,#000 16%,#000 66%,transparent);
+  }
+  .hero::after{
+    content:"";position:absolute;left:50%;bottom:-32%;width:120%;height:72%;
+    transform:translateX(-50%);pointer-events:none;z-index:0;
+    background:radial-gradient(ellipse at center,rgba(242,106,41,.16),transparent 62%);
+  }
+  .hero-content{position:relative;z-index:1;max-width:53rem;padding-block:clamp(5rem,14vw,9rem)}
+  .lead{margin-top:1.6rem;font-size:clamp(1.05rem,1.7vw,1.3rem);color:var(--ink-dim);max-width:56ch}
+  .hero-cta{margin-top:2.4rem;display:flex;flex-wrap:wrap;gap:.9rem}
+
+  /* services */
+  .cards{margin-top:2.6rem;display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(255px,1fr))}
+  .card{
+    display:flex;flex-direction:column;gap:.85rem;
+    background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:1.7rem;
+    transition:transform .15s ease,border-color .2s ease;
+  }
+  .card:hover{transform:translateY(-3px);border-color:#4b4033}
+  .card-kicker{font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ember)}
+  .card-desc{color:var(--ink-dim);font-size:.96rem}
+  .price{margin-top:auto;padding-top:.5rem;display:flex;flex-direction:column;gap:.15rem}
+  .price-num{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:1.5rem;color:var(--ink);font-variant-numeric:tabular-nums}
+  .price-unit{font-size:.82rem;color:var(--ink-faint)}
+  .card .btn{margin-top:.5rem}
+
+  /* why-local */
+  .benefits{margin-top:2.6rem;display:grid;gap:2rem;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+  .benefit{display:flex;flex-direction:column;gap:.7rem}
+  .benefit svg{width:30px;height:30px;color:var(--ember)}
+  .benefit h3{font-size:1.12rem}
+  .benefit p{color:var(--ink-dim);font-size:.96rem}
+  .benefit .alt{
+    margin-top:.2rem;padding-left:.9rem;border-left:2px solid var(--line);
+    color:var(--ink-faint);font-size:.92rem;
+  }
+  .benefit .alt b{color:var(--ink-dim);font-weight:600}
+
+  /* hardware */
+  .hw-intro{margin-top:1rem;color:var(--ink-dim);max-width:60ch}
+  .mem{margin-top:2.6rem;overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+  .mem table{border-collapse:collapse;width:100%;min-width:660px;font-size:.95rem;table-layout:fixed}
+  .mem col.c-mem{width:12rem}
+  .mem col.c-fit{width:12rem}
+  .mem th,.mem td{text-align:left;padding:.95rem 1.15rem;border-bottom:1px solid var(--line-soft);vertical-align:top}
+  .mem thead th{
+    font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--ember);background:var(--surface);white-space:nowrap;
+  }
+  .mem tbody tr:last-child td{border-bottom:0}
+  .mem tbody tr:hover td{background:var(--surface-2)}
+  .mem .m-cap{
+    font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;
+    color:var(--ink);white-space:nowrap;font-weight:500;
+  }
+  .mem .m-mid{color:var(--ink-dim)}
+  .mem .m-note{color:var(--ink-dim)}
+
+  .rigs{margin-top:1.75rem;display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+  .rig{
+    background:var(--surface);border:1px solid var(--line);border-radius:10px;
+    padding:1.7rem;display:flex;flex-direction:column;gap:.65rem;
+  }
+  .rig.is-rec{border-color:var(--ember);box-shadow:0 0 0 1px rgba(242,106,41,.15)}
+  .rig-tag{font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ember)}
+  .rig h3{font-size:1.1rem}
+  .rig p{color:var(--ink-dim);font-size:.95rem}
+  .rig p + p{margin-top:.15rem}
+  .hw-foot{margin-top:1.9rem;color:var(--ink-dim);max-width:58ch;font-size:.96rem}
+
+  /* showcase */
+  .case{
+    margin-top:2.6rem;
+    background:var(--surface);border:1px solid var(--line);border-radius:12px;
+    padding:clamp(1.6rem,3.5vw,2.4rem);
+    display:grid;gap:clamp(1.6rem,4vw,2.6rem);
+  }
+  @media (min-width:860px){ .case{grid-template-columns:1.05fr 1fr;align-items:start} }
+  .case-head h3{font-size:1.5rem}
+  .case-kicker{
+    font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--ember);margin-bottom:.7rem;
+  }
+  .case-head > p{margin-top:.9rem;color:var(--ink-dim)}
+  .case-specs{
+    list-style:none;padding:0;margin:1.5rem 0 0;
+    display:flex;flex-wrap:wrap;gap:.5rem;
+  }
+  .case-specs li{
+    font-family:"IBM Plex Mono",monospace;font-size:.74rem;
+    color:var(--ink-dim);border:1px solid var(--line);border-radius:999px;
+    padding:.32em .8em;
+  }
+  .case-cta{margin-top:1.6rem;display:flex;flex-wrap:wrap;gap:.8rem;align-items:center}
+  .case-note{margin-top:.9rem;font-size:.82rem;color:var(--ink-faint);max-width:44ch}
+
+  .caps{display:grid;gap:1.1rem}
+  .cap{display:grid;grid-template-columns:auto 1fr;gap:.5rem 1rem;align-items:start}
+  .cap svg{width:22px;height:22px;color:var(--ember);margin-top:.15rem}
+  .cap h4{margin:0;font-family:"Archivo",sans-serif;font-size:1rem;font-weight:700}
+  .cap p{margin:.2rem 0 0;color:var(--ink-dim);font-size:.92rem;grid-column:2}
+
+  .section-note{margin-top:1rem;color:var(--ink-dim);max-width:54ch}
+
+  /* contact */
+  .contact-grid{display:grid;grid-template-columns:1fr;gap:clamp(2rem,5vw,3.5rem)}
+  .contact-intro>p{margin-top:1rem;color:var(--ink-dim);max-width:46ch}
+  .contact-facts{list-style:none;padding:0;margin:1.8rem 0 0;display:flex;flex-direction:column;gap:.85rem;font-size:.95rem}
+  .contact-facts li{display:flex;flex-direction:column;gap:.15rem}
+  .contact-facts li>span{font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint)}
+
+  .booking{
+    background:var(--surface);border:1px solid var(--line);border-radius:10px;
+    padding:clamp(1.4rem,3vw,2rem);display:flex;flex-direction:column;gap:1.1rem;
+  }
+  .field{display:flex;flex-direction:column;gap:.4rem}
+  .field label{font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim)}
+  .field input,.field select,.field textarea{
+    font:inherit;color:var(--ink);background:var(--bg);
+    border:1px solid var(--line);border-radius:5px;padding:.7em .8em;width:100%;
+  }
+  .field textarea{resize:vertical;min-height:6.5em}
+  .field input:focus,.field select:focus,.field textarea:focus{
+    border-color:var(--ember);outline:none;box-shadow:0 0 0 3px rgba(242,106,41,.16);
+  }
+  .form-status{font-size:.9rem;margin:.2rem 0 0;min-height:1.2em}
+  .form-status.is-err{color:#ff9a76}
+  .form-status.is-ok{color:var(--ink-dim)}
+
+  @media (min-width:820px){
+    .contact-grid{grid-template-columns:1fr 1fr;align-items:start}
+  }
+
+  /* footer */
+  .site-footer{border-top:1px solid var(--line);background:var(--surface)}
+  .footer-inner{padding-block:clamp(2.5rem,6vw,4rem);display:grid;gap:2rem}
+  .footer-brand{display:flex;align-items:center;gap:.55rem;font-family:"Archivo",sans-serif;font-weight:800}
+  .footer-cols{display:grid;gap:1.5rem;grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+  .footer-cols span{display:block;font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:.45rem}
+  .footer-cols div{color:var(--ink-dim);font-size:.92rem;line-height:1.7}
+  .footer-legal{margin:0;color:var(--ink-faint);font-size:.82rem;border-top:1px solid var(--line-soft);padding-top:1.5rem}
+
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *{animation-duration:.001ms!important;transition-duration:.001ms!important}
+  }
+</style>
+<link rel="canonical" href="https://jonsagent8.github.io/cloak-forge/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Cloak Forge">
+<meta property="og:title" content="Cloak Forge">
+<meta property="og:description" content="Cloak Forge sets up private AI automation on your own machine — local models, no cloud, no per-token billing. Remote setup, mail-in SSD processing, and one-on-one tutoring.">
+<meta property="og:url" content="https://jonsagent8.github.io/cloak-forge/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+</head>
+<body>
+<style>
+  .legal{max-width:70ch}
+  .legal p,.legal li{color:var(--ink-dim)}
+  .legal h2{margin-top:2.6rem;font-size:1.4rem}
+  .legal h2:first-of-type{margin-top:1.5rem}
+  .legal ul{padding-left:1.2rem;display:flex;flex-direction:column;gap:.5rem}
+  .legal .updated{font-family:"IBM Plex Mono",monospace;font-size:.8rem;color:var(--ink-faint);margin-top:.5rem}
+  .legal a{color:var(--ember-soft)}
+</style>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a href="index.html" class="wordmark">
+      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1l2.3 6.9L21 5.7l-4.2 5.6L23 15l-7-.7L12 23l-1.9-8.7L3 15l5.4-3.4L4 5.7l6.7 1.9z"/></svg>
+      <span>Cloak Forge</span>
+    </a>
+    <a href="index.html#contact" class="btn btn-primary btn-sm">Book a call</a>
+  </div>
+</header>
+
+<main>
+  <section class="section" style="border-top:0">
+    <div class="wrap legal">
+      <p class="eyebrow">Privacy</p>
+      <h1>What we do with your information</h1>
+      <p class="updated">Last updated 2 September 2026</p>
+
+      <h2>The short version</h2>
+      <p>This is a small site for a small business. It has no analytics, no tracking pixels, no cookies, and no advertising. We collect only what you deliberately send us, and we use it only to reply.</p>
+
+      <h2>The booking form</h2>
+      <p>The form on the contact section does not send anything to a server. When you press <em>Request a call</em>, your browser prepares an email in your own mail application containing the name, email address, service, and message you typed. Nothing leaves your device until you choose to send that email to us. Once you send it, we hold that message the way we hold any other email &mdash; to respond and to follow up on the work.</p>
+
+      <h2>If you email us directly</h2>
+      <p>We keep the correspondence so we can carry the conversation forward and deliver the service. We do not sell it, rent it, or share it with anyone outside Cloak Forge, except where we are legally required to.</p>
+
+      <h2>Fonts and hosting</h2>
+      <ul>
+        <li>The site loads typefaces from Google Fonts (<code>fonts.googleapis.com</code>). As part of serving those files, Google receives your IP address and browser user-agent. This is the only third-party request the page makes.</li>
+        <li>The site is hosted on GitHub Pages. GitHub may log request metadata (IP address, user-agent, timestamp) under its own privacy practices.</li>
+      </ul>
+
+      <h2>The mail-in SSD service</h2>
+      <p>If you use the drive-processing service, we work on your data on an air-gapped machine, return the drive, and retain no copies once the results are delivered and you have confirmed receipt. The specifics are written into the engagement agreement before any drive is shipped.</p>
+
+      <h2>Your choices</h2>
+      <p>You can ask us what correspondence we hold from you, and ask us to delete it, by emailing <a href="mailto:jonsagent8@gmail.com">jonsagent8@gmail.com</a>. Since we store nothing beyond email threads, this is usually a quick request to honour.</p>
+
+      <h2>Changes</h2>
+      <p>If this policy changes, the date above changes with it. Material changes will be noted at the top of this page for a reasonable period.</p>
+
+      <p style="margin-top:2.5rem"><a href="index.html">&larr; Back to the main site</a></p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1l2.3 6.9L21 5.7l-4.2 5.6L23 15l-7-.7L12 23l-1.9-8.7L3 15l5.4-3.4L4 5.7l6.7 1.9z"/></svg>
+      <span>Cloak Forge</span>
+    </div>
+    <p class="footer-legal">&copy; 2026 Cloak Forge &middot; Local AI automation, set up on your machine &middot; No cloud, by design.</p>
+  </div>
+</footer>
+</body>
+</html>
