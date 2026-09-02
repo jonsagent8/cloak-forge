@@ -5,24 +5,31 @@
 <title>Cloak Forge</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Cloak Forge sets up private AI automation on your own machine — local models, no cloud, no per-token billing. Remote setup, mail-in SSD processing, and one-on-one tutoring.">
-<meta name="theme-color" content="#12100e">
+<meta name="theme-color" content="#0b1a30">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 
 <style>
   :root{
-    --bg:#12100e;
-    --surface:#1a1714;
-    --surface-2:#221e19;
-    --ink:#f3eee5;
-    --ink-dim:#a89d8d;
-    --ink-faint:#6f6557;
-    --ember:#f26a29;
-    --ember-soft:#ff8a4c;
+    --bg:#0b1a30;
+    --surface:#122844;
+    --surface-2:#1a3557;
+    --ink:#f2eee6;
+    --ink-dim:#a7b4c6;
+    --ink-faint:#6a7c93;
+    --ember:#ff7d33;
+    --ember-soft:#ffa25e;
     --steel:#8fa6b6;
-    --line:#33302a;
-    --line-soft:#242019;
+    --line:#274264;
+    --line-soft:#17304c;
+
+    /* tinted orange glass — luminous, translucent, backlit */
+    --glass:linear-gradient(135deg,rgba(255,140,62,.5),rgba(255,120,50,.2) 55%,rgba(255,170,100,.36));
+    --glass-edge:rgba(255,178,120,.55);
+    --glass-inset:inset 0 1px 0 rgba(255,224,198,.5),inset 0 0 70px rgba(255,135,55,.22);
+    --glass-glow:0 26px 80px -28px rgba(255,120,45,.55);
+    --glass-sheen:linear-gradient(115deg,transparent 38%,rgba(255,244,230,.2) 46%,transparent 54%);
     color-scheme:dark;
   }
 
@@ -66,17 +73,23 @@
     cursor:pointer;text-align:center;
     transition:transform .12s ease,box-shadow .2s ease,background .2s ease,border-color .2s ease,color .2s ease;
   }
-  .btn-primary{background:var(--ember);color:#1c0d04}
-  .btn-primary:hover{background:var(--ember-soft);transform:translateY(-1px);box-shadow:0 10px 34px -10px rgba(242,106,41,.55);text-decoration:none}
+  .btn-primary{
+    background:linear-gradient(180deg,#ff9350,#f26a29);color:#241004;
+    box-shadow:inset 0 1px 0 rgba(255,224,198,.55),0 8px 24px -10px rgba(255,110,40,.5);
+  }
+  .btn-primary:hover{
+    background:linear-gradient(180deg,#ffa267,#ff7a33);transform:translateY(-1px);
+    box-shadow:inset 0 1px 0 rgba(255,232,212,.6),0 14px 40px -12px rgba(255,120,45,.62);text-decoration:none;
+  }
   .btn-ghost{background:transparent;color:var(--ember-soft);border-color:var(--line)}
-  .btn-ghost:hover{border-color:var(--ember);background:rgba(242,106,41,.08);text-decoration:none}
+  .btn-ghost:hover{border-color:var(--ember);background:rgba(255,125,45,.1);text-decoration:none}
   .btn-block{width:100%}
   .btn-sm{padding:.6em 1.05em;font-size:.88rem}
 
   /* header */
   .site-header{
     position:sticky;top:0;z-index:50;
-    background:rgba(18,16,14,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    background:rgba(11,26,48,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
     border-bottom:1px solid var(--line-soft);
   }
   .header-inner{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding-block:.8rem}
@@ -85,18 +98,33 @@
   .wordmark svg,.footer-brand svg{color:var(--ember)}
 
   /* hero */
-  .hero{position:relative;overflow:hidden}
+  .hero{position:relative;overflow:hidden;isolation:isolate;background:var(--bg)}
   .hero canvas{
     position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;
     -webkit-mask:linear-gradient(to top,transparent,#000 16%,#000 66%,transparent);
     mask:linear-gradient(to top,transparent,#000 16%,#000 66%,transparent);
   }
+  /* a wall of tinted orange glass across the right of the frame — backlit look via screen blend */
+  .hero::before{
+    content:"";position:absolute;top:0;bottom:0;right:0;width:min(46%,540px);z-index:0;
+    pointer-events:none;mix-blend-mode:screen;
+    border-left:1px solid rgba(255,205,160,.7);
+    background:
+      linear-gradient(180deg,transparent 32%,rgba(255,246,232,.55) 38%,rgba(255,246,232,.08) 43%,transparent 48%),
+      repeating-linear-gradient(90deg,transparent 0 calc(50% - 1px),rgba(255,205,165,.28) 50%,transparent calc(50% + 1px) 100%),
+      var(--glass);
+    -webkit-mask:linear-gradient(to bottom,transparent,#000 8%,#000 92%,transparent);
+    mask:linear-gradient(to bottom,transparent,#000 8%,#000 92%,transparent);
+  }
   .hero::after{
     content:"";position:absolute;left:50%;bottom:-32%;width:120%;height:72%;
     transform:translateX(-50%);pointer-events:none;z-index:0;
-    background:radial-gradient(ellipse at center,rgba(242,106,41,.16),transparent 62%);
+    background:radial-gradient(ellipse at center,rgba(255,125,45,.18),transparent 62%);
   }
   .hero-content{position:relative;z-index:1;max-width:53rem;padding-block:clamp(5rem,14vw,9rem)}
+  @media (max-width:720px){
+    .hero::before{width:64%;opacity:.5}
+  }
   .lead{margin-top:1.6rem;font-size:clamp(1.05rem,1.7vw,1.3rem);color:var(--ink-dim);max-width:56ch}
   .hero-cta{margin-top:2.4rem;display:flex;flex-wrap:wrap;gap:.9rem}
 
@@ -107,7 +135,7 @@
     background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:1.7rem;
     transition:transform .15s ease,border-color .2s ease;
   }
-  .card:hover{transform:translateY(-3px);border-color:#4b4033}
+  .card:hover{transform:translateY(-3px);border-color:rgba(255,140,70,.42)}
   .card-kicker{font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ember)}
   .card-desc{color:var(--ink-dim);font-size:.96rem}
   .price{margin-top:auto;padding-top:.5rem;display:flex;flex-direction:column;gap:.15rem}
@@ -152,7 +180,17 @@
     background:var(--surface);border:1px solid var(--line);border-radius:10px;
     padding:1.7rem;display:flex;flex-direction:column;gap:.65rem;
   }
-  .rig.is-rec{border-color:var(--ember);box-shadow:0 0 0 1px rgba(242,106,41,.15)}
+  .rig.is-rec{
+    border-color:var(--glass-edge);
+    background:var(--glass),var(--surface);
+    box-shadow:var(--glass-inset),var(--glass-glow);
+    position:relative;overflow:hidden;
+  }
+  .rig.is-rec::after{
+    content:"";position:absolute;inset:0;pointer-events:none;z-index:0;background:var(--glass-sheen);
+  }
+  .rig.is-rec > *{position:relative;z-index:1}
+  .rig.is-rec p{color:#ece3d6}
   .rig-tag{font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ember)}
   .rig h3{font-size:1.1rem}
   .rig p{color:var(--ink-dim);font-size:.95rem}
@@ -161,11 +199,18 @@
 
   /* showcase */
   .case{
-    margin-top:2.6rem;
-    background:var(--surface);border:1px solid var(--line);border-radius:12px;
+    margin-top:2.6rem;position:relative;overflow:hidden;
+    background:linear-gradient(160deg,rgba(255,125,45,.13),rgba(255,125,45,.03) 55%),var(--surface);
+    border:1px solid var(--glass-edge);border-radius:12px;
+    box-shadow:var(--glass-glow);
     padding:clamp(1.6rem,3.5vw,2.4rem);
     display:grid;gap:clamp(1.6rem,4vw,2.6rem);
   }
+  .case::before{
+    content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
+    background:linear-gradient(120deg,transparent 52%,rgba(255,236,218,.09) 60%,transparent 67%);
+  }
+  .case > *{position:relative;z-index:1}
   @media (min-width:860px){ .case{grid-template-columns:1.05fr 1fr;align-items:start} }
   .case-head h3{font-size:1.5rem}
   .case-kicker{
@@ -212,7 +257,7 @@
   }
   .field textarea{resize:vertical;min-height:6.5em}
   .field input:focus,.field select:focus,.field textarea:focus{
-    border-color:var(--ember);outline:none;box-shadow:0 0 0 3px rgba(242,106,41,.16);
+    border-color:var(--ember);outline:none;box-shadow:0 0 0 3px rgba(255,125,45,.18);
   }
   .form-status{font-size:.9rem;margin:.2rem 0 0;min-height:1.2em}
   .form-status.is-err{color:#ff9a76}
@@ -542,8 +587,8 @@
     }
     function frame(){
       ctx.clearRect(0, 0, W, H);
-      ctx.shadowBlur = 8;
-      ctx.shadowColor = "rgba(255,120,50,0.5)";
+      ctx.shadowBlur = 9;
+      ctx.shadowColor = "rgba(255,140,60,0.6)";
       for (var i = 0; i < parts.length; i++) {
         var p = parts[i];
         p.x += p.vx; p.y -= p.vy; p.life++;
