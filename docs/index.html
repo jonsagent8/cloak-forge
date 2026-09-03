@@ -150,34 +150,47 @@
     background:linear-gradient(to bottom,transparent 34%,#12224a 100%);
   }
 
-  /* the ribbon of light */
-  .hero-wave{
-    position:absolute;inset:-18% -10% 0 -4%;z-index:0;pointer-events:none;
-    animation:waveDrift 34s ease-in-out infinite;will-change:transform;
-    -webkit-mask:radial-gradient(115% 130% at 72% 6%,#000 26%,rgba(0,0,0,.4) 58%,transparent 82%);
-    mask:radial-gradient(115% 130% at 72% 6%,#000 26%,rgba(0,0,0,.4) 58%,transparent 82%);
+  .fluid-defs{position:absolute;width:0;height:0}
+  /* flowing liquid — churning colour masses put through a turbulence-displacement filter */
+  .fluid{
+    position:absolute;inset:-16%;z-index:0;pointer-events:none;
+    filter:url(#liquid);
+    -webkit-mask:linear-gradient(to bottom,#000 0%,#000 62%,transparent 96%);
+    mask:linear-gradient(to bottom,#000 0%,#000 62%,transparent 96%);
   }
-  .hero-wave svg{width:100%;height:100%;display:block;overflow:visible}
-  .wv-core{stroke-dasharray:210 150;animation:coreFlow 8s linear infinite}
-  @keyframes waveDrift{
-    0%,100%{transform:translate3d(0,0,0) rotate(0deg) scale(1)}
-    50%{transform:translate3d(-2.6%,1.6%,0) rotate(-1.4deg) scale(1.05)}
+  .fluid span{
+    position:absolute;mix-blend-mode:screen;will-change:transform,border-radius;
   }
-  @keyframes coreFlow{to{stroke-dashoffset:-360}}
-
-  /* particle dust, denser toward the lower-left */
-  .hero-dust{
-    position:absolute;inset:0;z-index:1;pointer-events:none;
-    background-image:
-      radial-gradient(circle,rgba(220,238,255,1) .8px,transparent 1.7px),
-      radial-gradient(circle,rgba(150,200,255,.6) .6px,transparent 1.7px);
-    background-size:50px 50px,30px 30px;
-    background-position:0 0,16px 23px;
-    -webkit-mask:radial-gradient(150% 120% at 18% 100%,#000 0%,rgba(0,0,0,.5) 40%,transparent 76%);
-    mask:radial-gradient(150% 120% at 18% 100%,#000 0%,rgba(0,0,0,.5) 40%,transparent 76%);
-    animation:dustFloat 44s linear infinite;
+  .fluid .f1{width:78vw;height:62vw;left:-16vw;top:-14vw;
+    background:radial-gradient(closest-side,#1e5fd6,rgba(30,95,214,0) 74%);
+    animation:flow1 30s ease-in-out infinite;}
+  .fluid .f2{width:70vw;height:58vw;right:-14vw;top:-18vw;
+    background:radial-gradient(closest-side,#2fa9f2,rgba(47,169,242,0) 74%);
+    animation:flow2 36s ease-in-out infinite;}
+  .fluid .f3{width:60vw;height:52vw;left:24vw;top:-6vw;
+    background:radial-gradient(closest-side,#39d6e6,rgba(57,214,230,0) 74%);
+    animation:flow3 27s ease-in-out infinite;}
+  .fluid .f4{width:52vw;height:46vw;left:36vw;top:-10vw;
+    background:radial-gradient(closest-side,#bfe9ff,rgba(191,233,255,0) 70%);
+    opacity:.75;animation:flow4 22s ease-in-out infinite;}
+  @keyframes flow1{
+    0%,100%{transform:translate3d(0,0,0) scale(1)}
+    33%{transform:translate3d(12vw,7vh,0) scale(1.14)}
+    66%{transform:translate3d(-6vw,3vh,0) scale(.94)}
   }
-  @keyframes dustFloat{to{background-position:0 -50px,16px -7px}}
+  @keyframes flow2{
+    0%,100%{transform:translate3d(0,0,0) scale(1.06)}
+    40%{transform:translate3d(-14vw,9vh,0) scale(.96)}
+    70%{transform:translate3d(-4vw,2vh,0) scale(1.12)}
+  }
+  @keyframes flow3{
+    0%,100%{transform:translate3d(0,0,0) scale(1)}
+    50%{transform:translate3d(10vw,10vh,0) scale(1.22)}
+  }
+  @keyframes flow4{
+    0%,100%{transform:translate3d(-8vw,0,0) scale(.9)}
+    50%{transform:translate3d(16vw,7vh,0) scale(1.3)}
+  }
 
   .hero-content{position:relative;z-index:2;padding-block:clamp(7rem,17vw,11rem) clamp(4rem,9vw,6rem)}
   .hero-grid{display:grid;gap:2.4rem}
@@ -361,7 +374,8 @@
   @media (prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
     *{animation-duration:.001ms!important;transition-duration:.001ms!important}
-    .rig.is-rec::after,.case::before,body::after,.hero-wave,.wv-core,.hero-dust{transform:none!important;animation:none!important}
+    .rig.is-rec::after,.case::before,body::after,.fluid span{transform:none!important;animation:none!important}
+    .fluid{filter:blur(46px)!important}
     body::before{background-position:center -34%!important}
   }
 </style>
@@ -387,44 +401,19 @@
 
 <main>
   <section class="hero" id="top">
-    <div class="hero-wave" aria-hidden="true">
-      <svg viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid slice">
-        <defs>
-          <linearGradient id="wv" x1="0" y1="0" x2="1" y2="0.25">
-            <stop offset="0" stop-color="#17246e"/>
-            <stop offset="0.32" stop-color="#2f7de6"/>
-            <stop offset="0.58" stop-color="#63c8ff"/>
-            <stop offset="0.82" stop-color="#2f7de6"/>
-            <stop offset="1" stop-color="#141f5e"/>
-          </linearGradient>
-          <linearGradient id="wv2" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stop-color="#cfeeff"/>
-            <stop offset="0.5" stop-color="#8fd4ff"/>
-            <stop offset="1" stop-color="#6ab6ff"/>
-          </linearGradient>
-          <filter id="bBig" x="-45%" y="-45%" width="190%" height="190%"><feGaussianBlur stdDeviation="58"/></filter>
-          <filter id="bMed" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="24"/></filter>
-          <filter id="bSm" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="7"/></filter>
-        </defs>
-        <mask id="sharp">
-          <rect width="1200" height="640" fill="url(#mg)"/>
-        </mask>
-        <radialGradient id="mg" cx="0.74" cy="0.12" r="0.62">
-          <stop offset="0" stop-color="#fff"/>
-          <stop offset="0.5" stop-color="#fff"/>
-          <stop offset="1" stop-color="#000"/>
-        </radialGradient>
-        <g>
-          <path d="M-160 270 C 220 70 470 150 700 268 C 900 372 1060 165 1440 250" fill="none" stroke="url(#wv)" stroke-width="320" stroke-linecap="round" opacity="0.20" filter="url(#bBig)"/>
-          <path d="M-160 270 C 220 70 470 150 700 268 C 900 372 1060 165 1440 250" fill="none" stroke="url(#wv)" stroke-width="130" stroke-linecap="round" opacity="0.40" filter="url(#bMed)"/>
-          <g mask="url(#sharp)">
-            <path d="M-160 270 C 220 70 470 150 700 268 C 900 372 1060 165 1440 250" fill="none" stroke="url(#wv2)" stroke-width="36" stroke-linecap="round" opacity="0.92" filter="url(#bSm)"/>
-            <path class="wv-core" d="M-160 270 C 220 70 470 150 700 268 C 900 372 1060 165 1440 250" fill="none" stroke="#eef8ff" stroke-width="6" stroke-linecap="round" opacity="0.95"/>
-          </g>
-        </g>
-      </svg>
-    </div>
-    <div class="hero-dust" aria-hidden="true"></div>
+    <svg class="fluid-defs" width="0" height="0" aria-hidden="true" focusable="false">
+      <filter id="liquid" x="-25%" y="-25%" width="150%" height="150%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.006 0.010" numOctaves="2" seed="7" result="turb">
+          <animate attributeName="baseFrequency" dur="34s" repeatCount="indefinite"
+            values="0.006 0.010;0.010 0.006;0.007 0.012;0.006 0.010"/>
+          <animate attributeName="seed" dur="60s" repeatCount="indefinite" values="1;12;1"/>
+        </feTurbulence>
+        <feDisplacementMap in="SourceGraphic" in2="turb" scale="140"
+          xChannelSelector="R" yChannelSelector="G" result="disp"/>
+        <feGaussianBlur in="disp" stdDeviation="26"/>
+      </filter>
+    </svg>
+    <div class="fluid" aria-hidden="true"><span class="f1"></span><span class="f2"></span><span class="f3"></span><span class="f4"></span></div>
     <div class="wrap">
       <div class="hero-content hero-grid">
         <div class="hero-main">
