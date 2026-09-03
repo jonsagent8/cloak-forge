@@ -132,76 +132,68 @@
   .wordmark:hover{text-decoration:none}
   .wordmark svg,.footer-brand svg{color:var(--ember)}
 
-  /* hero — dark so the flowing mesh wave and the glass wall glow against it */
+  /* hero — deep space with a flowing ribbon of light */
   .hero{
     position:relative;overflow:hidden;
-    background:linear-gradient(162deg,#0b1533 0%,#080e24 55%,#05081a 100%);
+    background:
+      radial-gradient(1100px 720px at 80% 6%,#132352 0%,#0b1238 46%,transparent 72%),
+      radial-gradient(1000px 900px at 6% 116%,#080d28 0%,transparent 56%),
+      linear-gradient(174deg,#080f2c 0%,#060a1e 58%,#04060e 100%);
   }
-  .hero canvas#embers{
-    position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;
-    -webkit-mask:linear-gradient(to top,transparent,#000 16%,#000 66%,transparent);
-    mask:linear-gradient(to top,transparent,#000 16%,#000 66%,transparent);
+  /* soft hand-off into the metallic-blue page below */
+  .hero::after{
+    content:"";position:absolute;left:0;right:0;bottom:0;height:38%;z-index:4;pointer-events:none;
+    background:linear-gradient(to bottom,transparent 34%,#12224a 100%);
   }
 
-  /* flowing gradient-mesh aurora behind the hero */
-  .aurora{
-    position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;
-    -webkit-mask:linear-gradient(to bottom,#000 0%,#000 72%,transparent 100%);
-    mask:linear-gradient(to bottom,#000 0%,#000 72%,transparent 100%);
+  /* the ribbon of light */
+  .hero-wave{
+    position:absolute;inset:-18% -10% 0 -4%;z-index:0;pointer-events:none;
+    animation:waveDrift 34s ease-in-out infinite;will-change:transform;
+    -webkit-mask:radial-gradient(115% 130% at 72% 6%,#000 26%,rgba(0,0,0,.4) 58%,transparent 82%);
+    mask:radial-gradient(115% 130% at 72% 6%,#000 26%,rgba(0,0,0,.4) 58%,transparent 82%);
   }
-  .aurora span{
-    position:absolute;border-radius:50%;filter:blur(56px);opacity:1;
-    will-change:transform;mix-blend-mode:screen;
+  .hero-wave svg{width:100%;height:100%;display:block;overflow:visible}
+  .wv-core{stroke-dasharray:210 150;animation:coreFlow 8s linear infinite}
+  @keyframes waveDrift{
+    0%,100%{transform:translate3d(0,0,0) rotate(0deg) scale(1)}
+    50%{transform:translate3d(-2.6%,1.6%,0) rotate(-1.4deg) scale(1.05)}
   }
-  .aurora span:nth-child(1){width:74vw;height:74vw;left:-18vw;top:-22vw;
-    background:radial-gradient(closest-side,#33f0e2,rgba(51,240,226,0) 74%);
-    animation:aur1 26s ease-in-out infinite;}
-  .aurora span:nth-child(2){width:70vw;height:70vw;right:-16vw;top:-14vw;
-    background:radial-gradient(closest-side,#3f9dff,rgba(63,157,255,0) 74%);
-    animation:aur2 32s ease-in-out infinite;}
-  .aurora span:nth-child(3){width:62vw;height:62vw;left:22vw;top:2vw;
-    background:radial-gradient(closest-side,#2ad4f6,rgba(42,212,246,0) 74%);
-    animation:aur3 29s ease-in-out infinite;}
-  .aurora span:nth-child(4){width:56vw;height:56vw;right:10vw;bottom:-24vw;
-    background:radial-gradient(closest-side,#2a63ea,rgba(42,99,234,0) 74%);
-    animation:aur4 23s ease-in-out infinite;}
-  .aurora span:nth-child(5){width:46vw;height:46vw;left:34vw;top:-4vw;
-    background:radial-gradient(closest-side,#c8faff,rgba(200,250,255,0) 70%);
-    opacity:.8;animation:aur5 20s ease-in-out infinite;}
-  @keyframes aur1{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(22vw,12vh,0) scale(1.25)}}
-  @keyframes aur2{0%,100%{transform:translate3d(0,0,0) scale(1.08)}50%{transform:translate3d(-20vw,10vh,0) scale(1)}}
-  @keyframes aur3{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(14vw,-12vh,0) scale(1.3)}}
-  @keyframes aur4{0%,100%{transform:translate3d(0,0,0) scale(1.12)}50%{transform:translate3d(-16vw,-14vh,0) scale(1)}}
-  @keyframes aur5{0%,100%{transform:translate3d(-10vw,0,0) scale(.85)}50%{transform:translate3d(18vw,8vh,0) scale(1.4)}}
-  /* a wall of tinted orange glass across the right of the frame — backlit via screen blend */
-  .glasswall{
-    position:absolute;top:0;bottom:0;right:0;width:min(46%,540px);z-index:0;
-    pointer-events:none;mix-blend-mode:screen;overflow:hidden;
-    border-left:1px solid rgba(255,205,160,.7);
-    background:
-      repeating-linear-gradient(90deg,transparent 0 calc(50% - 1px),rgba(255,205,165,.28) 50%,transparent calc(50% + 1px) 100%),
-      var(--glass);
-    -webkit-mask:linear-gradient(to bottom,transparent,#000 8%,#000 92%,transparent);
-    mask:linear-gradient(to bottom,transparent,#000 8%,#000 92%,transparent);
+  @keyframes coreFlow{to{stroke-dashoffset:-360}}
+
+  /* particle dust, denser toward the lower-left */
+  .hero-dust{
+    position:absolute;inset:0;z-index:1;pointer-events:none;
+    background-image:
+      radial-gradient(circle,rgba(220,238,255,1) .8px,transparent 1.7px),
+      radial-gradient(circle,rgba(150,200,255,.6) .6px,transparent 1.7px);
+    background-size:50px 50px,30px 30px;
+    background-position:0 0,16px 23px;
+    -webkit-mask:radial-gradient(150% 120% at 18% 100%,#000 0%,rgba(0,0,0,.5) 40%,transparent 76%);
+    mask:radial-gradient(150% 120% at 18% 100%,#000 0%,rgba(0,0,0,.5) 40%,transparent 76%);
+    animation:dustFloat 44s linear infinite;
   }
-  /* the reflection band — slides down the glass as the page scrolls */
-  .glasswall i{
-    position:absolute;left:-12%;right:-12%;height:42%;top:-24%;
-    background:linear-gradient(180deg,transparent,rgba(255,232,204,.42) 44%,rgba(255,224,190,.05) 62%,transparent);
-    transform:translateY(calc(var(--sy,0) * .16));
-    will-change:transform;
+  @keyframes dustFloat{to{background-position:0 -50px,16px -7px}}
+
+  .hero-content{position:relative;z-index:2;padding-block:clamp(7rem,17vw,11rem) clamp(4rem,9vw,6rem)}
+  .hero-grid{display:grid;gap:2.4rem}
+  @media (min-width:920px){
+    .hero-grid{grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:3.4rem}
   }
-  .hero::after{
-    content:"";position:absolute;left:50%;bottom:-32%;width:120%;height:72%;
-    transform:translateX(-50%);pointer-events:none;z-index:0;
-    background:radial-gradient(ellipse at center,rgba(255,125,45,.18),transparent 62%);
+  .hero-main{max-width:34rem}
+  .hero h1{font-size:clamp(2rem,4vw,3rem);line-height:1.08}
+  .lead{margin-top:1.5rem;font-size:clamp(1.05rem,1.6vw,1.26rem);color:var(--ink-dim);max-width:46ch}
+  .hero-cta{margin-top:2.3rem;display:flex;flex-wrap:wrap;gap:.9rem}
+
+  /* right-side labels, echoing the reference's cover text */
+  .hero-side{display:flex;flex-direction:column;gap:1.6rem;text-align:right}
+  .hero-side div{display:flex;flex-direction:column;gap:.22rem}
+  .hero-side b{font-family:"Archivo",sans-serif;font-weight:700;font-size:.94rem;color:var(--ink)}
+  .hero-side span{
+    font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink-faint);
   }
-  .hero-content{position:relative;z-index:1;max-width:53rem;padding-block:clamp(5rem,14vw,9rem)}
-  @media (max-width:720px){
-    .glasswall{width:64%;opacity:.5}
-  }
-  .lead{margin-top:1.6rem;font-size:clamp(1.05rem,1.7vw,1.3rem);color:var(--ink-dim);max-width:56ch}
-  .hero-cta{margin-top:2.4rem;display:flex;flex-wrap:wrap;gap:.9rem}
+  @media (max-width:919px){ .hero-side{display:none} }
 
   /* services */
   .cards{margin-top:2.6rem;display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(255px,1fr))}
@@ -365,7 +357,7 @@
   @media (prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
     *{animation-duration:.001ms!important;transition-duration:.001ms!important}
-    .glasswall i,.rig.is-rec::after,.case::before,body::after,.aurora span{transform:none!important;animation:none!important}
+    .rig.is-rec::after,.case::before,body::after,.hero-wave,.wv-core,.hero-dust{transform:none!important;animation:none!important}
     body::before{background-position:center -34%!important}
   }
 </style>
@@ -382,17 +374,59 @@
 
 <main>
   <section class="hero" id="top">
-    <div class="aurora" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
-    <canvas id="embers" aria-hidden="true"></canvas>
-    <div class="glasswall" aria-hidden="true"><i></i></div>
+    <div class="hero-wave" aria-hidden="true">
+      <svg viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="wv" x1="0" y1="0" x2="1" y2="0.25">
+            <stop offset="0" stop-color="#17246e"/>
+            <stop offset="0.32" stop-color="#2f7de6"/>
+            <stop offset="0.58" stop-color="#63c8ff"/>
+            <stop offset="0.82" stop-color="#2f7de6"/>
+            <stop offset="1" stop-color="#141f5e"/>
+          </linearGradient>
+          <linearGradient id="wv2" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#cfeeff"/>
+            <stop offset="0.5" stop-color="#8fd4ff"/>
+            <stop offset="1" stop-color="#6ab6ff"/>
+          </linearGradient>
+          <filter id="bBig" x="-45%" y="-45%" width="190%" height="190%"><feGaussianBlur stdDeviation="58"/></filter>
+          <filter id="bMed" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="24"/></filter>
+          <filter id="bSm" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="7"/></filter>
+        </defs>
+        <mask id="sharp">
+          <rect width="1200" height="640" fill="url(#mg)"/>
+        </mask>
+        <radialGradient id="mg" cx="0.74" cy="0.12" r="0.62">
+          <stop offset="0" stop-color="#fff"/>
+          <stop offset="0.5" stop-color="#fff"/>
+          <stop offset="1" stop-color="#000"/>
+        </radialGradient>
+        <g>
+          <path d="M-160 270 C 220 70 470 150 700 268 C 900 372 1060 165 1440 250" fill="none" stroke="url(#wv)" stroke-width="320" stroke-linecap="round" opacity="0.20" filter="url(#bBig)"/>
+          <path d="M-160 270 C 220 70 470 150 700 268 C 900 372 1060 165 1440 250" fill="none" stroke="url(#wv)" stroke-width="130" stroke-linecap="round" opacity="0.40" filter="url(#bMed)"/>
+          <g mask="url(#sharp)">
+            <path d="M-160 270 C 220 70 470 150 700 268 C 900 372 1060 165 1440 250" fill="none" stroke="url(#wv2)" stroke-width="36" stroke-linecap="round" opacity="0.92" filter="url(#bSm)"/>
+            <path class="wv-core" d="M-160 270 C 220 70 470 150 700 268 C 900 372 1060 165 1440 250" fill="none" stroke="#eef8ff" stroke-width="6" stroke-linecap="round" opacity="0.95"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+    <div class="hero-dust" aria-hidden="true"></div>
     <div class="wrap">
-      <div class="hero-content">
-        <p class="eyebrow">Local &middot; Air-gapped &middot; Yours</p>
-        <h1>Private AI automation, forged on your machine.</h1>
-        <p class="lead">We install the whole pipeline &mdash; models, scripts, schedulers &mdash; directly on your computer. Nothing routes through the cloud, because there is no cloud.</p>
-        <div class="hero-cta">
-          <a href="#contact" class="btn btn-primary">Book a call</a>
-          <a href="#services" class="btn btn-ghost">See how it works</a>
+      <div class="hero-content hero-grid">
+        <div class="hero-main">
+          <p class="eyebrow">Local &middot; Air-gapped &middot; Yours</p>
+          <h1>Private AI automation, forged on your machine.</h1>
+          <p class="lead">We install the whole pipeline &mdash; models, scripts, schedulers &mdash; directly on your computer. Nothing routes through the cloud, because there is no cloud.</p>
+          <div class="hero-cta">
+            <a href="#contact" class="btn btn-primary">Book a call</a>
+            <a href="#services" class="btn btn-ghost">See how it works</a>
+          </div>
+        </div>
+        <div class="hero-side">
+          <div><b>No cloud</b><span>nothing leaves the machine</span></div>
+          <div><b>No metered billing</b><span>one-time setup</span></div>
+          <div><b>Runs offline</b><span>no internet required</span></div>
         </div>
       </div>
     </div>
@@ -653,62 +687,6 @@
       if (!ticking) { ticking = true; requestAnimationFrame(syncScroll); }
     }, { passive: true });
     syncScroll();
-  }
-
-  /* ---- ember drift in the hero ---- */
-  var canvas = document.getElementById("embers");
-  if (canvas && canvas.getContext && !reduce.matches) {
-    var ctx = canvas.getContext("2d");
-    var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    var W = 0, H = 0, parts = [], raf = 0;
-
-    function size(){
-      var r = canvas.getBoundingClientRect();
-      W = r.width; H = r.height;
-      canvas.width = Math.max(1, Math.round(W * dpr));
-      canvas.height = Math.max(1, Math.round(H * dpr));
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
-    function make(seed){
-      return {
-        x: Math.random() * W,
-        y: seed ? Math.random() * H : H + Math.random() * 40,
-        r: 0.6 + Math.random() * 1.7,
-        vy: 0.14 + Math.random() * 0.46,
-        vx: (Math.random() - 0.5) * 0.22,
-        life: 0,
-        max: 220 + Math.random() * 280
-      };
-    }
-    function frame(){
-      ctx.clearRect(0, 0, W, H);
-      ctx.shadowBlur = 9;
-      ctx.shadowColor = "rgba(255,140,60,0.6)";
-      for (var i = 0; i < parts.length; i++) {
-        var p = parts[i];
-        p.x += p.vx; p.y -= p.vy; p.life++;
-        p.vx += (Math.random() - 0.5) * 0.02;
-        if (p.y < -12 || p.life > p.max) { parts[i] = make(false); continue; }
-        var t = p.life / p.max;
-        var a = Math.sin(t * Math.PI) * 0.5;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, 6.2832);
-        ctx.fillStyle = "rgba(255," + Math.round(140 - t * 70) + "," + Math.round(72 - t * 52) + "," + a.toFixed(3) + ")";
-        ctx.fill();
-      }
-      raf = requestAnimationFrame(frame);
-    }
-    function start(){ if (!raf) raf = requestAnimationFrame(frame); }
-    function stop(){ if (raf) { cancelAnimationFrame(raf); raf = 0; } }
-
-    size();
-    var count = Math.round(Math.max(18, Math.min(46, W / 26)));
-    for (var k = 0; k < count; k++) parts.push(make(true));
-    start();
-
-    var rt;
-    window.addEventListener("resize", function(){ clearTimeout(rt); rt = setTimeout(size, 160); });
-    document.addEventListener("visibilitychange", function(){ document.hidden ? stop() : start(); });
   }
 
   /* ---- service card -> prefill + jump to form ---- */
