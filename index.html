@@ -132,13 +132,47 @@
   .wordmark:hover{text-decoration:none}
   .wordmark svg,.footer-brand svg{color:var(--ember)}
 
-  /* hero — transparent so the paint shows and the glass wall glows against it */
-  .hero{position:relative;overflow:hidden}
-  .hero canvas{
-    position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;
+  /* hero — dark so the flowing mesh wave and the glass wall glow against it */
+  .hero{
+    position:relative;overflow:hidden;
+    background:linear-gradient(162deg,#0b1533 0%,#080e24 55%,#05081a 100%);
+  }
+  .hero canvas#embers{
+    position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;
     -webkit-mask:linear-gradient(to top,transparent,#000 16%,#000 66%,transparent);
     mask:linear-gradient(to top,transparent,#000 16%,#000 66%,transparent);
   }
+
+  /* flowing gradient-mesh aurora behind the hero */
+  .aurora{
+    position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;
+    -webkit-mask:linear-gradient(to bottom,#000 0%,#000 72%,transparent 100%);
+    mask:linear-gradient(to bottom,#000 0%,#000 72%,transparent 100%);
+  }
+  .aurora span{
+    position:absolute;border-radius:50%;filter:blur(56px);opacity:1;
+    will-change:transform;mix-blend-mode:screen;
+  }
+  .aurora span:nth-child(1){width:74vw;height:74vw;left:-18vw;top:-22vw;
+    background:radial-gradient(closest-side,#33f0e2,rgba(51,240,226,0) 74%);
+    animation:aur1 26s ease-in-out infinite;}
+  .aurora span:nth-child(2){width:70vw;height:70vw;right:-16vw;top:-14vw;
+    background:radial-gradient(closest-side,#3f9dff,rgba(63,157,255,0) 74%);
+    animation:aur2 32s ease-in-out infinite;}
+  .aurora span:nth-child(3){width:62vw;height:62vw;left:22vw;top:2vw;
+    background:radial-gradient(closest-side,#2ad4f6,rgba(42,212,246,0) 74%);
+    animation:aur3 29s ease-in-out infinite;}
+  .aurora span:nth-child(4){width:56vw;height:56vw;right:10vw;bottom:-24vw;
+    background:radial-gradient(closest-side,#2a63ea,rgba(42,99,234,0) 74%);
+    animation:aur4 23s ease-in-out infinite;}
+  .aurora span:nth-child(5){width:46vw;height:46vw;left:34vw;top:-4vw;
+    background:radial-gradient(closest-side,#c8faff,rgba(200,250,255,0) 70%);
+    opacity:.8;animation:aur5 20s ease-in-out infinite;}
+  @keyframes aur1{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(22vw,12vh,0) scale(1.25)}}
+  @keyframes aur2{0%,100%{transform:translate3d(0,0,0) scale(1.08)}50%{transform:translate3d(-20vw,10vh,0) scale(1)}}
+  @keyframes aur3{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(14vw,-12vh,0) scale(1.3)}}
+  @keyframes aur4{0%,100%{transform:translate3d(0,0,0) scale(1.12)}50%{transform:translate3d(-16vw,-14vh,0) scale(1)}}
+  @keyframes aur5{0%,100%{transform:translate3d(-10vw,0,0) scale(.85)}50%{transform:translate3d(18vw,8vh,0) scale(1.4)}}
   /* a wall of tinted orange glass across the right of the frame — backlit via screen blend */
   .glasswall{
     position:absolute;top:0;bottom:0;right:0;width:min(46%,540px);z-index:0;
@@ -331,7 +365,7 @@
   @media (prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
     *{animation-duration:.001ms!important;transition-duration:.001ms!important}
-    .glasswall i,.rig.is-rec::after,.case::before,body::after{transform:none!important;animation:none!important}
+    .glasswall i,.rig.is-rec::after,.case::before,body::after,.aurora span{transform:none!important;animation:none!important}
     body::before{background-position:center -34%!important}
   }
 </style>
@@ -348,6 +382,7 @@
 
 <main>
   <section class="hero" id="top">
+    <div class="aurora" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
     <canvas id="embers" aria-hidden="true"></canvas>
     <div class="glasswall" aria-hidden="true"><i></i></div>
     <div class="wrap">
