@@ -25,14 +25,11 @@
     --line:#3a5a8c;
     --line-soft:#22406e;
 
-    /* contoured metallic-blue paint: a lit curved panel, electric near the light, midnight in shadow */
-    /* a tall dark metallic-blue sweep — the viewport pans down it as you scroll, so the
-       blue drifts in temperature: steel near the top, through indigo, to violet-navy */
-    --paint:linear-gradient(172deg,
-      #1c3d73 0%,#1a3a74 10%,#1b3f86 18%,
-      #3866b8 25%,#5b8ad8 29%,#3a63b0 33%,   /* bright specular band that sweeps through on scroll */
-      #1d3a80 40%,#182c72 52%,#1b2866 63%,
-      #1e2558 73%,#1b2050 82%,#161a41 92%,#0e1230 100%);
+    /* the same deep-space navy as the hero, used for the whole page */
+    --paint:
+      radial-gradient(1100px 760px at 80% -6%,#132352 0%,#0b1238 46%,transparent 72%),
+      radial-gradient(1000px 900px at 4% 106%,#080d28 0%,transparent 58%),
+      linear-gradient(174deg,#0a1130 0%,#070c22 55%,#050810 100%);
     /* metal plate: soft top-left highlight falling to a shadowed base — no lines */
     --panel:
       radial-gradient(130% 100% at 14% -8%,rgba(150,196,255,.18),transparent 52%),
@@ -70,10 +67,7 @@
   body::before{
     content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;
     background:var(--paint);
-    background-size:100% 250%;
-    background-position:center calc(var(--sy,0) * -0.17);
-    background-repeat:no-repeat;
-    will-change:background-position;
+    background-size:cover;
   }
   /* fixed light: a soft top highlight + a gentle edge vignette so text stays legible */
   body::after{
@@ -359,7 +353,6 @@
     .rig.is-rec::after,.case::before,body::after,.fluid i{animation:none!important}
     .fluid i{transform:translate3d(20vw,0,0)!important}
     .fluid-inner{filter:blur(26px)!important}
-    body::before{background-position:center -34%!important}
   }
 </style>
 <link rel="canonical" href="https://jonsagent8.github.io/cloak-forge/">
