@@ -9,23 +9,23 @@
 <style>
   :root{
     /* Tanzanite-blue metallic */
-    --bg:#0f1d3a;
-    --surface:#223a70;
-    --surface-2:#2c4988;
+    --bg:#0a1428;
+    --surface:#15274a;
+    --surface-2:#1c3260;
     --ink:#f1eee7;
     --ink-dim:#aeb9cf;
     --ink-faint:#7484a1;
     --ember:#ff4500;
     --ember-soft:#ff6a2b;
     --steel:#93a8bd;
-    --line:#3a5a8c;
-    --line-soft:#22406e;
+    --line:#274266;
+    --line-soft:#172845;
 
     /* the same deep-space navy as the hero, used for the whole page */
     --paint:
-      radial-gradient(1100px 760px at 80% -6%,#132352 0%,#0b1238 46%,transparent 72%),
-      radial-gradient(1000px 900px at 4% 106%,#080d28 0%,transparent 58%),
-      linear-gradient(174deg,#0a1130 0%,#070c22 55%,#050810 100%);
+      radial-gradient(1100px 760px at 80% -6%,#0e1c40 0%,#081029 46%,transparent 72%),
+      radial-gradient(1000px 900px at 4% 106%,#060a1e 0%,transparent 58%),
+      linear-gradient(174deg,#080e26 0%,#05091a 55%,#040610 100%);
     /* metal plate: soft top-left highlight falling to a shadowed base — no lines */
     --panel:
       radial-gradient(130% 100% at 14% -8%,rgba(150,196,255,.18),transparent 52%),
@@ -129,14 +129,14 @@
   .hero{
     position:relative;overflow:hidden;
     background:
-      radial-gradient(1100px 720px at 80% 6%,#132352 0%,#0b1238 46%,transparent 72%),
-      radial-gradient(1000px 900px at 6% 116%,#080d28 0%,transparent 56%),
-      linear-gradient(174deg,#080f2c 0%,#060a1e 58%,#04060e 100%);
+      radial-gradient(1100px 720px at 80% 6%,#0e1c40 0%,#081029 46%,transparent 72%),
+      radial-gradient(1000px 900px at 6% 116%,#060a1e 0%,transparent 56%),
+      linear-gradient(174deg,#060b1e 0%,#040814 58%,#03040a 100%);
   }
-  /* soft hand-off into the metallic-blue page below */
+  /* soft hand-off into the page below */
   .hero::after{
     content:"";position:absolute;left:0;right:0;bottom:0;height:38%;z-index:4;pointer-events:none;
-    background:linear-gradient(to bottom,transparent 34%,#12224a 100%);
+    background:linear-gradient(to bottom,transparent 34%,#0b1734 100%);
   }
 
   .fluid-defs{position:absolute;width:0;height:0}
@@ -144,7 +144,7 @@
      wobbled by a turbulence displacement so they ripple as they travel */
   .fluid{
     position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;
-    background:radial-gradient(130% 120% at 76% 0%,#123166 0%,#0b1f49 46%,#06102e 82%);
+    background:radial-gradient(130% 120% at 76% 0%,#0c2450 0%,#081934 46%,#040a20 82%);
     -webkit-mask:radial-gradient(155% 135% at 66% 4%,#000 42%,rgba(0,0,0,.6) 72%,transparent 100%);
     mask:radial-gradient(155% 135% at 66% 4%,#000 42%,rgba(0,0,0,.6) 72%,transparent 100%);
   }
