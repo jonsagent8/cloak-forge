@@ -10,15 +10,15 @@
   :root{
     /* Tanzanite-blue metallic */
     --bg:#0a1428;
-    --surface:#15274a;
-    --surface-2:#1c3260;
+    --surface:#122140;
+    --surface-2:#182a52;
     --ink:#f1eee7;
     --ink-dim:#aeb9cf;
     --ink-faint:#7484a1;
     --ember:#ff4500;
     --ember-soft:#ff6a2b;
     --steel:#93a8bd;
-    --line:#274266;
+    --line:#223a5c;
     --line-soft:#172845;
 
     /* the same deep-space navy as the hero, used for the whole page */
@@ -28,10 +28,10 @@
       linear-gradient(174deg,#080e26 0%,#05091a 55%,#040610 100%);
     /* metal plate: soft top-left highlight falling to a shadowed base — no lines */
     --panel:
-      radial-gradient(130% 100% at 14% -8%,rgba(150,196,255,.18),transparent 52%),
-      linear-gradient(162deg,rgba(126,170,255,.10) 0%,rgba(255,255,255,0) 30%,rgba(0,0,0,.10) 72%,rgba(0,0,0,.22) 100%);
+      radial-gradient(130% 100% at 14% -8%,rgba(128,166,222,.13),transparent 52%),
+      linear-gradient(162deg,rgba(108,146,210,.08) 0%,rgba(255,255,255,0) 30%,rgba(0,0,0,.10) 72%,rgba(0,0,0,.22) 100%);
     --panel-edge:
-      inset 0 1px 0 rgba(210,228,255,.32),
+      inset 0 1px 0 rgba(180,200,236,.24),
       inset 0 -1px 0 rgba(0,0,0,.5),
       0 16px 34px -16px rgba(0,0,0,.6);
 
@@ -68,7 +68,7 @@
   body::after{
     content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
     background:
-      radial-gradient(1000px 700px at 24% 12%,rgba(150,200,255,.14),transparent 60%),
+      radial-gradient(1000px 700px at 24% 12%,rgba(120,162,222,.10),transparent 60%),
       radial-gradient(1400px 1100px at 50% 60%,transparent 40%,rgba(6,10,32,.5) 100%);
   }
   @keyframes sheen{
@@ -151,7 +151,7 @@
   .fluid-inner{position:absolute;inset:0;filter:url(#flow)}
   .fluid i{
     position:absolute;left:0;display:block;border-radius:50%;
-    background:radial-gradient(closest-side,rgba(196,231,255,.95),rgba(124,198,255,.32) 44%,rgba(110,180,255,0) 74%);
+    background:radial-gradient(closest-side,rgba(150,196,240,.82),rgba(92,150,214,.28) 44%,rgba(80,135,205,0) 74%);
     mix-blend-mode:screen;will-change:transform;
   }
   .fluid .s1{width:80vw;height:22vw;top:8%;animation:drift 17s linear infinite}
