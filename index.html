@@ -15,8 +15,8 @@
     --ink:#f1eee7;
     --ink-dim:#aeb9cf;
     --ink-faint:#7484a1;
-    --ember:#ff4500;
-    --ember-soft:#ff6a2b;
+    --ember:#ff8a33;
+    --ember-soft:#ffab66;
     --steel:#93a8bd;
     --line:#223a5c;
     --line-soft:#172845;
@@ -36,11 +36,11 @@
       0 16px 34px -16px rgba(0,0,0,.6);
 
     /* tinted orange glass — luminous, translucent, backlit */
-    --glass:linear-gradient(135deg,rgba(255,95,35,.5),rgba(255,75,25,.2) 55%,rgba(255,120,55,.36));
-    --glass-edge:rgba(255,130,70,.55);
-    --glass-inset:inset 0 1px 0 rgba(255,205,175,.5),inset 0 0 70px rgba(255,85,25,.22);
-    --glass-glow:0 26px 80px -28px rgba(255,75,20,.55);
-    --glass-sheen:linear-gradient(115deg,transparent 38%,rgba(255,230,208,.2) 46%,transparent 54%);
+    --glass:linear-gradient(135deg,rgba(255,158,72,.5),rgba(255,142,62,.2) 55%,rgba(255,180,104,.36));
+    --glass-edge:rgba(255,190,124,.55);
+    --glass-inset:inset 0 1px 0 rgba(255,226,198,.5),inset 0 0 70px rgba(255,150,60,.22);
+    --glass-glow:0 26px 80px -28px rgba(255,142,56,.55);
+    --glass-sheen:linear-gradient(115deg,transparent 38%,rgba(255,244,230,.2) 46%,transparent 54%);
     color-scheme:dark;
   }
 
@@ -102,15 +102,15 @@
     transition:transform .12s ease,box-shadow .2s ease,background .2s ease,border-color .2s ease,color .2s ease;
   }
   .btn-primary{
-    background:linear-gradient(180deg,#ff7a3d,#e63c00);color:#241004;
-    box-shadow:inset 0 1px 0 rgba(255,205,175,.55),0 8px 24px -10px rgba(255,72,20,.5);
+    background:linear-gradient(180deg,#ffa457,#f2761f);color:#241004;
+    box-shadow:inset 0 1px 0 rgba(255,226,198,.55),0 8px 24px -10px rgba(255,140,56,.5);
   }
   .btn-primary:hover{
-    background:linear-gradient(180deg,#ff8a52,#ff4500);transform:translateY(-1px);
-    box-shadow:inset 0 1px 0 rgba(255,215,190,.6),0 14px 40px -12px rgba(255,75,20,.62);text-decoration:none;
+    background:linear-gradient(180deg,#ffb474,#ff8a33);transform:translateY(-1px);
+    box-shadow:inset 0 1px 0 rgba(255,234,212,.6),0 14px 40px -12px rgba(255,142,56,.62);text-decoration:none;
   }
   .btn-ghost{background:transparent;color:var(--ember-soft);border-color:var(--line)}
-  .btn-ghost:hover{border-color:var(--ember);background:rgba(255,69,10,.1);text-decoration:none}
+  .btn-ghost:hover{border-color:var(--ember);background:rgba(255,138,48,.1);text-decoration:none}
   .btn-block{width:100%}
   .btn-sm{padding:.6em 1.05em;font-size:.88rem}
 
@@ -192,7 +192,7 @@
     transition:transform .15s ease,border-color .2s ease;
   }
   .card:hover{
-    transform:translateY(-3px);border-color:rgba(255,95,40,.42);
+    transform:translateY(-3px);border-color:rgba(255,158,80,.42);
     background:
       radial-gradient(130% 100% at 14% -8%,rgba(170,208,255,.26),transparent 52%),
       linear-gradient(162deg,rgba(140,182,255,.14) 0%,rgba(255,255,255,0) 30%,rgba(0,0,0,.10) 72%,rgba(0,0,0,.22) 100%),
@@ -264,7 +264,7 @@
   /* showcase */
   .case{
     margin-top:2.6rem;position:relative;overflow:hidden;
-    background:linear-gradient(160deg,rgba(255,69,10,.13),rgba(255,69,10,.03) 55%),var(--surface);
+    background:linear-gradient(160deg,rgba(255,138,48,.13),rgba(255,138,48,.03) 55%),var(--surface);
     border:1px solid var(--glass-edge);border-radius:12px;
     box-shadow:var(--glass-glow);
     padding:clamp(1.6rem,3.5vw,2.4rem);
@@ -272,7 +272,7 @@
   }
   .case::before{
     content:"";position:absolute;inset:0 -45%;pointer-events:none;z-index:0;
-    background:linear-gradient(118deg,transparent 46%,rgba(255,222,198,.13) 54%,transparent 62%);
+    background:linear-gradient(118deg,transparent 46%,rgba(255,238,220,.13) 54%,transparent 62%);
     transform:translateX(calc(-20% + var(--sy,0) * .022));will-change:transform;
   }
   .case > *{position:relative;z-index:1}
@@ -323,10 +323,10 @@
   }
   .field textarea{resize:vertical;min-height:6.5em}
   .field input:focus,.field select:focus,.field textarea:focus{
-    border-color:var(--ember);outline:none;box-shadow:0 0 0 3px rgba(255,69,10,.18);
+    border-color:var(--ember);outline:none;box-shadow:0 0 0 3px rgba(255,138,48,.18);
   }
   .form-status{font-size:.9rem;margin:.2rem 0 0;min-height:1.2em}
-  .form-status.is-err{color:#ff8a66}
+  .form-status.is-err{color:#ffa47c}
   .form-status.is-ok{color:var(--ink-dim)}
 
   @media (min-width:820px){
