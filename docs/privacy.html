@@ -50,7 +50,7 @@
 
   *,*::before,*::after{box-sizing:border-box}
   html{scroll-behavior:smooth}
-  #top,#services,#why,#hardware,#showcase,#contact{scroll-margin-top:5rem}
+  #top,#services,#why,#hardware,#showcase,#about,#contact{scroll-margin-top:5rem}
 
   body{
     margin:0;
@@ -306,6 +306,21 @@
   .cap p{margin:.2rem 0 0;color:var(--ink-dim);font-size:.92rem;grid-column:2}
 
   .section-note{margin-top:1rem;color:var(--ink-dim);max-width:54ch}
+
+  /* about */
+  .about-grid{margin-top:2.4rem;display:grid;gap:clamp(1.6rem,4vw,2.8rem);align-items:center}
+  @media (min-width:720px){ .about-grid{grid-template-columns:auto 1fr} }
+  .about-photo{
+    width:clamp(15rem,40vw,21rem);height:auto;display:block;
+    border-radius:14px;border:1px solid var(--line);
+    box-shadow:0 20px 50px -20px rgba(0,0,0,.7);
+  }
+  .about-body p{color:var(--ink-dim);max-width:52ch}
+  .about-body p + p{margin-top:1rem}
+  .about-body .sig{
+    margin-top:1.3rem;font-family:"IBM Plex Mono",monospace;font-size:.72rem;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);
+  }
 
   /* contact */
   .contact-grid{display:grid;grid-template-columns:1fr;gap:clamp(2rem,5vw,3.5rem)}
