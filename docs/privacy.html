@@ -50,7 +50,7 @@
 
   *,*::before,*::after{box-sizing:border-box}
   html{scroll-behavior:smooth}
-  #top,#services,#why,#hardware,#showcase,#contact{scroll-margin-top:5rem}
+  #top,#services,#why,#hardware,#showcase,#launcher,#contact{scroll-margin-top:5rem}
 
   body{
     margin:0;
@@ -298,6 +298,25 @@
   }
   .case-cta{margin-top:1.6rem;display:flex;flex-wrap:wrap;gap:.8rem;align-items:center}
   .case-note{margin-top:.9rem;font-size:.82rem;color:var(--ink-faint);max-width:44ch}
+
+  /* launcher */
+  .launcher{
+    margin-top:2.6rem;
+    background:var(--panel),var(--surface);border:1px solid var(--line);border-radius:12px;
+    box-shadow:var(--panel-edge);
+    padding:clamp(1.6rem,3.5vw,2.4rem);
+    display:grid;gap:clamp(1.4rem,4vw,2.4rem);
+  }
+  @media (min-width:760px){ .launcher{grid-template-columns:1fr auto;align-items:start} }
+  .launcher-body{margin-top:1rem;color:var(--ink-dim);font-size:.95rem;max-width:54ch}
+  .launcher-buy{display:flex;flex-direction:column;gap:.9rem;min-width:min(15rem,100%)}
+  @media (min-width:760px){
+    .launcher-buy{border-left:1px solid var(--line);padding-left:clamp(1.4rem,3vw,2rem)}
+  }
+  .launcher-buy .price{margin:0}
+  .btn[disabled]{opacity:.5;cursor:not-allowed}
+  .buy-soon{font-size:.8rem;color:var(--ink-faint)}
+  .buy-soon a{color:var(--ember-soft)}
 
   .caps{display:grid;gap:1.1rem}
   .cap{display:grid;grid-template-columns:auto 1fr;gap:.5rem 1rem;align-items:start}
