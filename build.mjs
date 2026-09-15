@@ -79,7 +79,21 @@ await writeFile(
   })
 );
 
+// email.html is authored as its own fragment in email.fragment.html
+const emailBody = await readFile(new URL("./email.fragment.html", import.meta.url), "utf8");
+await writeFile(
+  new URL("./docs/email.html", import.meta.url),
+  page({
+    title: "Cloak Forge Email — AI inbox drafting & auto-send rules",
+    head: headNoTitle.replace(
+      /<meta name="description"[^>]*>/,
+      '<meta name="description" content="Reads your inbox, drafts replies, and can send them for you on rules you set — a Cloak Forge Launcher Connection running on the model you already have.">'
+    ),
+    body: emailBody.trim(),
+  })
+);
+
 await copyFile(new URL("./favicon.svg", import.meta.url), new URL("./docs/favicon.svg", import.meta.url));
 await writeFile(new URL("./docs/.nojekyll", import.meta.url), "");
 
-console.log("built docs/ -> index.html, privacy.html, launcher.html, favicon.svg, .nojekyll");
+console.log("built docs/ -> index.html, privacy.html, launcher.html, email.html, favicon.svg, .nojekyll");

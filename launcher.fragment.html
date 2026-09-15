@@ -40,8 +40,67 @@
         <li><strong>Hardware-matched model picks.</strong> Scans your CPU/GPU and unified memory, then recommends a model sized to fit &mdash; from a fast 1.7B model on modest hardware up to 235B-class models on a high-end workstation, always the largest size that will actually run well rather than just the largest that downloads.</li>
         <li><strong>Download and remove models freely.</strong> Pull any size at any time with visible live progress, and remove one later to free disk space &mdash; re-download it again whenever you want. Nothing is one-way.</li>
         <li><strong>Local, on-device chat.</strong> Talk to whichever model you have active, with optional file, shell, and web-search tools it can call &mdash; each one permissioned to ask every time, auto-approve, or stay fully read-only, your choice.</li>
-        <li><strong>Connections.</strong> A growing set of add-on modules that plug into the same local model instead of shipping their own separate AI. The first is <a href="index.html#showcase">Cloak Forge Email</a> &mdash; AI-drafted replies and rule-based auto-send, running on the exact model you already have loaded.</li>
+        <li><strong>Connections.</strong> A growing set of add-on modules that plug into the same local model instead of shipping their own separate AI. The first is <a href="email.html">Cloak Forge Email</a> &mdash; AI-drafted replies and rule-based auto-send, running on the exact model you already have loaded.</li>
       </ul>
+
+      <h2>The models it can run</h2>
+      <p>All 4-bit quantized, all Apache&#8209;2.0 licensed. It always defaults to the largest general-purpose size your hardware can run well; the vision and coding sizes are opt-in &mdash; listed and downloadable, but never chosen for you automatically.</p>
+
+      <div class="mem" role="region" aria-label="Model sizes the launcher supports">
+        <table>
+          <colgroup><col class="c-mem"><col class="c-fit"><col></colgroup>
+          <thead>
+            <tr><th scope="col">Size</th><th scope="col">Download</th><th scope="col">What it's for</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="m-cap">1.7B</td>
+              <td class="m-mid">1.4&nbsp;GB</td>
+              <td class="m-note">Fast and light on almost any Mac. Fine for a single, simple tool call at a time; not for multi-step reasoning.</td>
+            </tr>
+            <tr>
+              <td class="m-cap">1.8B <span style="color:var(--ink-faint)">(vision, opt-in)</span></td>
+              <td class="m-mid">1.8&nbsp;GB</td>
+              <td class="m-note">The lightest way to send it an image &mdash; basic description and detection, no tool-calling.</td>
+            </tr>
+            <tr>
+              <td class="m-cap">8B</td>
+              <td class="m-mid">5.2&nbsp;GB</td>
+              <td class="m-note">A real step up in reasoning. Reliable for one tool call at a time; still shaky chaining several together.</td>
+            </tr>
+            <tr>
+              <td class="m-cap">7B <span style="color:var(--ink-faint)">(vision, opt-in)</span></td>
+              <td class="m-mid">6.0&nbsp;GB</td>
+              <td class="m-note">Meaningfully better at reading documents, charts, and screenshots than the smaller vision size.</td>
+            </tr>
+            <tr>
+              <td class="m-cap">14B</td>
+              <td class="m-mid">9.3&nbsp;GB</td>
+              <td class="m-note">A dependable everyday default &mdash; handles both single- and multi-step tool use with reasonable judgment.</td>
+            </tr>
+            <tr>
+              <td class="m-cap">30B <span style="color:var(--ink-faint)">(coding, opt-in)</span></td>
+              <td class="m-mid">18&nbsp;GB</td>
+              <td class="m-note">Tuned for code and agentic tool use, with a 262K context window for large codebases. Stronger than the general 32B size at exactly this, weaker at open-ended writing.</td>
+            </tr>
+            <tr>
+              <td class="m-cap">32B</td>
+              <td class="m-mid">20&nbsp;GB</td>
+              <td class="m-note">Strong general reasoning and dependable multi-step tool use &mdash; chaining tools, recovering from a bad result, nuanced instructions.</td>
+            </tr>
+            <tr>
+              <td class="m-cap">~70B-class <span style="color:var(--ink-faint)">(MoE)</span></td>
+              <td class="m-mid">28&nbsp;GB</td>
+              <td class="m-note">A mixture-of-experts model giving roughly 70B-class quality at a fraction of the active compute. Chats well; can't call tools.</td>
+            </tr>
+            <tr>
+              <td class="m-cap">235B-A22B <span style="color:var(--ink-faint)">(MoE)</span></td>
+              <td class="m-mid">142&nbsp;GB</td>
+              <td class="m-note">Frontier-class reasoning with full tool-calling. Realistic only on a very high-end unified-memory or multi-GPU workstation.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <h2>Why local</h2>
       <p>No API bill that scales with usage, no account, and no dependence on a provider staying up or staying priced the way it is today. The trade-off is honest: a local model is not going to out-think a frontier hosted one. What you get instead is a setup that is entirely yours &mdash; private by construction, working offline, and still yours in five years regardless of what any AI company does.</p>
