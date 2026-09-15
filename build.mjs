@@ -65,7 +65,21 @@ await writeFile(
   })
 );
 
+// launcher.html is authored as its own fragment in launcher.fragment.html
+const launcherBody = await readFile(new URL("./launcher.fragment.html", import.meta.url), "utf8");
+await writeFile(
+  new URL("./docs/launcher.html", import.meta.url),
+  page({
+    title: "Cloak Forge Launcher — local-AI dashboard for your Mac",
+    head: headNoTitle.replace(
+      /<meta name="description"[^>]*>/,
+      '<meta name="description" content="A one-download terminal dashboard that scans your Mac, picks a model sized to your hardware, and runs it entirely on-device via a bundled Ollama.">'
+    ),
+    body: launcherBody.trim(),
+  })
+);
+
 await copyFile(new URL("./favicon.svg", import.meta.url), new URL("./docs/favicon.svg", import.meta.url));
 await writeFile(new URL("./docs/.nojekyll", import.meta.url), "");
 
-console.log("built docs/ -> index.html, privacy.html, favicon.svg, .nojekyll");
+console.log("built docs/ -> index.html, privacy.html, launcher.html, favicon.svg, .nojekyll");
