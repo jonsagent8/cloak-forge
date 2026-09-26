@@ -4,7 +4,7 @@
 // tags (canonical, OG/Twitter, favicon).
 import { readFile, writeFile, mkdir, copyFile } from "node:fs/promises";
 
-const SITE_URL = "https://jonsagent8.github.io/cloak-forge";
+const SITE_URL = "https://cloakforgeai.com";
 const fragment = await readFile(new URL("./index.html", import.meta.url), "utf8");
 
 // Split at the end of the first <style> block: everything before it (minus the
@@ -95,5 +95,6 @@ await writeFile(
 
 await copyFile(new URL("./favicon.svg", import.meta.url), new URL("./docs/favicon.svg", import.meta.url));
 await writeFile(new URL("./docs/.nojekyll", import.meta.url), "");
+await writeFile(new URL("./docs/CNAME", import.meta.url), new URL(SITE_URL).host + "\n");
 
 console.log("built docs/ -> index.html, privacy.html, launcher.html, email.html, favicon.svg, .nojekyll");
