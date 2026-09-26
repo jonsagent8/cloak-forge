@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="bg" cx="75%" cy="10%" r="95%">
+      <stop offset="0" stop-color="#1b3572"/><stop offset="45%" stop-color="#0e1c40"/><stop offset="100%" stop-color="#040610"/>
+    </radialGradient>
+    <linearGradient id="e" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffab66"/><stop offset="1" stop-color="#ff7a1f"/></linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <g transform="translate(96 150) scale(3.3)"><path fill="url(#e)" fill-rule="evenodd" d="M50 4c4 16 16 24 24 36 6 9 9 17 9 26 0 17-14 30-33 30S17 83 17 66c0-11 5-20 12-28 1 8 4 13 9 16-2-20 4-36 12-50z M50 50a8 8 0 0 0-4.6 14.5L42 82h16l-3.4-17.5A8 8 0 0 0 50 50z"/></g>
+  <text x="470" y="300" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="800" font-size="96" fill="#eef2fa" letter-spacing="-2">Cloak Forge</text>
+  <text x="474" y="372" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="30" fill="#a9b6cf">Private AI automation, forged on your machine.</text>
+  <text x="474" y="440" font-family="Menlo, monospace" font-size="22" fill="#ff8a33" letter-spacing="5">NO CLOUD · NO METER · RUNS OFFLINE</text>
+</svg>

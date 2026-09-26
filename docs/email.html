@@ -50,7 +50,7 @@
 
   *,*::before,*::after{box-sizing:border-box}
   html{scroll-behavior:smooth}
-  #top,#services,#why,#hardware,#showcase,#launcher,#contact{scroll-margin-top:5rem}
+  #top{scroll-margin-top:5rem}
 
   body{
     margin:0;
@@ -124,10 +124,33 @@
     background:rgba(11,26,48,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
     border-bottom:1px solid var(--line-soft);
   }
-  .header-inner{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding-block:.8rem}
+  .header-inner{display:flex;align-items:center;gap:1rem;padding-block:.8rem}
   .wordmark{display:inline-flex;align-items:center;gap:.55rem;color:var(--ink);font-family:"Archivo",sans-serif;font-weight:800;font-size:1.02rem}
   .wordmark:hover{text-decoration:none}
   .wordmark svg,.footer-brand svg{color:var(--ember)}
+  .wordmark svg{width:36px;height:36px;transform:translateY(-6px)} /* lift so the keyhole, not the flame, sits on the text line */
+
+  /* primary nav */
+  .site-nav{display:flex;flex-wrap:wrap;gap:1.5rem;align-items:center;flex:1}
+  .site-nav a{color:var(--ink-dim);font-family:"IBM Plex Sans",sans-serif;font-size:.92rem;font-weight:500}
+  .site-nav a:hover{color:var(--ink);text-decoration:none}
+  .nav-toggle{
+    display:none;background:transparent;border:1px solid var(--line);color:var(--ink);
+    font-family:"IBM Plex Sans",sans-serif;font-size:.85rem;font-weight:600;
+    padding:.5em .9em;border-radius:5px;cursor:pointer;
+  }
+  .nav-toggle:hover{border-color:var(--ember)}
+  @media (max-width:900px){
+    .header-inner{flex-wrap:wrap}
+    .wordmark{order:1}
+    .nav-toggle{display:inline-flex;order:2}
+    .header-inner>.btn{order:3}
+    .site-nav{
+      order:4;flex:1 1 100%;flex-direction:column;align-items:flex-start;gap:.9rem;
+      max-height:0;overflow:hidden;opacity:0;transition:max-height .2s ease,opacity .2s ease;
+    }
+    .site-nav.is-open{max-height:22rem;opacity:1;padding-top:.6rem;padding-bottom:.2rem}
+  }
 
   /* hero — deep space with a flowing ribbon of light */
   .hero{
@@ -138,34 +161,70 @@
       linear-gradient(174deg,#060b1e 0%,#040814 58%,#03040a 100%);
   }
   /* soft hand-off into the page below */
-  .hero::after{
-    content:"";position:absolute;left:0;right:0;bottom:0;height:38%;z-index:4;pointer-events:none;
-    background:linear-gradient(to bottom,transparent 34%,#0b1734 100%);
+
+
+
+  /* hero video — a real waterfall, graded to the navy palette; the left side is
+     darkened so the headline reads, with a faint forge glow at the base */
+  .hero-video{position:absolute;inset:0;z-index:0;overflow:hidden;background:#040814 url(media/waterfall-poster.jpg) center/cover no-repeat}
+  .hero-video video{display:block;width:100%;height:100%;object-fit:cover}
+  .hero-video::after{
+    content:"";position:absolute;inset:0;
+    background:
+      linear-gradient(90deg,rgba(4,8,20,.94) 0%,rgba(4,8,20,.82) 32%,rgba(4,8,20,.34) 62%,rgba(4,8,20,.5) 100%),
+      linear-gradient(180deg,rgba(4,8,20,.55) 0%,transparent 26%),
+      radial-gradient(55% 40% at 70% 104%,rgba(255,138,51,.2),transparent 70%);
+  }
+  .hero-side b,.hero-side span{text-shadow:0 1px 3px rgba(4,8,20,.95),0 0 18px rgba(4,8,20,.9)}
+  .hero .hero-side span{color:var(--ink-dim)}
+  /* orange-tinted glass panels around the hero text. On desktop the padding is
+     cancelled by an equal negative margin, so the panels grow outward and the
+     hero (and the video framing) stays exactly the same size */
+  .hero-main,.hero-side div{
+    background:linear-gradient(135deg,rgba(255,146,58,.3),rgba(255,138,51,.12) 55%,rgba(255,170,92,.24)),rgba(8,12,28,.5);
+    border-radius:14px;
+    box-shadow:inset 0 0 60px rgba(255,138,51,.12),0 24px 60px -28px rgba(255,138,51,.6);
+    -webkit-backdrop-filter:blur(10px) saturate(1.15);backdrop-filter:blur(10px) saturate(1.15);
+  }
+  .hero-main{padding:1.5rem 1.4rem}
+  @media (min-width:920px){
+    .hero .hero-main{padding:2rem 2.2rem;margin:-2rem -2.2rem;max-width:calc(34rem + 4.4rem)}
+    .hero-side div{padding:.6rem 1.1rem;margin:-.6rem -1.1rem}
+  }
+  @media (max-width:919px){
+    .hero-video::after{background:linear-gradient(180deg,rgba(4,8,20,.7),rgba(4,8,20,.86) 60%,rgba(4,8,20,.9))}
   }
 
-  .fluid-defs{position:absolute;width:0;height:0}
-  /* flowing water — light-blue currents that sweep across a dark deep-blue body,
-     wobbled by a turbulence displacement so they ripple as they travel */
-  .fluid{
-    position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;
-    background:radial-gradient(130% 120% at 76% 0%,#0c2450 0%,#081934 46%,#040a20 82%);
-    -webkit-mask:radial-gradient(155% 135% at 66% 4%,#000 42%,rgba(0,0,0,.6) 72%,transparent 100%);
-    mask:radial-gradient(155% 135% at 66% 4%,#000 42%,rgba(0,0,0,.6) 72%,transparent 100%);
+  /* the same waterfall turned on its side, twice: the left copy flows right and
+     the right copy is its mirror, so the two streams meet in the middle. It runs
+     behind the open band under the hero and the two sections below it */
+  /* the zone slides up under the hero's bottom padding and fades in there, so the
+     two waterfalls blend with no gap */
+  .river-zone{position:relative;z-index:1;margin-top:calc(-1 * clamp(4rem,9vw,6rem));pointer-events:none}
+  .river-zone > .section{position:relative;z-index:1;border-top:0;pointer-events:auto}
+  .river-gap{height:calc(clamp(200px,24vw,340px) + clamp(4rem,9vw,6rem))}
+  .river{position:absolute;inset:0;z-index:0;display:grid;grid-template-columns:1fr 1fr;overflow:hidden;
+    pointer-events:none;
+    -webkit-mask:linear-gradient(transparent,#000 clamp(4rem,9vw,6rem),#000 88%,transparent);mask:linear-gradient(transparent,#000 clamp(4rem,9vw,6rem),#000 88%,transparent)}
+  .river-half{position:relative;overflow:hidden;container-type:size}
+  .river-half.mirror{transform:scaleX(-1);margin-left:-1px}
+  .river-half video{
+    /* sized in the half's own units, then turned 90deg: its width becomes the zone's height */
+    position:absolute;top:50%;left:50%;width:calc(100cqh + 8px);height:calc(100cqw + 8px);object-fit:cover;
+    transform:translate(-50%,-50%) rotate(-90deg);
+    background:#040814 url(media/waterfall-poster.jpg) center/cover no-repeat;
   }
-  .fluid-inner{position:absolute;inset:0;filter:url(#flow)}
-  .fluid i{
-    position:absolute;left:0;display:block;border-radius:50%;
-    background:radial-gradient(closest-side,rgba(150,196,240,.82),rgba(92,150,214,.28) 44%,rgba(80,135,205,0) 74%);
-    mix-blend-mode:screen;will-change:transform;
+  .river::before{
+    content:"";position:absolute;top:0;bottom:0;left:calc(50% - 28px);width:56px;z-index:1;pointer-events:none;
+    -webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px);
+    -webkit-mask:linear-gradient(90deg,transparent,#000 35%,#000 65%,transparent);mask:linear-gradient(90deg,transparent,#000 35%,#000 65%,transparent);
   }
-  .fluid .s1{width:80vw;height:22vw;top:8%;animation:drift 17s linear infinite}
-  .fluid .s2{width:64vw;height:18vw;top:30%;opacity:.85;animation:drift 24s linear infinite;animation-delay:-9s}
-  .fluid .s3{width:96vw;height:28vw;top:-2%;opacity:.55;animation:drift 32s linear infinite;animation-delay:-20s}
-  .fluid .s4{width:50vw;height:14vw;top:50%;opacity:.7;animation:driftUp 13s linear infinite;animation-delay:-5s}
-  .fluid .s5{width:72vw;height:20vw;top:18%;opacity:.7;animation:driftDn 20s linear infinite;animation-delay:-13s}
-  @keyframes drift{from{transform:translate3d(-95vw,0,0)}to{transform:translate3d(125vw,0,0)}}
-  @keyframes driftUp{from{transform:translate3d(-95vw,4vh,0)}to{transform:translate3d(125vw,-6vh,0)}}
-  @keyframes driftDn{from{transform:translate3d(-95vw,-5vh,0)}to{transform:translate3d(125vw,5vh,0)}}
+  .river::after{
+    content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+    background:
+      linear-gradient(180deg,rgba(4,8,20,0) 0,rgba(4,8,20,.08) clamp(160px,18vw,280px),rgba(4,8,20,.66) clamp(330px,34vw,520px),rgba(4,8,20,.66) 100%),
+      linear-gradient(90deg,rgba(4,8,20,.5),rgba(4,8,20,.08) 30%,rgba(4,8,20,.08) 70%,rgba(4,8,20,.5));
+  }
 
   .hero-content{position:relative;z-index:2;padding-block:clamp(7rem,17vw,11rem) clamp(4rem,9vw,6rem)}
   .hero-grid{display:grid;gap:2.4rem}
@@ -264,6 +323,41 @@
   .rig p{color:var(--ink-dim);font-size:.95rem}
   .rig p + p{margin-top:.15rem}
   .hw-foot{margin-top:1.9rem;color:var(--ink-dim);max-width:58ch;font-size:.96rem}
+
+  /* fit checker */
+  .spec-tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1.8rem}
+  .spec-tab{
+    font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;
+    padding:.55em 1.1em;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink-dim);cursor:pointer;
+  }
+  .spec-tab:hover{border-color:var(--ember)}
+  .spec-tab.is-active{background:var(--surface-2);border-color:var(--ember);color:var(--ink)}
+  .spec-panel{display:none;margin-top:1.4rem}
+  .spec-panel.is-active{display:block}
+  .spec-panel ol{margin:0;padding-left:1.3rem;display:flex;flex-direction:column;gap:.6rem;color:var(--ink-dim);font-size:.95rem}
+  .spec-panel code{font-family:"IBM Plex Mono",monospace;font-size:.88em;background:var(--surface-2);padding:.1em .4em;border-radius:3px;color:var(--ink)}
+
+  .fit-tool{
+    margin-top:2.6rem;background:var(--panel),var(--surface);border:1px solid var(--line);border-radius:12px;
+    box-shadow:var(--panel-edge);padding:clamp(1.6rem,3.5vw,2.4rem);
+  }
+  .fit-form{display:grid;gap:1.3rem;max-width:34rem;margin-top:1.4rem}
+  .fit-group{display:flex;flex-direction:column;gap:.5rem}
+  .fit-group>span{font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim)}
+  .fit-radios{display:flex;flex-direction:column;gap:.55rem}
+  .fit-radios label{display:flex;align-items:center;gap:.6rem;font-size:.95rem;color:var(--ink-dim);cursor:pointer}
+  .fit-radios input{accent-color:var(--ember)}
+  .fit-form select{
+    font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);
+    border-radius:5px;padding:.7em .8em;width:100%;max-width:16rem;
+  }
+  .fit-form select:focus{border-color:var(--ember);outline:none;box-shadow:0 0 0 3px rgba(255,138,48,.18)}
+  .fit-result{margin-top:1.8rem;padding-top:1.6rem;border-top:1px solid var(--line-soft);display:none}
+  .fit-result.is-visible{display:block}
+  .fit-result-tier{font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ember);margin-bottom:.5rem}
+  .fit-result h3{margin-bottom:.5rem}
+  .fit-result p{color:var(--ink-dim);margin-top:.5rem}
+  .fit-result .case-cta{margin-top:1.3rem}
 
   /* showcase */
   .case{
@@ -368,9 +462,7 @@
   @media (prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
     *{animation-duration:.001ms!important;transition-duration:.001ms!important}
-    .rig.is-rec::after,.case::before,body::after,.fluid i{animation:none!important}
-    .fluid i{transform:translate3d(20vw,0,0)!important}
-    .fluid-inner{filter:blur(26px)!important}
+    .rig.is-rec::after,.case::before,body::after{animation:none!important}
   }
 </style>
 <link rel="canonical" href="https://cloakforgeai.com/">
@@ -379,8 +471,13 @@
 <meta property="og:title" content="Cloak Forge">
 <meta property="og:description" content="Cloak Forge sets up private AI automation on your own machine — local models, no cloud, no per-token billing. Remote setup, mail-in SSD processing, and one-on-one tutoring.">
 <meta property="og:url" content="https://cloakforgeai.com/">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://cloakforgeai.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cloakforgeai.com/og-image.png">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 </head>
 <body>
 <style>
@@ -398,10 +495,15 @@
 <header class="site-header">
   <div class="wrap header-inner">
     <a href="index.html" class="wordmark">
-      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1l2.3 6.9L21 5.7l-4.2 5.6L23 15l-7-.7L12 23l-1.9-8.7L3 15l5.4-3.4L4 5.7l6.7 1.9z"/></svg>
+      <svg width="24" height="24" viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M50 4c4 16 16 24 24 36 6 9 9 17 9 26 0 17-14 30-33 30S17 83 17 66c0-11 5-20 12-28 1 8 4 13 9 16-2-20 4-36 12-50z M50 50a8 8 0 0 0-4.6 14.5L42 82h16l-3.4-17.5A8 8 0 0 0 50 50z"/></svg>
       <span>Cloak Forge</span>
     </a>
-    <a href="index.html#contact" class="btn btn-primary btn-sm">Book a call</a>
+    <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="site-nav" id="site-nav" aria-label="Primary">
+      <a href="about.html">About</a>
+      <a href="offerings.html">What we offer</a>
+    </nav>
+    <a href="offerings.html#contact" class="btn btn-primary btn-sm">Get in touch</a>
   </div>
 </header>
 
@@ -432,26 +534,41 @@
       <h2>Why a Connection, not its own app</h2>
       <p>It doesn't run its own copy of anything &mdash; no separate model to download, no separate account to sign into beyond the mail account you already have. It's a thin, purpose-built layer on top of the Launcher's local model, which is the whole point of Connections: one local AI setup, several tools that share it.</p>
 
-      <p style="margin-top:2rem"><strong>Pricing:</strong> not yet set &mdash; <a href="index.html#contact">email me</a> if you want to hear when it's available.</p>
+      <p style="margin-top:2rem"><strong>Pricing:</strong> not yet set &mdash; <a href="offerings.html#contact">get in touch</a> if you want to hear when it's available.</p>
 
-      <p style="margin-top:2.5rem"><a href="index.html">&larr; Back to the main site</a></p>
+      <p style="margin-top:2.5rem"><a href="offerings.html">&larr; Back to what we offer</a></p>
     </div>
   </section>
 </main>
 
 <footer class="site-footer">
   <div class="wrap footer-inner">
-    <div class="footer-brand">
-      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1l2.3 6.9L21 5.7l-4.2 5.6L23 15l-7-.7L12 23l-1.9-8.7L3 15l5.4-3.4L4 5.7l6.7 1.9z"/></svg>
+    <a href="index.html" class="footer-brand" style="color:inherit;text-decoration:none">
+      <svg width="24" height="24" viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M50 4c4 16 16 24 24 36 6 9 9 17 9 26 0 17-14 30-33 30S17 83 17 66c0-11 5-20 12-28 1 8 4 13 9 16-2-20 4-36 12-50z M50 50a8 8 0 0 0-4.6 14.5L42 82h16l-3.4-17.5A8 8 0 0 0 50 50z"/></svg>
       <span>Cloak Forge</span>
-    </div>
+    </a>
     <div class="footer-cols">
-      <div><span>Contact</span><a href="mailto:jonsagent8@gmail.com">jonsagent8@gmail.com</a></div>
-      <div><span>Product</span><a href="launcher.html">Launcher</a><br><a href="email.html">Email</a></div>
+      <div><span>Pages</span><a href="about.html">About</a><br><a href="offerings.html">What we offer</a></div>
+      <div><span>Products</span><a href="launcher.html">Launcher</a><br><a href="email.html">Cloak Forge Email</a></div>
+      <div><span>Contact</span><a href="mailto:jonsagent8@gmail.com">jonsagent8@gmail.com</a><br><a href="offerings.html#contact">Get in touch</a></div>
       <div><span>Legal</span><a href="privacy.html">Privacy</a></div>
     </div>
     <p class="footer-legal">&copy; 2026 Cloak Forge &middot; Local AI automation, set up on your machine &middot; No cloud, by design.</p>
   </div>
 </footer>
+
+<script>
+(function(){
+  "use strict";
+  var navBtn = document.getElementById("nav-toggle");
+  var nav = document.getElementById("site-nav");
+  if (navBtn && nav) {
+    navBtn.addEventListener("click", function(){
+      var open = nav.classList.toggle("is-open");
+      navBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+  }
+})();
+</script>
 </body>
 </html>

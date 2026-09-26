@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Privacy — Cloak Forge</title>
+<title>What we offer — Cloak Forge</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="How Cloak Forge handles the information you send through this site.">
+<meta name="description" content="Remote setup, mail-in SSD processing, tutoring, and the Cloak Forge Launcher — plus how to get in touch.">
 <meta name="theme-color" content="#081132">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -481,13 +481,9 @@
 </head>
 <body>
 <style>
-  .legal{max-width:70ch}
-  .legal p,.legal li{color:var(--ink-dim)}
-  .legal h2{margin-top:2.6rem;font-size:1.4rem}
-  .legal h2:first-of-type{margin-top:1.5rem}
-  .legal ul{padding-left:1.2rem;display:flex;flex-direction:column;gap:.5rem}
-  .legal .updated{font-family:"IBM Plex Mono",monospace;font-size:.8rem;color:var(--ink-faint);margin-top:.5rem}
-  .legal a{color:var(--ember-soft)}
+  @media (min-width:720px){.cards.two-up{grid-template-columns:repeat(2,1fr)}}
+  .promise{display:flex;gap:.55rem;align-items:flex-start;margin-top:.9rem;padding:.7rem .9rem;border:1px solid rgba(255,138,51,.35);border-radius:10px;background:rgba(255,138,51,.08);color:var(--ink) !important;font-weight:600;font-size:.93rem}
+  .promise svg{flex:none;width:18px;height:18px;margin-top:.12rem;color:var(--ember)}
 </style>
 
 <header class="site-header">
@@ -507,36 +503,116 @@
 
 <main>
   <section class="section" style="border-top:0">
-    <div class="wrap legal">
-      <p class="eyebrow">Privacy</p>
-      <h1>What we do with your information</h1>
-      <p class="updated">Last updated 2 September 2026</p>
+    <div class="wrap">
+      <p class="eyebrow">What we offer</p>
+      <h1>Services</h1>
+      <p class="hw-intro">Four ways to work with us, depending on how hands-on you want to be. Your information is only ever handled by local AI &mdash; on your Mac or on ours &mdash; never a cloud service. Setups and tutoring are for <a href="about.html#fit">Apple Silicon Macs (M1 or newer)</a> only; no Mac needed if we run the job for you.</p>
+      <div class="cards two-up">
 
-      <h2>The short version</h2>
-      <p>This is a small site for a small business. It has no analytics, no tracking pixels, no cookies, and no advertising. We collect only what you deliberately send us, and we use it only to reply.</p>
+        <article class="card">
+          <p class="card-kicker">Built for you</p>
+          <h3>Remote setup</h3>
+          <p class="card-desc">We build and test the whole automation on our end first &mdash; a model sized to your Mac, scripts wired to your kind of files, schedules set &mdash; then send it to you ready to run, with a short guide to get it going. No live session, and no access to your machine.</p>
+          <p class="price"><span class="price-num">from&nbsp;$400</span><span class="price-unit">one-time, per automation &middot; M-series Mac required</span></p>
+          <a href="offerings.html?service=Remote%20setup#contact" class="btn btn-ghost btn-block">Ask about remote setup</a>
+        </article>
 
-      <h2>The booking form</h2>
-      <p>The form on the contact section does not send anything to a server. When you press <em>Request a call</em>, your browser prepares an email in your own mail application containing the name, email address, service, and message you typed. Nothing leaves your device until you choose to send that email to us. Once you send it, we hold that message the way we hold any other email &mdash; to respond and to follow up on the work.</p>
+        <article class="card">
+          <p class="card-kicker">Done for you</p>
+          <h3>We run it on our machine</h3>
+          <p class="card-desc">Don&rsquo;t want to set anything up? Send us your documents or data and we run them through the local AI on our own computer &mdash; summaries, sorting, extraction, drafting &mdash; then send you the results. Nothing goes to a cloud AI service.</p>
+          <p class="promise"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.6-3 7.8-7 9-4-1.2-7-4.4-7-9V6l7-3z"/><path d="M9.2 12l2 2 3.6-3.8"/></svg><span>We never store or sell your data.</span></p>
+          <p class="price"><span class="price-num">Quoted</span><span class="price-unit">per job, after a quick look at the work</span></p>
+          <a href="offerings.html?service=Done%20for%20you#contact" class="btn btn-ghost btn-block">Ask about a job</a>
+        </article>
 
-      <h2>If you email us directly</h2>
-      <p>We keep the correspondence so we can carry the conversation forward and deliver the service. We do not sell it, rent it, or share it with anyone outside Cloak Forge, except where we are legally required to.</p>
+        <article class="card">
+          <p class="card-kicker">Offline</p>
+          <h3>Mail-in SSD service</h3>
+          <p class="card-desc">For work that can&rsquo;t touch a network at all. You ship an encrypted SSD, we process it on an air-gapped machine, and the drive comes back with the results. No remote access, no copies retained.</p>
+          <p class="price"><span class="price-num">from&nbsp;$650</span><span class="price-unit">per drive, processed &amp; returned</span></p>
+          <a href="offerings.html?service=Mail-in%20SSD#contact" class="btn btn-ghost btn-block">Arrange a drive</a>
+        </article>
 
-      <h2>Fonts and hosting</h2>
-      <ul>
-        <li>The site loads typefaces from Google Fonts (<code>fonts.googleapis.com</code>). As part of serving those files, Google receives your IP address and browser user-agent. This is the only third-party request the page makes.</li>
-        <li>The site is hosted on GitHub Pages. GitHub may log request metadata (IP address, user-agent, timestamp) under its own privacy practices.</li>
-      </ul>
+        <article class="card">
+          <p class="card-kicker">Tutoring</p>
+          <h3>One-on-one tutoring</h3>
+          <p class="card-desc">We teach you to run local AI yourself &mdash; picking and quantizing models, wiring prompt pipelines, scheduling jobs, and fixing things when they break &mdash; on your own Apple Silicon Mac, at your pace.</p>
+          <p class="price"><span class="price-num">$250</span><span class="price-unit">per hour &middot; M-series Mac required</span></p>
+          <a href="offerings.html?service=Tutoring#contact" class="btn btn-ghost btn-block">Book a session</a>
+        </article>
 
-      <h2>The mail-in SSD service</h2>
-      <p>If you use the drive-processing service, we work on your data on an air-gapped machine, return the drive, and retain no copies once the results are delivered and you have confirmed receipt. The specifics are written into the engagement agreement before any drive is shipped.</p>
+      </div>
+    </div>
+  </section>
 
-      <h2>Your choices</h2>
-      <p>You can ask us what correspondence we hold from you, and ask us to delete it, by emailing <a href="mailto:jonsagent8@gmail.com">jonsagent8@gmail.com</a>. Since we store nothing beyond email threads, this is usually a quick request to honour.</p>
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Products</p>
+      <h2>Software you run yourself</h2>
+      <div class="cards">
 
-      <h2>Changes</h2>
-      <p>If this policy changes, the date above changes with it. Material changes will be noted at the top of this page for a reasonable period.</p>
+        <article class="card">
+          <p class="card-kicker">The Launcher</p>
+          <h3>Local AI, no setup call</h3>
+          <p class="card-desc">A one-download app that scans your Mac, picks a model sized to your hardware, and runs it entirely on your machine. Apple Silicon only for now.</p>
+          <p class="price"><span class="price-num">$50</span><span class="price-unit">one-time &middot; checkout opens soon</span></p>
+          <a href="launcher.html" class="btn btn-ghost btn-block">See the Launcher &rarr;</a>
+        </article>
 
-      <p style="margin-top:2.5rem"><a href="offerings.html">&larr; Back to what we offer</a></p>
+        <article class="card">
+          <p class="card-kicker">Launcher add-on</p>
+          <h3>Cloak Forge Email</h3>
+          <p class="card-desc">Reads your inbox, drafts AI replies, and can send them for you on rules you set &mdash; running on the model the Launcher already installed.</p>
+          <p class="price"><span class="price-num">Coming soon</span><span class="price-unit">pricing not yet set</span></p>
+          <a href="email.html" class="btn btn-ghost btn-block">See Cloak Forge Email &rarr;</a>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="contact">
+    <div class="wrap contact-grid">
+      <div class="contact-intro">
+        <p class="eyebrow">Get in touch</p>
+        <h2>Tell us what you want to automate</h2>
+        <p>We&rsquo;ll reply within one business day and set up a 20-minute call to scope the work &mdash; what you run now, what hardware you have, and which option fits. No sales script.</p>
+        <ul class="contact-facts">
+          <li><span>Email</span><a href="mailto:jonsagent8@gmail.com">jonsagent8@gmail.com</a></li>
+          <li><span>Response time</span><span style="font-family:inherit;font-size:inherit;letter-spacing:normal;text-transform:none;color:var(--ink-dim)">Within one business day.</span></li>
+          <li><span>Drive intake</span><span style="font-family:inherit;font-size:inherit;letter-spacing:normal;text-transform:none;color:var(--ink-dim)">Shipping address for the mail-in SSD service is sent once a drive is scheduled.</span></li>
+        </ul>
+      </div>
+
+      <form id="booking" class="booking" novalidate>
+        <div class="field">
+          <label for="f-name">Name</label>
+          <input id="f-name" name="name" type="text" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label for="f-email">Email</label>
+          <input id="f-email" name="email" type="email" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="f-service">Interested in</label>
+          <select id="f-service" name="service">
+            <option value="Not sure yet">Not sure yet</option>
+            <option value="Remote setup">Remote setup</option>
+            <option value="Done for you">Done for you (we run it)</option>
+            <option value="Mail-in SSD">Mail-in SSD</option>
+            <option value="Tutoring">Tutoring</option>
+            <option value="The Launcher">The Launcher</option>
+            <option value="Cloak Forge Email">Cloak Forge Email</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-msg">What do you want to automate?</label>
+          <textarea id="f-msg" name="message" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Send message</button>
+        <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+      </form>
     </div>
   </section>
 </main>
@@ -560,12 +636,57 @@
 <script>
 (function(){
   "use strict";
+
   var navBtn = document.getElementById("nav-toggle");
   var nav = document.getElementById("site-nav");
   if (navBtn && nav) {
     navBtn.addEventListener("click", function(){
       var open = nav.classList.toggle("is-open");
       navBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+  }
+
+  /* ---- preselect service from ?service=... ---- */
+  var sel = document.getElementById("f-service");
+  var msg = document.getElementById("f-msg");
+  var want = new URLSearchParams(window.location.search).get("service");
+  if (want && sel) {
+    for (var i = 0; i < sel.options.length; i++) {
+      if (sel.options[i].value === want) { sel.selectedIndex = i; break; }
+    }
+    if (msg) msg.focus({ preventScroll: true });
+  }
+
+  /* ---- contact form (no backend: hands off to the visitor's email app) ---- */
+  var form = document.getElementById("booking");
+  var status = document.getElementById("form-status");
+  if (form && status) {
+    form.addEventListener("submit", function(e){
+      e.preventDefault();
+      var name = document.getElementById("f-name").value.trim();
+      var email = document.getElementById("f-email").value.trim();
+      var body = document.getElementById("f-msg").value.trim();
+      var service = sel ? sel.value : "";
+      status.classList.remove("is-ok", "is-err");
+
+      if (!name || !body || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        status.textContent = "Add your name, a valid email, and a line about the work, then send again.";
+        status.classList.add("is-err");
+        return;
+      }
+
+      var subject = encodeURIComponent("Cloak Forge inquiry — " + service);
+      var mailBody = encodeURIComponent(
+        "Name: " + name + "\nEmail: " + email + "\nInterested in: " + service + "\n\n" + body
+      );
+      var href = "mailto:jonsagent8@gmail.com?subject=" + subject + "&body=" + mailBody;
+      var safeName = name.replace(/[<>&"]/g, "");
+
+      status.innerHTML = "Thanks, " + safeName +
+        ". Your message is ready — <a href=\"" + href + "\">open it in your email app</a> to send. We reply within one business day.";
+      status.classList.add("is-ok");
+      var submit = form.querySelector("button[type=submit]");
+      if (submit) { submit.textContent = "Message prepared"; submit.disabled = true; }
     });
   }
 })();

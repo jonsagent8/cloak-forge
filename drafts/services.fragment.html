@@ -1,0 +1,87 @@
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a href="index.html" class="wordmark">
+      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1l2.3 6.9L21 5.7l-4.2 5.6L23 15l-7-.7L12 23l-1.9-8.7L3 15l5.4-3.4L4 5.7l6.7 1.9z"/></svg>
+      <span>Cloak Forge</span>
+    </a>
+    <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="site-nav" id="site-nav" aria-label="Primary">
+      <a href="services.html">Services</a>
+      <a href="why-local.html">Why local</a>
+      <a href="fit.html">Is it a fit?</a>
+      <a href="showcase.html">Showcase</a>
+      <a href="launcher.html">Launcher</a>
+      <a href="email.html">Email</a>
+    </nav>
+    <a href="contact.html" class="btn btn-primary btn-sm">Book a call</a>
+  </div>
+</header>
+
+<main>
+  <section class="section" style="border-top:0">
+    <div class="wrap">
+      <p class="eyebrow">Services</p>
+      <h1>Three ways to get set up</h1>
+      <p class="hw-intro">Pick the route that fits how hands-on you want to be &mdash; all three end with private AI automation running on hardware you control.</p>
+      <div class="cards" style="margin-top:2.2rem">
+
+        <article class="card">
+          <p class="card-kicker">Remote</p>
+          <h3>Remote setup</h3>
+          <p class="card-desc">We join a screen-share session and build the automation with you watching &mdash; models pulled to your disk, scripts wired to your files, every step tested before we disconnect. You keep working access; we keep none.</p>
+          <p class="price"><span class="price-num">from&nbsp;$400</span><span class="price-unit">one-time setup, per automation</span></p>
+          <a href="contact.html?service=Remote%20setup" class="btn btn-ghost btn-block">Book remote setup</a>
+        </article>
+
+        <article class="card">
+          <p class="card-kicker">Offline</p>
+          <h3>Mail-in SSD service</h3>
+          <p class="card-desc">For work that can&rsquo;t touch a network at all. You ship an encrypted SSD, we process it on an air-gapped machine, and the drive comes back with the results. No remote access, no copies retained.</p>
+          <p class="price"><span class="price-num">from&nbsp;$650</span><span class="price-unit">per drive, processed &amp; returned</span></p>
+          <a href="contact.html?service=Mail-in%20SSD" class="btn btn-ghost btn-block">Arrange a drive</a>
+        </article>
+
+        <article class="card">
+          <p class="card-kicker">Tutoring</p>
+          <h3>One-on-one tutoring</h3>
+          <p class="card-desc">We teach you to run local AI yourself &mdash; picking and quantizing models, wiring prompt pipelines, scheduling jobs, and fixing things when they break &mdash; on your own hardware, at your pace.</p>
+          <p class="price"><span class="price-num">$250</span><span class="price-unit">per hour</span></p>
+          <a href="contact.html?service=Tutoring" class="btn btn-ghost btn-block">Book a session</a>
+        </article>
+
+      </div>
+
+      <p style="margin-top:2.5rem"><a href="fit.html">Not sure your machine can handle it? Check your fit &rarr;</a></p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1l2.3 6.9L21 5.7l-4.2 5.6L23 15l-7-.7L12 23l-1.9-8.7L3 15l5.4-3.4L4 5.7l6.7 1.9z"/></svg>
+      <span>Cloak Forge</span>
+    </div>
+    <div class="footer-cols">
+      <div><span>Explore</span><a href="services.html">Services</a><br><a href="why-local.html">Why local</a><br><a href="fit.html">Is it a fit?</a><br><a href="showcase.html">Showcase</a></div>
+      <div><span>Product</span><a href="launcher.html">Launcher</a><br><a href="email.html">Email</a></div>
+      <div><span>Contact</span><a href="mailto:jonsagent8@gmail.com">jonsagent8@gmail.com</a><br><a href="contact.html">Book a call</a></div>
+      <div><span>Legal</span><a href="privacy.html">Privacy</a></div>
+    </div>
+    <p class="footer-legal">&copy; 2026 Cloak Forge &middot; Local AI automation, set up on your machine &middot; No cloud, by design.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var navBtn = document.getElementById("nav-toggle");
+  var nav = document.getElementById("site-nav");
+  if (navBtn && nav) {
+    navBtn.addEventListener("click", function(){
+      var open = nav.classList.toggle("is-open");
+      navBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+  }
+})();
+</script>

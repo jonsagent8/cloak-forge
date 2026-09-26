@@ -1,0 +1,322 @@
+<style>
+  .steps{margin-top:2.6rem;display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));list-style:none;padding:0;counter-reset:step}
+  .steps li{counter-increment:step;padding:1.4rem 1.3rem;border:1px solid var(--line);border-radius:12px;background:var(--panel),var(--surface)}
+  .steps li::before{content:"0" counter(step);display:block;font-family:"IBM Plex Mono",monospace;font-size:.8rem;letter-spacing:.12em;color:var(--ember);margin-bottom:.7rem}
+  .steps h3{font-size:1.05rem;margin-bottom:.45rem}
+  .steps p{color:var(--ink-dim);font-size:.94rem}
+  @media (min-width:720px){.benefits.two-up{grid-template-columns:repeat(2,1fr);column-gap:3rem}}
+  .promise{display:flex;gap:.55rem;align-items:flex-start;margin-top:.9rem;padding:.7rem .9rem;border:1px solid rgba(255,138,51,.35);border-radius:10px;background:rgba(255,138,51,.08);color:var(--ink) !important;font-weight:600;font-size:.93rem}
+  .promise svg{flex:none;width:18px;height:18px;margin-top:.12rem;color:var(--ember)}
+  .verdict{display:inline-block;margin-bottom:.45rem;padding:.18rem .55rem;border-radius:999px;font-family:"IBM Plex Mono",monospace;font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase}
+  .verdict.bad{color:#ff9d8a;background:rgba(255,90,60,.12);border:1px solid rgba(255,110,80,.45)}
+  .verdict.meh{color:#ffc27a;background:rgba(255,170,60,.1);border:1px solid rgba(255,170,60,.4)}
+  .mem tr.row-bad td{background:rgba(255,90,60,.05)}
+  .mem tr.row-meh td{background:rgba(255,170,60,.04)}
+  .fit-result .verdict{margin:0 0 .6rem}
+</style>
+
+<header class="site-header"></header>
+
+<main>
+  <section class="section" style="border-top:0">
+    <div class="wrap">
+      <p class="eyebrow">About</p>
+      <h1>AI that works for you &mdash; and never leaves your computer</h1>
+      <p class="hw-intro">Cloak Forge sets up private AI automation on your own Apple Silicon Mac &mdash; or, if you&rsquo;d rather not set anything up, runs your information through the local AI on our own computer for you. Either way, nothing is sent to a cloud service, so there&rsquo;s nothing to leak, nothing to meter, and nothing that stops working when a vendor changes its terms.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">What we do</p>
+      <h2>Private AI &mdash; on your machine or ours</h2>
+      <div class="benefits two-up">
+
+        <div class="benefit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>
+          <h3>Build it for your machine</h3>
+          <p>We pick a model sized to your Mac&rsquo;s chip and memory, build and test everything on our end, then send it to you ready to run &mdash; no accounts, no API keys, no monthly plan.</p>
+        </div>
+
+        <div class="benefit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h10M4 12h16M4 17h7"/><path d="M17 4l3 3-3 3"/></svg>
+          <h3>Automate the busywork</h3>
+          <p>We set the model up to work with your kind of files and tools &mdash; sorting and drafting email, summarizing documents, organizing data &mdash; and schedule it to run on its own.</p>
+        </div>
+
+        <div class="benefit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8l9-4 9 4-9 4-9-4z"/><path d="M7 10v5c0 1.4 2.2 3 5 3s5-1.6 5-3v-5"/></svg>
+          <h3>Teach you to run it</h3>
+          <p>Prefer to do it yourself? We&rsquo;ll teach you how to choose models, build pipelines, and fix things when they break &mdash; on your hardware, at your pace.</p>
+        </div>
+
+        <div class="benefit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="7" rx="1.5"/><rect x="3" y="14" width="18" height="7" rx="1.5"/><path d="M7 6.5h.01M7 17.5h.01"/></svg>
+          <h3>Or run it for you</h3>
+          <p>No setup on your end at all: send us your documents or data and we run them through the local AI on our own computer &mdash; never a cloud service &mdash; then send you the results.</p>
+          <p class="promise"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.6-3 7.8-7 9-4-1.2-7-4.4-7-9V6l7-3z"/><path d="M9.2 12l2 2 3.6-3.8"/></svg><span>We never store or sell your data.</span></p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Why local</p>
+      <h2>Why run AI on your own computer?</h2>
+      <div class="benefits">
+
+        <div class="benefit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.6-3 7.8-7 9-4-1.2-7-4.4-7-9V6l7-3z"/><path d="M9.2 12l2 2 3.6-3.8"/></svg>
+          <h3>Your data stays yours</h3>
+          <p>Your files are only ever processed on a physical machine &mdash; yours, or ours &mdash; never on a cloud AI service. There&rsquo;s no third party holding copies, and no vendor account to be breached.</p>
+        </div>
+
+        <div class="benefit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M6.2 17.8L17.8 6.2"/><path d="M9.5 9.2c0-1.2 1-1.9 2.5-1.9s2.5.8 2.5 1.9-1 1.6-2.5 1.9"/></svg>
+          <h3>No meter running</h3>
+          <p>Cloud AI bills per word or per hour, forever. Local AI costs the setup and the electricity your computer already uses.</p>
+        </div>
+
+        <div class="benefit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>
+          <h3>Works offline</h3>
+          <p>It keeps running when the internet drops, when a provider changes its prices, or when a cloud product shuts down.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="fit">
+    <div class="wrap">
+      <p class="eyebrow">Fit check</p>
+      <h2>Will it run on your Mac?</h2>
+      <p class="hw-intro">We only build for <b>Apple Silicon Macs</b> &mdash; any Mac with an M1, M2, M3, M4 or newer chip. Their <em>unified memory</em> lets the AI use nearly all of the computer&rsquo;s memory, which is what makes big, capable models practical on a desk. How much memory your Mac has decides which models it can run &mdash; find it below, then use the checker.</p>
+
+      <h2 style="margin-top:2.4rem;font-size:1.3rem">Step 1: find your chip and memory</h2>
+      <div class="spec-panel is-active">
+        <ol>
+          <li>Click the Apple menu in the top-left corner of the screen.</li>
+          <li>Choose <code>About This Mac</code>.</li>
+          <li>Read the <b>Chip</b> line. If it says Apple M1, M2, M3, M4 or newer (any variant, like &ldquo;M2 Pro&rdquo;), you&rsquo;re set. If it says Intel, see the note below.</li>
+          <li>Read the <b>Memory</b> line &mdash; e.g. &ldquo;16 GB.&rdquo; That whole number is usable by the AI.</li>
+        </ol>
+      </div>
+
+      <h2 style="margin-top:2.6rem;font-size:1.3rem">Step 2: check your fit</h2>
+      <div class="fit-tool">
+        <form class="fit-form" id="fit-form">
+          <div class="fit-group">
+            <span id="fit-mem-label">How much memory does your Mac have?</span>
+            <select id="fit-mem" aria-label="Memory"></select>
+          </div>
+          <button type="submit" class="btn btn-primary" style="justify-self:start">Check my fit</button>
+        </form>
+
+        <div class="fit-result" id="fit-result">
+          <p class="fit-result-tier" id="fit-result-tier"></p>
+          <h3 id="fit-result-title"></h3>
+          <p id="fit-result-note"></p>
+          <p id="fit-result-extra"></p>
+          <div class="case-cta" id="fit-result-cta"></div>
+        </div>
+      </div>
+
+      <p class="hw-foot" style="margin-top:1.6rem"><b>Intel Mac, Windows or Linux?</b> We don&rsquo;t build for those &mdash; PCs split memory between the computer and the graphics card, and Intel Macs are too slow for these models, so neither can match an M-series Mac without expensive extra hardware. You can still use us: <a href="offerings.html?service=Done%20for%20you#contact">we&rsquo;ll run the job on our own Mac</a> and send you the results.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Memory guide</p>
+      <h2>What to expect at each amount of memory</h2>
+      <p class="hw-intro">Memory on an Apple Silicon Mac. The figures below assume 4-bit quantized models &mdash; the format most people run locally &mdash; with room left for a working context window.</p>
+
+      <div class="mem" role="region" aria-label="Memory tiers and what they can run">
+        <table>
+          <colgroup><col class="c-mem"><col class="c-fit"><col></colgroup>
+          <thead>
+            <tr><th scope="col">Memory</th><th scope="col">Model class that fits</th><th scope="col">What to expect</th></tr>
+          </thead>
+          <tbody>
+            <tr class="row-bad">
+              <td class="m-cap">8 GB</td>
+              <td class="m-mid">3B &ndash; 4B</td>
+              <td class="m-note"><span class="verdict bad">Basically unusable</span><br>Only tiny models fit, and they get things wrong too often to rely on. We don&rsquo;t recommend AI work on an 8&nbsp;GB Mac.</td>
+            </tr>
+            <tr class="row-meh">
+              <td class="m-cap">16 GB</td>
+              <td class="m-mid">7B &ndash; 8B</td>
+              <td class="m-note"><span class="verdict meh">Only slightly usable</span><br>Fine for short, simple jobs &mdash; quick summaries, sorting, tagging &mdash; but it struggles with anything longer or more complex. 24&nbsp;GB is where it starts to get comfortable.</td>
+            </tr>
+            <tr>
+              <td class="m-cap">24 &ndash; 32 GB</td>
+              <td class="m-mid">12B &ndash; 14B</td>
+              <td class="m-note">A clear step up in reasoning and instruction-following, or an 8B model with a long context window &mdash; good for daily work.</td>
+            </tr>
+            <tr>
+              <td class="m-cap">48 GB</td>
+              <td class="m-mid">27B &ndash; 32B</td>
+              <td class="m-note">Strong on nuanced writing, code, and multi-step tasks. Close to mainstream cloud quality for most jobs.</td>
+            </tr>
+            <tr>
+              <td class="m-cap">64 GB</td>
+              <td class="m-mid">70B (4-bit)</td>
+              <td class="m-note">Where local output starts to rival premium cloud models, with roughly 40 GB of weights and headroom for a large context on top.</td>
+            </tr>
+            <tr>
+              <td class="m-cap">128 GB +</td>
+              <td class="m-mid">70B at full precision, or large mixture-of-experts models</td>
+              <td class="m-note">Room to keep several models loaded at once and hold long-running context in memory &mdash; the basis for always-on agents.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="rigs" style="grid-template-columns:1fr">
+        <div class="rig is-rec">
+          <p class="rig-tag">Why we only work on M-series Macs</p>
+          <h3>Unified memory changes the math</h3>
+          <p>On an Apple Silicon Mac, the chip and its graphics share one pool of memory, so the AI can use nearly all of it. A 64&nbsp;GB Mac runs models that would otherwise need a data-center graphics card &mdash; and a Mac around $2,000 covers most real workloads.</p>
+          <p>On Windows and Linux PCs, the model has to fit inside the graphics card&rsquo;s own memory, which tops out around 24&nbsp;GB on consumer cards. Going bigger means $2,000+ cards or very slow processing. Focusing on one platform also means every setup we ship is one we&rsquo;ve built and tested on the same kind of machine you have.</p>
+        </div>
+      </div>
+
+      <p class="hw-foot">When you get in touch, we look at what you already own, tell you plainly which tier you&rsquo;re in, and lay out what it will and won&rsquo;t do before you spend anything on hardware.</p>
+      <p style="margin-top:1rem"><a href="offerings.html#contact" class="btn btn-ghost">Get in touch</a></p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">What to expect</p>
+      <h2>From first message to finished setup</h2>
+      <ol class="steps">
+        <li>
+          <h3>You reach out</h3>
+          <p>Tell us what you want to automate. We reply within one business day.</p>
+        </li>
+        <li>
+          <h3>A 20-minute call</h3>
+          <p>We talk through what you run now, what hardware you have, and which option fits. No sales script.</p>
+        </li>
+        <li>
+          <h3>We build it</h3>
+          <p>We build and test everything on our end, then send it to you ready to run &mdash; or we run the job on our machine and send back the results.</p>
+        </li>
+        <li>
+          <h3>It&rsquo;s yours</h3>
+          <p>You keep full access and we keep none. No subscription, and no copies of your data on our side.</p>
+        </li>
+      </ol>
+
+      <div class="hero-cta" style="margin-top:2.6rem">
+        <a href="offerings.html" class="btn btn-primary">See what we offer</a>
+        <a href="offerings.html#contact" class="btn btn-ghost">Get in touch</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer"></footer>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  /* ---- scroll position -> --sy, drives the tinted-glass reflections ---- */
+  if (!reduce.matches) {
+    var root = document.documentElement, ticking = false;
+    function syncScroll(){
+      root.style.setProperty("--sy", window.scrollY.toFixed(1) + "px");
+      ticking = false;
+    }
+    window.addEventListener("scroll", function(){
+      if (!ticking) { ticking = true; requestAnimationFrame(syncScroll); }
+    }, { passive: true });
+    syncScroll();
+  }
+
+  /* ---- nav toggle ---- */
+  var navBtn = document.getElementById("nav-toggle");
+  var nav = document.getElementById("site-nav");
+  if (navBtn && nav) {
+    navBtn.addEventListener("click", function(){
+      var open = nav.classList.toggle("is-open");
+      navBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+  }
+
+  /* ---- fit checker ---- */
+  var TIERS = [
+    { max: 15, label: "8 GB tier", verdict: ["bad", "Basically unusable"], title: "Only tiny 3B – 4B models fit", note: "They get things wrong too often to rely on. We don’t recommend AI work on an 8 GB Mac — if you have one, let us run the job on our Mac for you instead." },
+    { max: 23, label: "16 GB tier", verdict: ["meh", "Only slightly usable"], title: "7B – 8B models fit, just barely", note: "Fine for short, simple jobs — quick summaries, sorting, tagging — but it struggles with anything longer or more complex. 24 GB is where it starts to get comfortable." },
+    { max: 47, label: "24–32 GB tier", models: "12B – 14B models", note: "A clear step up in reasoning and instruction-following, or an 8B model with a long context window — good for daily work." },
+    { max: 63, label: "48 GB tier", models: "27B – 32B models", note: "Strong on nuanced writing, code, and multi-step tasks. Close to mainstream cloud quality for most jobs." },
+    { max: 127, label: "64 GB tier", models: "70B models (4-bit)", note: "Where local output starts to rival premium cloud models, with roughly 40 GB of weights and headroom for a large context on top." },
+    { max: Infinity, label: "128 GB+ tier", models: "70B at full precision, or large mixture-of-experts models", note: "Room to keep several models loaded at once and hold long-running context in memory — the basis for always-on agents." }
+  ];
+  function tierFor(gb){
+    for (var i = 0; i < TIERS.length; i++) { if (gb <= TIERS[i].max) return TIERS[i]; }
+    return TIERS[TIERS.length - 1];
+  }
+
+  var APPLE_OPTS = [8, 16, 18, 24, 32, 36, 48, 64, 96, 128, 192];
+
+  var form = document.getElementById("fit-form");
+  var memSelect = document.getElementById("fit-mem");
+  var result = document.getElementById("fit-result");
+  var resTier = document.getElementById("fit-result-tier");
+  var resTitle = document.getElementById("fit-result-title");
+  var resNote = document.getElementById("fit-result-note");
+  var resExtra = document.getElementById("fit-result-extra");
+  var resCta = document.getElementById("fit-result-cta");
+
+  function renderMemOptions(list, current){
+    memSelect.innerHTML = "";
+    list.forEach(function(gb){
+      var opt = document.createElement("option");
+      opt.value = String(gb);
+      opt.textContent = gb + " GB" + (gb === list[list.length - 1] ? " or more" : "");
+      if (gb === current) opt.selected = true;
+      memSelect.appendChild(opt);
+    });
+  }
+
+  if (form) {
+    renderMemOptions(APPLE_OPTS, 16);
+
+    form.addEventListener("submit", function(e){
+      e.preventDefault();
+      var gb = parseInt(memSelect.value, 10);
+      var tier = tierFor(gb);
+
+      resTitle.textContent = tier.title || ("You can comfortably run " + tier.models);
+      resTier.innerHTML = "";
+      if (tier.verdict) {
+        var badge = document.createElement("span");
+        badge.className = "verdict " + tier.verdict[0];
+        badge.textContent = tier.verdict[1];
+        resTier.appendChild(badge);
+        resTier.appendChild(document.createElement("br"));
+      }
+      resTier.appendChild(document.createTextNode(tier.label));
+      resNote.textContent = tier.note;
+      resExtra.textContent = "";
+
+      var ctaHtml = '<a href="offerings.html?service=Remote%20setup#contact" class="btn btn-primary">Ask about remote setup</a>';
+      ctaHtml += ' <a href="launcher.html" class="btn btn-ghost">See the Launcher</a>';
+      if (tier.verdict && tier.verdict[0] === "bad") {
+        ctaHtml = '<a href="offerings.html?service=Done%20for%20you#contact" class="btn btn-primary">Have us run it for you</a>';
+      }
+      resCta.innerHTML = ctaHtml;
+
+      result.classList.add("is-visible");
+      result.scrollIntoView({ behavior: reduce.matches ? "auto" : "smooth", block: "nearest" });
+    });
+  }
+})();
+</script>

@@ -1,0 +1,295 @@
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a href="index.html" class="wordmark">
+      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1l2.3 6.9L21 5.7l-4.2 5.6L23 15l-7-.7L12 23l-1.9-8.7L3 15l5.4-3.4L4 5.7l6.7 1.9z"/></svg>
+      <span>Cloak Forge</span>
+    </a>
+    <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="site-nav" id="site-nav" aria-label="Primary">
+      <a href="services.html">Services</a>
+      <a href="why-local.html">Why local</a>
+      <a href="fit.html">Is it a fit?</a>
+      <a href="showcase.html">Showcase</a>
+      <a href="launcher.html">Launcher</a>
+      <a href="email.html">Email</a>
+    </nav>
+    <a href="contact.html" class="btn btn-primary btn-sm">Book a call</a>
+  </div>
+</header>
+
+<main>
+  <section class="section" style="border-top:0">
+    <div class="wrap">
+      <p class="eyebrow">Fit check</p>
+      <h1>Is your computer a good fit?</h1>
+      <p class="hw-intro">A model has to fit in memory alongside its context before it can run at all &mdash; that one constraint decides which models are realistic on your machine. Find your specs below, then use the checker to see what you can run.</p>
+
+      <h2 style="margin-top:2.4rem;font-size:1.3rem">Step 1: find your specs</h2>
+      <div class="spec-tabs" role="tablist" aria-label="Find your specs by platform">
+        <button type="button" class="spec-tab is-active" data-tab="mac" role="tab" aria-selected="true">Mac</button>
+        <button type="button" class="spec-tab" data-tab="win" role="tab" aria-selected="false">Windows</button>
+        <button type="button" class="spec-tab" data-tab="lin" role="tab" aria-selected="false">Linux</button>
+      </div>
+
+      <div class="spec-panel is-active" data-panel="mac">
+        <ol>
+          <li>Click the  Apple menu in the top-left corner of the screen.</li>
+          <li>Choose <code>About This Mac</code>.</li>
+          <li>Read the <b>Chip</b> line &mdash; e.g. &ldquo;Apple M2 Pro&rdquo; or &ldquo;2.3 GHz Quad-Core Intel Core i5.&rdquo; If it says Apple M1/M2/M3/M4 (any variant), it&rsquo;s Apple Silicon.</li>
+          <li>Read the <b>Memory</b> line &mdash; e.g. &ldquo;16 GB.&rdquo; On Apple Silicon, that whole number is usable as unified memory.</li>
+        </ol>
+      </div>
+      <div class="spec-panel" data-panel="win">
+        <ol>
+          <li>Click <b>Start</b>, then open <b>Settings</b>.</li>
+          <li>Go to <b>System &rarr; About</b> and read <b>Installed RAM</b> under &ldquo;Device specifications.&rdquo;</li>
+          <li>For your graphics card&rsquo;s own memory, open Task Manager (<code>Ctrl+Shift+Esc</code>) &rarr; <b>Performance</b> tab &rarr; select your GPU, and read <b>Dedicated GPU memory</b>.</li>
+        </ol>
+      </div>
+      <div class="spec-panel" data-panel="lin">
+        <ol>
+          <li>Open a terminal.</li>
+          <li>Run <code>free -h</code> to see total system RAM.</li>
+          <li>Run <code>nvidia-smi</code> (NVIDIA) or <code>rocm-smi</code> (AMD) to see dedicated GPU memory &mdash; or <code>lspci -v | grep -A12 VGA</code> if neither tool is installed.</li>
+        </ol>
+      </div>
+
+      <h2 style="margin-top:2.6rem;font-size:1.3rem">Step 2: check your fit</h2>
+      <div class="fit-tool">
+        <form class="fit-form" id="fit-form">
+          <div class="fit-group">
+            <span>What kind of machine is it?</span>
+            <div class="fit-radios">
+              <label><input type="radio" name="platform" value="apple" checked> Apple Silicon Mac (M1 / M2 / M3 / M4)</label>
+              <label><input type="radio" name="platform" value="other"> Intel Mac, Windows, or Linux</label>
+            </div>
+          </div>
+          <div class="fit-group">
+            <span id="fit-mem-label">Unified memory</span>
+            <select id="fit-mem" aria-label="Memory"></select>
+          </div>
+          <button type="submit" class="btn btn-primary" style="justify-self:start">Check my fit</button>
+        </form>
+
+        <div class="fit-result" id="fit-result">
+          <p class="fit-result-tier" id="fit-result-tier"></p>
+          <h3 id="fit-result-title"></h3>
+          <p id="fit-result-note"></p>
+          <p id="fit-result-extra"></p>
+          <div class="case-cta" id="fit-result-cta"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Reference</p>
+      <h2>Memory tiers, in full</h2>
+      <p class="hw-intro">The figures below assume 4-bit quantized models &mdash; the format most people run locally &mdash; with room left for a working context window.</p>
+
+      <div class="mem" role="region" aria-label="Memory tiers and what they can run">
+        <table>
+          <colgroup><col class="c-mem"><col class="c-fit"><col></colgroup>
+          <thead>
+            <tr><th scope="col">Memory</th><th scope="col">Model class that fits</th><th scope="col">What to expect</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="m-cap">8 GB</td>
+              <td class="m-mid">3B &ndash; 4B</td>
+              <td class="m-note">Short summaries, tagging, simple extraction. Reasoning is shaky &mdash; keep each task narrow and well-defined.</td>
+            </tr>
+            <tr>
+              <td class="m-cap">16 GB</td>
+              <td class="m-mid">7B &ndash; 8B</td>
+              <td class="m-note">The practical floor for a general-purpose assistant. Handles most drafting, classification, and question-answering over your own notes.</td>
+            </tr>
+            <tr>
+              <td class="m-cap">24 &ndash; 32 GB</td>
+              <td class="m-mid">12B &ndash; 14B</td>
+              <td class="m-note">A clear step up in reasoning and instruction-following, or an 8B model with a long context window. Comfortable for daily work.</td>
+            </tr>
+            <tr>
+              <td class="m-cap">48 GB</td>
+              <td class="m-mid">27B &ndash; 32B</td>
+              <td class="m-note">Strong on nuanced writing, code, and multi-step tasks. Close to mainstream cloud quality for most jobs.</td>
+            </tr>
+            <tr>
+              <td class="m-cap">64 GB</td>
+              <td class="m-mid">70B (4-bit)</td>
+              <td class="m-note">Where local output starts to rival premium cloud models, with roughly 40 GB of weights and headroom for a large context on top.</td>
+            </tr>
+            <tr>
+              <td class="m-cap">128 GB +</td>
+              <td class="m-mid">70B at full precision, or large mixture-of-experts models</td>
+              <td class="m-note">Room to keep several models loaded at once and hold long-running context in memory &mdash; the basis for always-on agents.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="rigs">
+        <div class="rig is-rec">
+          <p class="rig-tag">Recommended &mdash; what we build on</p>
+          <h3>Apple Silicon (M-series)</h3>
+          <p>Memory is <em>unified</em>: the GPU can use nearly all of it. A Mac with 64 GB runs models that would otherwise need a data-center card, and one around $2,000 covers most real workloads.</p>
+          <p>Speed tracks memory bandwidth, so an M&#8209;Pro, M&#8209;Max, or Ultra chip is markedly faster than a base M chip at the same model size. This is the simplest, cheapest path to running large models locally.</p>
+        </div>
+        <div class="rig">
+          <p class="rig-tag">Workable, but more expensive</p>
+          <h3>Intel Macs, Windows &amp; Linux desktops</h3>
+          <p>System RAM and graphics memory are separate pools, and the model has to fit in the graphics card&rsquo;s memory. Consumer cards top out near 24 GB, so anything past a ~32B model either doesn&rsquo;t fit or spills over into system RAM, where it runs many times slower.</p>
+          <p>Running larger models here means buying a graphics card that costs $2,000 or more, using several of them together, or accepting slow processing on the CPU alone. We can still set it up &mdash; but expect to spend more on hardware, and more time getting it tuned, to reach the same result.</p>
+        </div>
+      </div>
+
+      <p class="hw-foot">On the scoping call we look at what you already own, tell you plainly which tier you&rsquo;re in, and lay out what it will and won&rsquo;t do before you spend anything on hardware.</p>
+      <p style="margin-top:1rem"><a href="contact.html?service=Remote%20setup" class="btn btn-ghost">Book a scoping call</a></p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1l2.3 6.9L21 5.7l-4.2 5.6L23 15l-7-.7L12 23l-1.9-8.7L3 15l5.4-3.4L4 5.7l6.7 1.9z"/></svg>
+      <span>Cloak Forge</span>
+    </div>
+    <div class="footer-cols">
+      <div><span>Explore</span><a href="services.html">Services</a><br><a href="why-local.html">Why local</a><br><a href="fit.html">Is it a fit?</a><br><a href="showcase.html">Showcase</a></div>
+      <div><span>Product</span><a href="launcher.html">Launcher</a><br><a href="email.html">Email</a></div>
+      <div><span>Contact</span><a href="mailto:jonsagent8@gmail.com">jonsagent8@gmail.com</a><br><a href="contact.html">Book a call</a></div>
+      <div><span>Legal</span><a href="privacy.html">Privacy</a></div>
+    </div>
+    <p class="footer-legal">&copy; 2026 Cloak Forge &middot; Local AI automation, set up on your machine &middot; No cloud, by design.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  /* ---- scroll position -> --sy, drives the tinted-glass reflections ---- */
+  if (!reduce.matches) {
+    var root = document.documentElement, ticking = false;
+    function syncScroll(){
+      root.style.setProperty("--sy", window.scrollY.toFixed(1) + "px");
+      ticking = false;
+    }
+    window.addEventListener("scroll", function(){
+      if (!ticking) { ticking = true; requestAnimationFrame(syncScroll); }
+    }, { passive: true });
+    syncScroll();
+  }
+
+  /* ---- nav toggle ---- */
+  var navBtn = document.getElementById("nav-toggle");
+  var nav = document.getElementById("site-nav");
+  if (navBtn && nav) {
+    navBtn.addEventListener("click", function(){
+      var open = nav.classList.toggle("is-open");
+      navBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+  }
+
+  /* ---- spec-finder tabs ---- */
+  var tabs = document.querySelectorAll(".spec-tab");
+  var panels = document.querySelectorAll(".spec-panel");
+  Array.prototype.forEach.call(tabs, function(tab){
+    tab.addEventListener("click", function(){
+      Array.prototype.forEach.call(tabs, function(t){ t.classList.remove("is-active"); t.setAttribute("aria-selected", "false"); });
+      Array.prototype.forEach.call(panels, function(p){ p.classList.remove("is-active"); });
+      tab.classList.add("is-active");
+      tab.setAttribute("aria-selected", "true");
+      var target = document.querySelector('.spec-panel[data-panel="' + tab.getAttribute("data-tab") + '"]');
+      if (target) target.classList.add("is-active");
+    });
+  });
+
+  /* ---- fit checker ---- */
+  var TIERS = [
+    { max: 15, label: "8 GB tier", models: "3B – 4B models", note: "Short summaries, tagging, simple extraction. Reasoning is shaky — keep each task narrow and well-defined." },
+    { max: 23, label: "16 GB tier", models: "7B – 8B models", note: "The practical floor for a general-purpose assistant. Handles most drafting, classification, and question-answering over your own notes." },
+    { max: 47, label: "24–32 GB tier", models: "12B – 14B models", note: "A clear step up in reasoning and instruction-following, or an 8B model with a long context window. Comfortable for daily work." },
+    { max: 63, label: "48 GB tier", models: "27B – 32B models", note: "Strong on nuanced writing, code, and multi-step tasks. Close to mainstream cloud quality for most jobs." },
+    { max: 127, label: "64 GB tier", models: "70B models (4-bit)", note: "Where local output starts to rival premium cloud models, with roughly 40 GB of weights and headroom for a large context on top." },
+    { max: Infinity, label: "128 GB+ tier", models: "70B at full precision, or large mixture-of-experts models", note: "Room to keep several models loaded at once and hold long-running context in memory — the basis for always-on agents." }
+  ];
+  function tierFor(gb){
+    for (var i = 0; i < TIERS.length; i++) { if (gb <= TIERS[i].max) return TIERS[i]; }
+    return TIERS[TIERS.length - 1];
+  }
+
+  var APPLE_OPTS = [8, 16, 18, 24, 32, 36, 48, 64, 96, 128, 192];
+  var OTHER_OPTS = [4, 6, 8, 10, 12, 16, 20, 24, 32, 48, 80];
+
+  var form = document.getElementById("fit-form");
+  var memLabel = document.getElementById("fit-mem-label");
+  var memSelect = document.getElementById("fit-mem");
+  var result = document.getElementById("fit-result");
+  var resTier = document.getElementById("fit-result-tier");
+  var resTitle = document.getElementById("fit-result-title");
+  var resNote = document.getElementById("fit-result-note");
+  var resExtra = document.getElementById("fit-result-extra");
+  var resCta = document.getElementById("fit-result-cta");
+
+  function renderMemOptions(list, current){
+    memSelect.innerHTML = "";
+    list.forEach(function(gb){
+      var opt = document.createElement("option");
+      opt.value = String(gb);
+      opt.textContent = gb + " GB" + (gb === list[list.length - 1] ? " or more" : "");
+      if (gb === current) opt.selected = true;
+      memSelect.appendChild(opt);
+    });
+  }
+
+  function platform(){
+    var r = form.querySelector('input[name="platform"]:checked');
+    return r ? r.value : "apple";
+  }
+
+  function updatePlatformUI(){
+    var isApple = platform() === "apple";
+    memLabel.textContent = isApple ? "Unified memory" : "Dedicated GPU memory (VRAM)";
+    renderMemOptions(isApple ? APPLE_OPTS : OTHER_OPTS, isApple ? 16 : 12);
+  }
+
+  if (form) {
+    Array.prototype.forEach.call(form.querySelectorAll('input[name="platform"]'), function(r){
+      r.addEventListener("change", updatePlatformUI);
+    });
+    updatePlatformUI();
+
+    form.addEventListener("submit", function(e){
+      e.preventDefault();
+      var gb = parseInt(memSelect.value, 10);
+      var isApple = platform() === "apple";
+      var tier = tierFor(gb);
+
+      resTier.textContent = tier.label;
+      resTitle.textContent = "You can comfortably run " + tier.models;
+      resNote.textContent = tier.note;
+      resExtra.textContent = "";
+
+      if (!isApple) {
+        resExtra.textContent = "This is based on your graphics card’s own memory, not your system RAM — that’s the real ceiling on non-Apple-Silicon hardware. Without a dedicated GPU, expect much slower, CPU-only inference regardless of tier.";
+        if (gb >= 24) {
+          resExtra.textContent += " Going bigger from here means multiple GPUs or a data-center card, which is a different budget than a single consumer machine.";
+        }
+      }
+
+      var ctaHtml = '<a href="contact.html?service=Remote%20setup" class="btn btn-primary">Book remote setup</a>';
+      if (isApple) {
+        ctaHtml += ' <a href="launcher.html" class="btn btn-ghost">See the Launcher</a>';
+      }
+      resCta.innerHTML = ctaHtml;
+
+      result.classList.add("is-visible");
+      result.scrollIntoView({ behavior: reduce.matches ? "auto" : "smooth", block: "nearest" });
+    });
+  }
+})();
+</script>

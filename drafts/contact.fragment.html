@@ -1,0 +1,138 @@
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a href="index.html" class="wordmark">
+      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1l2.3 6.9L21 5.7l-4.2 5.6L23 15l-7-.7L12 23l-1.9-8.7L3 15l5.4-3.4L4 5.7l6.7 1.9z"/></svg>
+      <span>Cloak Forge</span>
+    </a>
+    <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="site-nav" id="site-nav" aria-label="Primary">
+      <a href="services.html">Services</a>
+      <a href="why-local.html">Why local</a>
+      <a href="fit.html">Is it a fit?</a>
+      <a href="showcase.html">Showcase</a>
+      <a href="launcher.html">Launcher</a>
+      <a href="email.html">Email</a>
+    </nav>
+    <a href="contact.html" class="btn btn-primary btn-sm">Book a call</a>
+  </div>
+</header>
+
+<main>
+  <section class="section" style="border-top:0">
+    <div class="wrap contact-grid">
+      <div class="contact-intro">
+        <p class="eyebrow">Book a call</p>
+        <h1>Tell us what you want to automate</h1>
+        <p>A 20-minute call to scope the work &mdash; what you run now, what hardware you have, and which of the three routes fits. No sales script.</p>
+        <ul class="contact-facts">
+          <li><span>Email</span><a href="mailto:jonsagent8@gmail.com">jonsagent8@gmail.com</a></li>
+          <li><span>Drive intake</span><span style="font-family:inherit;font-size:inherit;letter-spacing:normal;text-transform:none;color:var(--ink-dim)">Shipping address for the mail-in SSD service is sent once a drive is scheduled.</span></li>
+          <li><span>Response time</span><span style="font-family:inherit;font-size:inherit;letter-spacing:normal;text-transform:none;color:var(--ink-dim)">Within one business day.</span></li>
+        </ul>
+        <p style="margin-top:1.8rem"><a href="fit.html">Not sure what your machine can run? Check your fit first &rarr;</a></p>
+      </div>
+
+      <form id="booking" class="booking" novalidate>
+        <div class="field">
+          <label for="f-name">Name</label>
+          <input id="f-name" name="name" type="text" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label for="f-email">Email</label>
+          <input id="f-email" name="email" type="email" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="f-service">Which service</label>
+          <select id="f-service" name="service">
+            <option value="Remote setup">Remote setup</option>
+            <option value="Mail-in SSD">Mail-in SSD</option>
+            <option value="Tutoring">Tutoring</option>
+            <option value="Not sure yet">Not sure yet</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-msg">What do you want to automate?</label>
+          <textarea id="f-msg" name="message" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Request a call</button>
+        <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 1l2.3 6.9L21 5.7l-4.2 5.6L23 15l-7-.7L12 23l-1.9-8.7L3 15l5.4-3.4L4 5.7l6.7 1.9z"/></svg>
+      <span>Cloak Forge</span>
+    </div>
+    <div class="footer-cols">
+      <div><span>Explore</span><a href="services.html">Services</a><br><a href="why-local.html">Why local</a><br><a href="fit.html">Is it a fit?</a><br><a href="showcase.html">Showcase</a></div>
+      <div><span>Product</span><a href="launcher.html">Launcher</a><br><a href="email.html">Email</a></div>
+      <div><span>Contact</span><a href="mailto:jonsagent8@gmail.com">jonsagent8@gmail.com</a><br><a href="contact.html">Book a call</a></div>
+      <div><span>Legal</span><a href="privacy.html">Privacy</a></div>
+    </div>
+    <p class="footer-legal">&copy; 2026 Cloak Forge &middot; Local AI automation, set up on your machine &middot; No cloud, by design.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  var navBtn = document.getElementById("nav-toggle");
+  var nav = document.getElementById("site-nav");
+  if (navBtn && nav) {
+    navBtn.addEventListener("click", function(){
+      var open = nav.classList.toggle("is-open");
+      navBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+  }
+
+  /* ---- preselect service from ?service=... ---- */
+  var sel = document.getElementById("f-service");
+  var msg = document.getElementById("f-msg");
+  var params = new URLSearchParams(window.location.search);
+  var want = params.get("service");
+  if (want && sel) {
+    for (var i = 0; i < sel.options.length; i++) {
+      if (sel.options[i].value === want) { sel.selectedIndex = i; break; }
+    }
+    if (msg) msg.focus({ preventScroll: true });
+  }
+
+  /* ---- booking form ---- */
+  var form = document.getElementById("booking");
+  var status = document.getElementById("form-status");
+  if (form && status) {
+    form.addEventListener("submit", function(e){
+      e.preventDefault();
+      var name = document.getElementById("f-name").value.trim();
+      var email = document.getElementById("f-email").value.trim();
+      var body = document.getElementById("f-msg").value.trim();
+      var service = sel ? sel.value : "";
+      status.classList.remove("is-ok", "is-err");
+
+      if (!name || !body || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        status.textContent = "Add your name, a valid email, and a line about the work, then send again.";
+        status.classList.add("is-err");
+        return;
+      }
+
+      var subject = encodeURIComponent("Call request — " + service);
+      var mailBody = encodeURIComponent(
+        "Name: " + name + "\nEmail: " + email + "\nService: " + service + "\n\n" + body
+      );
+      var href = "mailto:jonsagent8@gmail.com?subject=" + subject + "&body=" + mailBody;
+      var safeName = name.replace(/[<>&"]/g, "");
+
+      status.innerHTML = "Thanks, " + safeName +
+        ". Your request is ready — <a href=\"" + href + "\">open it in your email app</a> to send. We reply within one business day.";
+      status.classList.add("is-ok");
+      var submit = form.querySelector("button[type=submit]");
+      if (submit) { submit.textContent = "Request prepared"; submit.disabled = true; }
+    });
+  }
+})();
+</script>

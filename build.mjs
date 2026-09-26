@@ -24,9 +24,23 @@ const SOCIAL = `
 <meta property="og:title" content="${title}">
 <meta property="og:description" content="${desc}">
 <meta property="og:url" content="${SITE_URL}/">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="${SITE_URL}/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="${SITE_URL}/og-image.png">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 `.trim();
+
+// The header and footer live in index.html (the artifact source); every other
+// page gets those same two blocks swapped in, so the nav is edited in one place.
+const HEADER = bodySrc.match(/<header class="site-header">[\s\S]*?<\/header>/)[0];
+const FOOTER = bodySrc.match(/<footer class="site-footer">[\s\S]*?<\/footer>/)[0];
+const withChrome = (body) =>
+  body
+    .replace(/<header class="site-header">[\s\S]*?<\/header>/, HEADER)
+    .replace(/<footer class="site-footer">[\s\S]*?<\/footer>/, FOOTER);
 
 function page({ title, head, body }) {
   return `<!doctype html>
@@ -51,50 +65,57 @@ await writeFile(
   page({ title, head: headNoTitle, body: bodySrc })
 );
 
-// privacy.html is authored as its own fragment in privacy.fragment.html
-const privacyBody = await readFile(new URL("./privacy.fragment.html", import.meta.url), "utf8");
-await writeFile(
-  new URL("./docs/privacy.html", import.meta.url),
-  page({
-    title: "Privacy — Cloak Forge",
-    head: headNoTitle.replace(
-      /<meta name="description"[^>]*>/,
-      '<meta name="description" content="How Cloak Forge handles the information you send through this site.">'
-    ),
-    body: privacyBody.trim(),
-  })
-);
-
-// launcher.html is authored as its own fragment in launcher.fragment.html
-const launcherBody = await readFile(new URL("./launcher.fragment.html", import.meta.url), "utf8");
-await writeFile(
-  new URL("./docs/launcher.html", import.meta.url),
-  page({
+// Every other page is authored as its own fragment file
+const pages = [
+  {
+    file: "about.fragment.html",
+    out: "about.html",
+    title: "About — Cloak Forge",
+    desc: "What Cloak Forge does, why we run AI on your own machine, and what to expect when you work with us.",
+  },
+  {
+    file: "offerings.fragment.html",
+    out: "offerings.html",
+    title: "What we offer — Cloak Forge",
+    desc: "Remote setup, mail-in SSD processing, tutoring, and the Cloak Forge Launcher — plus how to get in touch.",
+  },
+  {
+    file: "launcher.fragment.html",
+    out: "launcher.html",
     title: "Cloak Forge Launcher — local-AI dashboard for your Mac",
-    head: headNoTitle.replace(
-      /<meta name="description"[^>]*>/,
-      '<meta name="description" content="A one-download terminal dashboard that scans your Mac, picks a model sized to your hardware, and runs it entirely on-device via a bundled Ollama.">'
-    ),
-    body: launcherBody.trim(),
-  })
-);
-
-// email.html is authored as its own fragment in email.fragment.html
-const emailBody = await readFile(new URL("./email.fragment.html", import.meta.url), "utf8");
-await writeFile(
-  new URL("./docs/email.html", import.meta.url),
-  page({
+    desc: "A one-download terminal dashboard that scans your Mac, picks a model sized to your hardware, and runs it entirely on-device via a bundled Ollama.",
+  },
+  {
+    file: "email.fragment.html",
+    out: "email.html",
     title: "Cloak Forge Email — AI inbox drafting & auto-send rules",
-    head: headNoTitle.replace(
-      /<meta name="description"[^>]*>/,
-      '<meta name="description" content="Reads your inbox, drafts replies, and can send them for you on rules you set — a Cloak Forge Launcher Connection running on the model you already have.">'
-    ),
-    body: emailBody.trim(),
-  })
-);
+    desc: "Reads your inbox, drafts replies, and can send them for you on rules you set — a Cloak Forge Launcher Connection running on the model you already have.",
+  },
+  {
+    file: "privacy.fragment.html",
+    out: "privacy.html",
+    title: "Privacy — Cloak Forge",
+    desc: "How Cloak Forge handles the information you send through this site.",
+  },
+];
 
-await copyFile(new URL("./favicon.svg", import.meta.url), new URL("./docs/favicon.svg", import.meta.url));
+for (const { file, out, title, desc } of pages) {
+  const body = await readFile(new URL(`./${file}`, import.meta.url), "utf8");
+  await writeFile(
+    new URL(`./docs/${out}`, import.meta.url),
+    page({
+      title,
+      head: headNoTitle.replace(/<meta name="description"[^>]*>/, `<meta name="description" content="${desc}">`),
+      body: withChrome(body.trim()),
+    })
+  );
+}
+
+await mkdir(new URL("./docs/media", import.meta.url), { recursive: true });
+for (const asset of ["favicon.svg", "apple-touch-icon.png", "og-image.png", "media/waterfall-120.mp4", "media/waterfall-poster.jpg"]) {
+  await copyFile(new URL(`./${asset}`, import.meta.url), new URL(`./docs/${asset}`, import.meta.url));
+}
 await writeFile(new URL("./docs/.nojekyll", import.meta.url), "");
 await writeFile(new URL("./docs/CNAME", import.meta.url), new URL(SITE_URL).host + "\n");
 
-console.log("built docs/ -> index.html, privacy.html, launcher.html, email.html, favicon.svg, .nojekyll");
+console.log(`built docs/ -> index.html, ${pages.map((p) => p.out).join(", ")}, favicon.svg, CNAME`);
