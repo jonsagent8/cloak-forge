@@ -129,6 +129,12 @@
   .wordmark:hover{text-decoration:none}
   .wordmark svg,.footer-brand svg{color:var(--ember)}
   .wordmark svg{width:36px;height:36px;transform:translateY(-6px)} /* lift so the keyhole, not the flame, sits on the text line */
+  @media (max-width:480px){
+    /* keep logo, Menu and the CTA on one row on phones */
+    .wordmark svg{width:28px;height:28px;transform:translateY(-4px)}
+    .header-inner .btn-sm{padding:.45rem .75rem;font-size:.82rem}
+    .nav-toggle{padding:.4rem .6rem}
+  }
 
   /* primary nav */
   .site-nav{display:flex;flex-wrap:wrap;gap:1.5rem;align-items:center;flex:1}
@@ -192,7 +198,8 @@
     .hero-side div{padding:.6rem 1.1rem;margin:-.6rem -1.1rem}
   }
   @media (max-width:919px){
-    .hero-video::after{background:linear-gradient(180deg,rgba(4,8,20,.7),rgba(4,8,20,.86) 60%,rgba(4,8,20,.9))}
+    .hero-video{background-image:url(media/waterfall-poster-portrait.jpg)}
+    .hero-video::after{background:linear-gradient(180deg,rgba(4,8,20,.3),rgba(4,8,20,.5) 60%,rgba(4,8,20,.62))}
   }
 
   /* the same waterfall turned on its side, twice: the left copy flows right and
@@ -476,8 +483,10 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://cloakforgeai.com/og-image.png">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="favicon.ico?v=2" sizes="32x32">
+<link rel="icon" href="favicon.svg?v=2" type="image/svg+xml">
+<link rel="icon" href="favicon-192.png?v=2" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=2">
 </head>
 <body>
 <header class="site-header">
@@ -543,7 +552,7 @@
         <article class="card">
           <p class="card-kicker">What we offer</p>
           <h3>Services, products, and prices</h3>
-          <p class="card-desc">Remote setup, processing your data on our own local AI (never stored, never sold), mail-in SSD service, one-on-one tutoring, and the Cloak Forge Launcher.</p>
+          <p class="card-desc">Remote setup, data processing on our local AI (never stored, never sold), mail-in SSD service, one-on-one tutoring, and the Cloak Forge Launcher.</p>
           <a href="offerings.html" class="btn btn-ghost btn-block">See what we offer &rarr;</a>
         </article>
 
@@ -581,11 +590,15 @@
 <script>
 (function(){
   "use strict";
-  // background waterfalls: phones and reduced-motion visitors keep the still poster
+  // background waterfalls: reduced-motion visitors keep the still poster; phones
+  // get lighter files (a portrait crop for the hero, 720p for the river)
   var vids = document.querySelectorAll(".bg-video");
-  if (vids.length && window.matchMedia("(min-width: 720px) and (prefers-reduced-motion: no-preference)").matches) {
+  if (vids.length && window.matchMedia("(prefers-reduced-motion: no-preference)").matches) {
+    var wide = window.matchMedia("(min-width: 720px)").matches;
     Array.prototype.forEach.call(vids, function(v){
-      v.src = "media/waterfall-120.mp4";
+      var hero = v.id === "hero-video";
+      if (!wide && hero) v.poster = "media/waterfall-poster-portrait.jpg";
+      v.src = wide ? "media/waterfall-120.mp4" : hero ? "media/waterfall-120-portrait.mp4" : "media/waterfall-120-720.mp4";
       v.play().catch(function(){});
     });
 

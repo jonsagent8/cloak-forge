@@ -29,8 +29,10 @@ const SOCIAL = `
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="${SITE_URL}/og-image.png">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="favicon.ico?v=2" sizes="32x32">
+<link rel="icon" href="favicon.svg?v=2" type="image/svg+xml">
+<link rel="icon" href="favicon-192.png?v=2" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=2">
 `.trim();
 
 // The header and footer live in index.html (the artifact source); every other
@@ -112,7 +114,7 @@ for (const { file, out, title, desc } of pages) {
 }
 
 await mkdir(new URL("./docs/media", import.meta.url), { recursive: true });
-for (const asset of ["favicon.svg", "apple-touch-icon.png", "og-image.png", "media/waterfall-120.mp4", "media/waterfall-poster.jpg"]) {
+for (const asset of ["favicon.svg", "favicon.ico", "favicon-32.png", "favicon-192.png", "favicon-512.png", "apple-touch-icon.png", "og-image.png", "media/waterfall-120.mp4", "media/waterfall-120-portrait.mp4", "media/waterfall-120-720.mp4", "media/waterfall-poster.jpg", "media/waterfall-poster-portrait.jpg"]) {
   await copyFile(new URL(`./${asset}`, import.meta.url), new URL(`./docs/${asset}`, import.meta.url));
 }
 await writeFile(new URL("./docs/.nojekyll", import.meta.url), "");
