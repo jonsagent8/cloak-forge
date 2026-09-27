@@ -604,8 +604,10 @@
 
     // while the page is scrolling the water drops into slow motion (0.25x; the
     // clip is interpolated to 120fps so that still shows 30 smooth frames a second),
-    // then eases back to full speed once scrolling stops
-    var rate = 1, goal = 1, stopTimer = 0, stepTimer = 0;
+    // then eases back to resting speed once scrolling stops
+    var REST = 0.75; // resting speed: a touch slower than real time
+    var rate = REST, goal = REST, stopTimer = 0, stepTimer = 0;
+    Array.prototype.forEach.call(vids, function(v){ v.defaultPlaybackRate = REST; v.playbackRate = REST; });
     function step(){
       rate += (goal - rate) * (goal < rate ? 0.35 : 0.08); // drop fast, recover gently
       if (Math.abs(goal - rate) < 0.01) { rate = goal; clearInterval(stepTimer); stepTimer = 0; }
@@ -615,7 +617,7 @@
     window.addEventListener("scroll", function(){
       goal = 0.25; step(); ease();
       clearTimeout(stopTimer);
-      stopTimer = setTimeout(function(){ goal = 1; ease(); }, 220);
+      stopTimer = setTimeout(function(){ goal = REST; ease(); }, 220);
     }, { passive: true });
   }
 
