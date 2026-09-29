@@ -2,12 +2,24 @@
   @media (min-width:720px){.cards.two-up{grid-template-columns:repeat(2,1fr)}}
   .promise{display:flex;gap:.55rem;align-items:flex-start;margin-top:.9rem;padding:.7rem .9rem;border:1px solid rgba(255,138,51,.35);border-radius:10px;background:rgba(255,138,51,.08);color:var(--ink) !important;font-weight:600;font-size:.93rem}
   .promise svg{flex:none;width:18px;height:18px;margin-top:.12rem;color:var(--ember)}
+  /* the Launcher page's sideways storm, behind the services; the service cards
+     turn to frosted glass so the clouds roll visibly behind them */
+  .storm-zone{position:relative;overflow:hidden}
+  .storm-zone > .section{position:relative;z-index:1;border-top:0}
+  .storm{position:absolute;inset:0;z-index:0;pointer-events:none;background:#0a1428 url(media/storm-poster-tall.jpg) center top/cover no-repeat;
+    -webkit-mask:linear-gradient(#000 80%,transparent);mask:linear-gradient(#000 80%,transparent)}
+  .storm video{display:block;width:100%;height:100%;object-fit:cover;object-position:center top}
+  .storm::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(90deg,rgba(10,20,40,.5) 0%,rgba(10,20,40,.12) 60%,rgba(10,20,40,0) 100%)}
+  .storm-zone .card{background:rgba(16,30,60,.58);-webkit-backdrop-filter:blur(8px) saturate(1.1);backdrop-filter:blur(8px) saturate(1.1)}
 </style>
 
 <header class="site-header"></header>
 
 <main>
-  <section class="section" style="border-top:0">
+  <div class="storm-zone">
+    <div class="storm" aria-hidden="true"><video id="storm-video" muted loop playsinline preload="none" poster="media/storm-poster-tall.jpg"></video></div>
+  <section class="section">
     <div class="wrap">
       <p class="eyebrow">What we offer</p>
       <h1>Services</h1>
@@ -50,6 +62,7 @@
       </div>
     </div>
   </section>
+  </div>
 
   <section class="section">
     <div class="wrap">
@@ -127,6 +140,26 @@
 <script>
 (function(){
   "use strict";
+
+  // storm clouds (same clip as the Launcher page): real-time speed so the
+  // clouds visibly roll, easing into slow motion while the page scrolls
+  var storm = document.getElementById("storm-video");
+  if (storm && window.matchMedia("(prefers-reduced-motion: no-preference)").matches) {
+    storm.src = "media/storm-120-tall.mp4";
+    var REST = 1, rate = REST, goal = REST, stopTimer = 0, stepTimer = 0;
+    storm.play().catch(function(){});
+    function step(){
+      rate += (goal - rate) * (goal < rate ? 0.35 : 0.08);
+      if (Math.abs(goal - rate) < 0.01) { rate = goal; clearInterval(stepTimer); stepTimer = 0; }
+      storm.playbackRate = rate;
+    }
+    function ease(){ if (!stepTimer) stepTimer = setInterval(step, 30); }
+    window.addEventListener("scroll", function(){
+      goal = 0.3; step(); ease();
+      clearTimeout(stopTimer);
+      stopTimer = setTimeout(function(){ goal = REST; ease(); }, 220);
+    }, { passive: true });
+  }
 
   var navBtn = document.getElementById("nav-toggle");
   var nav = document.getElementById("site-nav");
