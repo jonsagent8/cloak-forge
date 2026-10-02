@@ -62,9 +62,16 @@ ${body}
 
 await mkdir(new URL("./docs", import.meta.url), { recursive: true });
 
+// The live homepage is home.html — a complete, standalone animated page (bead
+// canvas + scroll effects). index.html stays the artifact source and the place
+// the shared header/footer for the other pages are edited.
+const home = await readFile(new URL("./home.html", import.meta.url), "utf8");
+const homeTitle = (home.match(/<title>([^<]*)<\/title>/) || [])[1] || title;
+const homeDesc = (home.match(/<meta name="description" content="([^"]*)"/) || [])[1] || desc;
+const homeSocial = SOCIAL.replace(`content="${title}"`, `content="${homeTitle}"`).replace(`content="${desc}"`, `content="${homeDesc}"`);
 await writeFile(
   new URL("./docs/index.html", import.meta.url),
-  page({ title, head: headNoTitle, body: bodySrc })
+  home.replace("</head>", `${homeSocial}\n<meta name="theme-color" content="#040610">\n</head>`)
 );
 
 // Every other page is authored as its own fragment file
@@ -114,7 +121,8 @@ for (const { file, out, title, desc } of pages) {
 }
 
 await mkdir(new URL("./docs/media", import.meta.url), { recursive: true });
-for (const asset of ["favicon.svg", "favicon.ico", "favicon-32.png", "favicon-192.png", "favicon-512.png", "apple-touch-icon.png", "og-image.png", "media/waterfall-120.mp4", "media/waterfall-120-portrait.mp4", "media/waterfall-120-720.mp4", "media/waterfall-poster.jpg", "media/waterfall-poster-portrait.jpg", "media/fire-100-portrait.mp4", "media/fire-poster-portrait.jpg", "media/storm-120-tall.mp4", "media/storm-poster-tall.jpg"]) {
+await mkdir(new URL("./docs/fonts", import.meta.url), { recursive: true });
+for (const asset of ["favicon.svg", "favicon.ico", "favicon-32.png", "favicon-192.png", "favicon-512.png", "apple-touch-icon.png", "og-image.png", "media/waterfall-120.mp4", "media/waterfall-120-portrait.mp4", "media/waterfall-120-720.mp4", "media/waterfall-poster.jpg", "media/waterfall-poster-portrait.jpg", "media/fire-100-portrait.mp4", "media/fire-poster-portrait.jpg", "media/storm-120-tall.mp4", "media/storm-poster-tall.jpg", "fonts/Archivo.ttf", "fonts/IBMPlexMono-Medium.ttf", "fonts/IBMPlexSans-Regular.ttf"]) {
   await copyFile(new URL(`./${asset}`, import.meta.url), new URL(`./docs/${asset}`, import.meta.url));
 }
 await writeFile(new URL("./docs/.nojekyll", import.meta.url), "");
