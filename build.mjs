@@ -89,11 +89,20 @@ const ORG_ID = `${SITE_URL}/#organization`;
 const SITE_ID = `${SITE_URL}/#website`;
 
 // Facts shared by every page's structured data; keep in sync with the copy.
+// LocalBusiness is a subtype of Organization, so this one entity carries both
+// the brand facts and the service area.
 const ORGANIZATION = {
-  "@type": "Organization",
+  "@type": "LocalBusiness",
   "@id": ORG_ID,
   name: "Cloak Forge",
   url: `${SITE_URL}/`,
+  // No street address is published; region and country only.
+  address: { "@type": "PostalAddress", addressRegion: "NY", addressCountry: "US" },
+  areaServed: [
+    { "@type": "AdministrativeArea", name: "Rockland County, New York" },
+    { "@type": "Place", name: "Hudson Valley, New York" },
+    { "@type": "Country", name: "United States", description: "Remote setup, done-for-you processing, mail-in SSD service and tutoring" },
+  ],
   logo: { "@type": "ImageObject", url: `${SITE_URL}/logo.png`, width: 512, height: 512 },
   image: `${SITE_URL}/og-image.png`,
   description:

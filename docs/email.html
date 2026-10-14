@@ -495,10 +495,30 @@
  "@context": "https://schema.org",
  "@graph": [
   {
-   "@type": "Organization",
+   "@type": "LocalBusiness",
    "@id": "https://cloakforgeai.com/#organization",
    "name": "Cloak Forge",
    "url": "https://cloakforgeai.com/",
+   "address": {
+    "@type": "PostalAddress",
+    "addressRegion": "NY",
+    "addressCountry": "US"
+   },
+   "areaServed": [
+    {
+     "@type": "AdministrativeArea",
+     "name": "Rockland County, New York"
+    },
+    {
+     "@type": "Place",
+     "name": "Hudson Valley, New York"
+    },
+    {
+     "@type": "Country",
+     "name": "United States",
+     "description": "Remote setup, done-for-you processing, mail-in SSD service and tutoring"
+    }
+   ],
    "logo": {
     "@type": "ImageObject",
     "url": "https://cloakforgeai.com/logo.png",

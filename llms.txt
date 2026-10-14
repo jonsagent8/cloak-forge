@@ -7,7 +7,7 @@ Key facts:
 - What it does: builds and tests custom AI automations (for example sorting and drafting email, summarizing documents, organizing data), then sends them to the customer ready to run on their Mac. The AI model runs on the Mac, not in a cloud.
 - Who it's for: anyone who wants AI automation without sending their data to a cloud AI service. Setups and tutoring require an Apple Silicon Mac. Intel Mac, Windows and Linux users can use the done-for-you service instead.
 - Contact: email jonsagent8@gmail.com or use the form at https://cloakforgeai.com/offerings.html#contact. Replies within one business day, followed by a 20-minute scoping call.
-- Location: works remotely. No public street address. The shipping address for the mail-in SSD service is sent once a drive is scheduled.
+- Location and service area: Rockland County and the Hudson Valley, New York, plus customers anywhere in the United States remotely. No public street address. The shipping address for the mail-in SSD service is sent once a drive is scheduled.
 
 ## Services and pricing
 
