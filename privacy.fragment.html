@@ -14,10 +14,65 @@
   <section class="section" style="border-top:0">
     <div class="wrap legal">
       <p class="eyebrow">Privacy</p>
-      <h1>What we do with your information</h1>
-      <p class="updated">Last updated 2 September 2026</p>
+      <h1>Cloak Forge privacy: fully private when you want it to be</h1>
+      <p>Cloak Forge runs AI entirely on your Mac. In Private Mode, nothing leaves through Cloak Forge: every leak check in our tests was blocked. The rest is up to you.</p>
+      <p class="updated">Last updated 6 October 2026</p>
 
-      <h2>The short version</h2>
+      <h2>How it works</h2>
+      <p>The Cloak Forge Launcher runs the AI model on your own Mac, using its own private copy of Ollama that ships with the app. There&rsquo;s no cloud AI and no account to create, and nothing is sent anywhere by default. Web starts switched off every time you open the Launcher.</p>
+      <p>The AI engine is locked to your Mac. It has no internet access, and the Launcher only lets programs ask it to chat or write. It can&rsquo;t download models, use cloud models or search the web on its own.</p>
+
+      <h2 id="private-mode">Private Mode</h2>
+      <p>One switch for full isolation. With Private Mode on:</p>
+      <ul>
+        <li><strong>No internet.</strong> The assistant and the commands it runs can reach only the AI on your Mac. Even looking up a web address is blocked.</li>
+        <li><strong>No opening other apps.</strong> Commands can&rsquo;t hand work to a browser, another app or a script that would run outside these protections.</li>
+        <li><strong>No clipboard.</strong> Commands can&rsquo;t read or write the clipboard, because macOS can sync it to your other Apple devices.</li>
+        <li><strong>No sync folders.</strong> Commands can write only inside your workspace folder. The default workspace doesn&rsquo;t sync, and the app warns you if you pick one inside iCloud, Dropbox or Google Drive.</li>
+        <li><strong>Nothing left behind.</strong> Nothing is logged, not even counts. Automations are paused, model downloads are off, and the app&rsquo;s own data folder gets no new files. Temporary files are deleted after each command. Anything you choose to save in your workspace stays there for you.</li>
+        <li><strong>Always visible.</strong> A Private badge in the title bar, with your Mac&rsquo;s online or offline status next to it.</li>
+      </ul>
+      <p><strong>Tested.</strong> We ran a fixed set of leak checks on the signed, notarized app: internet requests, web-address lookups, opening apps and files, model downloads, cloud-model requests, writes to sync and startup folders, and a scheduled automation. Every one was blocked, and local chat still worked.</p>
+      <p><strong>Offline is the strongest setting.</strong> An option allows Private Mode only while your Mac is offline. With no internet connection, nothing on your Mac can reach the internet, from Cloak Forge or anything else.</p>
+
+      <h2 id="control">You&rsquo;re in control</h2>
+      <p>Outside Private Mode, privacy depends on what you connect the AI to. Each of these reaches out only when you turn it on, and shares only what&rsquo;s listed here.</p>
+      <ul>
+        <li><strong>Web search</strong> (Web on): your search queries go to the search provider, Tavily. While Web is on, commands the assistant runs also get normal internet access.</li>
+        <li><strong>Cloak Forge Email:</strong> the AI that reads and drafts runs only on the Launcher&rsquo;s private local AI. Your mail goes through your email provider (Gmail, for example), which sees the emails you send, as it already does.</li>
+        <li><strong>Model downloads</strong> (Web on, confirmed each time): Ollama&rsquo;s model library sees your IP address and which model you download. Downloads are off in Private Mode.</li>
+      </ul>
+
+      <h2>Outside the app</h2>
+      <p>Like all Mac software, Cloak Forge runs on macOS, and macOS checks app certificates with Apple. Cloak Forge also can&rsquo;t control other software on your Mac. Private Mode covers everything Cloak Forge does; using it on an offline Mac keeps everything else off the internet too.</p>
+
+      <h2>Automations</h2>
+      <ul>
+        <li><strong>Web off:</strong> automation commands run with the same protections as the assistant: no internet, no opening other apps, no writing to sync or startup folders. Email steps are skipped.</li>
+        <li><strong>Private Mode:</strong> automations are paused completely.</li>
+        <li><strong>Web on:</strong> automations run the steps you set up, with normal internet access. Commands can reach the web and email steps send through your email provider. They do what you set them up to do, and nothing else is added.</li>
+      </ul>
+      <p>Web counts as on only while the Launcher is open. If it&rsquo;s closed, scheduled automations run as if Web is off.</p>
+
+      <h2>Logs</h2>
+      <p>The Launcher&rsquo;s run records hold counts and outcomes only: the time, whether the run worked, numbers such as files seen or emails sent, and which step failed. No email text, subjects, addresses, file names or command output. Only your Mac user account can read them, and they&rsquo;re deleted after 30 days. In Private Mode, nothing is logged at all.</p>
+      <p>Cloak Forge Email keeps the same kind of record for auto-sends: the time and how many replies were sent, skipped or failed, deleted after 30 days. So it never auto-replies to the same person twice in a day, it keeps a scrambled fingerprint of each address it replied to, made with a key that never leaves your Mac, and deletes it after 24 hours.</p>
+
+      <h2>Known limits</h2>
+      <ul>
+        <li><strong>Built on a feature Apple has deprecated.</strong> The protections use macOS&rsquo;s sandbox tool. It works on current macOS, but a future release could change or remove it. We&rsquo;ve designed a second, independent layer as a backup; it isn&rsquo;t shipped yet.</li>
+        <li><strong>A list of blocked services.</strong> Some protections block specific macOS services that can hand work to another app. A macOS update could add a new one that isn&rsquo;t on the list yet.</li>
+        <li><strong>Web on turns protections off, on purpose.</strong> Searches go to Tavily and commands get normal internet.</li>
+        <li><strong>Model downloads</strong> show your IP address and the model&rsquo;s name to Ollama&rsquo;s library.</li>
+        <li><strong>Email automations</strong> don&rsquo;t send while Web is off. When they do send, email goes through your email provider.</li>
+        <li><strong>macOS contacts Apple</strong> to check app certificates.</li>
+        <li><strong>Some programs don&rsquo;t work in Private Mode.</strong> Commands keep temporary files in a folder inside your workspace, deleted after each command. Programs that insist on macOS&rsquo;s own temporary folder (some Apple tools, for example) fail.</li>
+        <li><strong>&ldquo;Online&rdquo; is cautious.</strong> Your Mac counts as online whenever it has a network route beyond your local network. On Wi-Fi without working internet it still shows online, so the offline-only option errs on the strict side.</li>
+        <li><strong>Your workspace is open to the assistant.</strong> It can write anything in the folder you pick. The default, <code>~/Cloak Forge Workspace</code>, is a dedicated folder that doesn&rsquo;t sync.</li>
+        <li><strong>Files your own commands write are yours to manage.</strong> If an automation command you wrote saves to a file of yours, the app doesn&rsquo;t apply its privacy settings or 30-day deletion to it.</li>
+      </ul>
+
+      <h2>This website</h2>
       <p>This is a small site for a small business. It has no analytics, no tracking pixels, no cookies, and no advertising. We collect only what you deliberately send us, and we use it only to reply.</p>
 
       <h2>The booking form</h2>
@@ -28,7 +83,7 @@
 
       <h2>Fonts and hosting</h2>
       <ul>
-        <li>The site loads typefaces from Google Fonts (<code>fonts.googleapis.com</code>). As part of serving those files, Google receives your IP address and browser user-agent. This is the only third-party request the page makes.</li>
+        <li>Every font and script is served from this site. Pages make no requests to anyone else: no font services, no script CDNs.</li>
         <li>The site is hosted on GitHub Pages. GitHub may log request metadata (IP address, user-agent, timestamp) under its own privacy practices.</li>
       </ul>
 

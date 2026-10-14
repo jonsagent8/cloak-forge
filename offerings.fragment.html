@@ -1,4 +1,6 @@
 <style>
+  /* service cards sit directly under the h1, so their titles are h2s styled like the h3s elsewhere */
+  .card-title{font-size:1.24rem;font-weight:700;line-height:inherit;letter-spacing:-.01em}
   @media (min-width:720px){.cards.two-up{grid-template-columns:repeat(2,1fr)}}
   .promise{display:flex;gap:.55rem;align-items:flex-start;margin-top:.9rem;padding:.7rem .9rem;border:1px solid rgba(255,138,51,.35);border-radius:10px;background:rgba(255,138,51,.08);color:var(--ink) !important;font-weight:600;font-size:.93rem}
   .promise svg{flex:none;width:18px;height:18px;margin-top:.12rem;color:var(--ember)}
@@ -22,13 +24,13 @@
   <section class="section">
     <div class="wrap">
       <p class="eyebrow">What we offer</p>
-      <h1>Services</h1>
-      <p class="hw-intro">Four ways to work with us, depending on how hands-on you want to be. Your information is only ever handled by local AI &mdash; on your Mac or on ours &mdash; never a cloud service. Setups and tutoring are for <a href="about.html#fit">Apple Silicon Macs (M1 or newer)</a> only; no Mac needed if we run the job for you.</p>
+      <h1>Local AI setup services and pricing</h1>
+      <p class="hw-intro">Four ways to work with us, depending on how hands-on you want to be. Your information is only ever handled by local AI &mdash; on your Mac or on ours &mdash; never a cloud service. Setups and tutoring are for <a href="about.html#fit">Apple Silicon Macs (M1 or newer)</a> only; no Mac needed if we run the job for you. To start, email <a href="mailto:jonsagent8@gmail.com">jonsagent8@gmail.com</a> or use the <a href="#contact">contact form</a>; we reply within one business day.</p>
       <div class="cards two-up">
 
         <article class="card">
           <p class="card-kicker">Built for you</p>
-          <h3>Remote setup</h3>
+          <h2 class="card-title">Remote setup</h2>
           <p class="card-desc">We build and test the whole automation on our end first &mdash; a model sized to your Mac, scripts wired to your kind of files, schedules set &mdash; then send it to you ready to run, with a short guide to get it going. No live session, and no access to your machine.</p>
           <p class="price"><span class="price-num">from&nbsp;$400</span><span class="price-unit">one-time, per automation &middot; M-series Mac required</span></p>
           <a href="offerings.html?service=Remote%20setup#contact" class="btn btn-ghost btn-block">Ask about remote setup</a>
@@ -36,7 +38,7 @@
 
         <article class="card">
           <p class="card-kicker">Done for you</p>
-          <h3>We run it on our machine</h3>
+          <h2 class="card-title">We run it on our machine</h2>
           <p class="card-desc">Don&rsquo;t want to set anything up? Send us your documents or data and we run them through the local AI on our own computer &mdash; summaries, sorting, extraction, drafting &mdash; then send you the results. Nothing goes to a cloud AI service.</p>
           <p class="promise"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.6-3 7.8-7 9-4-1.2-7-4.4-7-9V6l7-3z"/><path d="M9.2 12l2 2 3.6-3.8"/></svg><span>We never store or sell your data.</span></p>
           <p class="price"><span class="price-num">Quoted</span><span class="price-unit">per job, after a quick look at the work</span></p>
@@ -45,7 +47,7 @@
 
         <article class="card">
           <p class="card-kicker">Offline</p>
-          <h3>Mail-in SSD service</h3>
+          <h2 class="card-title">Mail-in SSD service</h2>
           <p class="card-desc">For work that can&rsquo;t touch a network at all. You ship an encrypted SSD, we process it on an air-gapped machine, and the drive comes back with the results. No remote access, no copies retained.</p>
           <p class="price"><span class="price-num">from&nbsp;$650</span><span class="price-unit">per drive, processed &amp; returned</span></p>
           <a href="offerings.html?service=Mail-in%20SSD#contact" class="btn btn-ghost btn-block">Arrange a drive</a>
@@ -53,7 +55,7 @@
 
         <article class="card">
           <p class="card-kicker">Tutoring</p>
-          <h3>One-on-one tutoring</h3>
+          <h2 class="card-title">One-on-one tutoring</h2>
           <p class="card-desc">We teach you to run local AI yourself &mdash; picking and quantizing models, wiring prompt pipelines, scheduling jobs, and fixing things when they break &mdash; on your own Apple Silicon Mac, at your pace.</p>
           <p class="price"><span class="price-num">$250</span><span class="price-unit">per hour &middot; M-series Mac required</span></p>
           <a href="offerings.html?service=Tutoring#contact" class="btn btn-ghost btn-block">Book a session</a>

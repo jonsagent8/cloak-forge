@@ -2,6 +2,7 @@
   .steps{margin-top:2.6rem;display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));list-style:none;padding:0;counter-reset:step}
   .steps li{counter-increment:step;padding:1.4rem 1.3rem;border:1px solid var(--line);border-radius:12px;background:var(--panel),var(--surface)}
   .steps li::before{content:"0" counter(step);display:block;font-family:"IBM Plex Mono",monospace;font-size:.8rem;letter-spacing:.12em;color:var(--ember);margin-bottom:.7rem}
+  .fit-result-h{font-family:"Archivo",system-ui,sans-serif;font-size:1.24rem;font-weight:700;letter-spacing:-.01em;margin-bottom:.5rem;text-wrap:balance}
   .steps h3{font-size:1.05rem;margin-bottom:.45rem}
   .steps p{color:var(--ink-dim);font-size:.94rem}
   @media (min-width:720px){.benefits.two-up{grid-template-columns:repeat(2,1fr);column-gap:3rem}}
@@ -52,7 +53,7 @@
   <section class="section about-hero">
     <div class="wrap">
       <p class="eyebrow">About</p>
-      <h1>AI that works for you &mdash; and never leaves your computer</h1>
+      <h1>Private AI that works for you &mdash; on your own Mac</h1>
       <p class="hw-intro">Cloak Forge sets up private AI automation on your own Apple Silicon Mac &mdash; or, if you&rsquo;d rather not set anything up, runs your data through our computer for you. Either way, nothing is sent to a cloud service, so there&rsquo;s nothing to leak, nothing to meter, and nothing that stops working when a vendor changes its terms.</p>
     </div>
   </section>
@@ -127,7 +128,7 @@
       <h2>Will it run on your Mac?</h2>
       <p class="hw-intro">We only build for <b>Apple Silicon Macs</b> &mdash; any Mac with an M1, M2, M3, M4 or newer chip. Their <em>unified memory</em> lets the AI use nearly all of the computer&rsquo;s memory, which is what makes big, capable models practical on a desk. How much memory your Mac has decides which models it can run &mdash; find it below, then use the checker.</p>
 
-      <h2 style="margin-top:2.4rem;font-size:1.3rem">Step 1: find your chip and memory</h2>
+      <h3 style="margin-top:2.4rem;font-size:1.3rem">Step 1: find your chip and memory</h3>
       <div class="spec-panel is-active">
         <ol>
           <li>Click the Apple menu in the top-left corner of the screen.</li>
@@ -137,7 +138,7 @@
         </ol>
       </div>
 
-      <h2 style="margin-top:2.6rem;font-size:1.3rem">Step 2: check your fit</h2>
+      <h3 style="margin-top:2.6rem;font-size:1.3rem">Step 2: check your fit</h3>
       <div class="fit-tool">
         <form class="fit-form" id="fit-form">
           <div class="fit-group">
@@ -149,7 +150,7 @@
 
         <div class="fit-result" id="fit-result">
           <p class="fit-result-tier" id="fit-result-tier"></p>
-          <h3 id="fit-result-title"></h3>
+          <p class="fit-result-h" id="fit-result-title"></p>
           <p id="fit-result-note"></p>
           <p id="fit-result-extra"></p>
           <div class="case-cta" id="fit-result-cta"></div>

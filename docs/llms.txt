@@ -1,0 +1,27 @@
+# Cloak Forge
+
+> Cloak Forge builds private AI automations that run on the customer's own Apple Silicon Mac (M1 or newer), with no cloud AI service, no API bills, and no subscription. It also runs jobs on its own Mac for customers who don't want to set anything up, and sells the Cloak Forge Launcher app.
+
+Key facts:
+
+- What it does: builds and tests custom AI automations (for example sorting and drafting email, summarizing documents, organizing data), then sends them to the customer ready to run on their Mac. The AI model runs on the Mac, not in a cloud.
+- Who it's for: anyone who wants AI automation without sending their data to a cloud AI service. Setups and tutoring require an Apple Silicon Mac. Intel Mac, Windows and Linux users can use the done-for-you service instead.
+- Contact: email jonsagent8@gmail.com or use the form at https://cloakforgeai.com/offerings.html#contact. Replies within one business day, followed by a 20-minute scoping call.
+- Location: works remotely. No public street address. The shipping address for the mail-in SSD service is sent once a drive is scheduled.
+
+## Services and pricing
+
+- [Remote setup](https://cloakforgeai.com/offerings.html): from $400 one-time per automation. Built and tested by Cloak Forge, then sent to you ready to run. No live session and no access to your machine. Apple Silicon Mac required.
+- [Done for you (we run it on our machine)](https://cloakforgeai.com/offerings.html): quoted per job. Send documents or data, and Cloak Forge runs them through local AI on its own computer and sends back the results.
+- [Mail-in SSD service](https://cloakforgeai.com/offerings.html): from $650 per drive. You ship an encrypted SSD, it is processed on an air-gapped machine, and the drive comes back with the results. No copies retained.
+- [One-on-one tutoring](https://cloakforgeai.com/offerings.html): $250 per hour. Learn to run local AI yourself on your own Apple Silicon Mac.
+
+## Products
+
+- [Cloak Forge Launcher](https://cloakforgeai.com/launcher.html): $50 one-time, free updates (checkout opens soon). A macOS app for Apple Silicon that scans your Mac, picks the largest language model it can run well, and runs it on-device with a bundled Ollama. Includes local chat, Private Mode, and add-on Connections.
+- [Cloak Forge Email](https://cloakforgeai.com/email.html): a Launcher add-on (pricing not yet set). Reads your inbox, drafts replies with the Launcher's local AI, and auto-sends only on rules you turn on.
+
+## More
+
+- [About](https://cloakforgeai.com/about.html): what Cloak Forge does, why local AI, which Macs qualify, and what each amount of memory can run.
+- [Privacy](https://cloakforgeai.com/privacy.html): how Private Mode works, its known limits, and what this website collects (no analytics, cookies or tracking).

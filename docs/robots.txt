@@ -1,0 +1,6 @@
+# Every page on this site is public. Search engines and AI assistants
+# (Googlebot, Bingbot, GPTBot, ClaudeBot, PerplexityBot, etc.) are welcome.
+User-agent: *
+Allow: /
+
+Sitemap: https://cloakforgeai.com/sitemap.xml

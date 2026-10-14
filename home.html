@@ -1,11 +1,12 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preload" href="fonts/Archivo.woff2" as="font" type="font/woff2" crossorigin>
 <title>Cloak Forge — Private AI, forged on your machine</title>
 <meta name="description" content="Cloak Forge builds private AI automations that run on your own Apple Silicon Mac. No cloud, no API costs, runs offline.">
 <style>
-@font-face{font-family:Archivo;src:url(fonts/Archivo.ttf);font-weight:100 900;font-display:block}
-@font-face{font-family:Plex;src:url(fonts/IBMPlexMono-Medium.ttf);font-weight:500;font-display:block}
-@font-face{font-family:PlexSans;src:url(fonts/IBMPlexSans-Regular.ttf);font-weight:400;font-display:block}
+@font-face{font-family:Archivo;src:url(fonts/Archivo.woff2) format("woff2");font-weight:100 900;font-display:swap}
+@font-face{font-family:Plex;src:url(fonts/IBMPlexMono-Medium.woff2) format("woff2");font-weight:500;font-display:swap}
+@font-face{font-family:PlexSans;src:url(fonts/IBMPlexSans.woff2) format("woff2");font-weight:100 700;font-display:swap}
 :root{--deep:#040610;--bg:#0a1428;--navy:#0e1c40;--line:#223a5c;--ink:#f1eee7;--dim:#aeb9cf;--steel:#93a8bd;--ember:#ff8a33;--ember-soft:#ffab66;--rw:300px;
   --fd:Archivo,"Helvetica Neue",sans-serif;--fm:Plex,Menlo,monospace;--fs:PlexSans,"Helvetica Neue",sans-serif;--gut:clamp(20px,4vw,72px)}
 *{box-sizing:border-box}
@@ -68,6 +69,7 @@ main{position:relative;z-index:2}
 section{position:relative}
 .eye{font:500 12px/1.5 var(--fm);letter-spacing:.24em;text-transform:uppercase;color:var(--ember);margin:0 0 22px;display:flex;align-items:center;gap:12px}
 .eye::before{content:'';width:28px;height:1px;background:var(--ember)}
+.split-h{margin:0;font:inherit}.split-h .h1{display:block}
 .h1{font:800 clamp(40px,5.6vw,104px)/.98 var(--fd);letter-spacing:-.03em;margin:0}
 .h2{font:800 clamp(36px,4.6vw,84px)/1 var(--fd);letter-spacing:-.025em;margin:0}
 .em{color:var(--ember-soft)}
@@ -205,7 +207,7 @@ section{position:relative}
 #contact .r{left:calc(50% + var(--rw))}
 #contact .bot{position:absolute;left:0;right:0;bottom:12vh;display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center}
 #contact .bot p{margin:0;max-width:38em}
-.mail{font:500 13px/1 var(--fm);letter-spacing:.16em;color:var(--steel);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:6px}
+.mail{font:500 13px/1 var(--fm);letter-spacing:.16em;text-transform:uppercase;color:var(--steel);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:6px}
 .mail:hover{color:var(--ink);border-color:var(--ember)}
 
 /* ---------- footer ---------- */
@@ -236,21 +238,21 @@ footer{position:relative;z-index:2;padding:10vh var(--gut) 40px;border-top:1px s
 @media (max-width:560px){.cards{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){.grain{animation:none}}
 </style>
-<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
 </head><body class="loading">
 
-<div id="loader">
+<div id="loader" aria-hidden="true">
   <svg viewBox="0 0 100 100"><path d="M50 4c4 16 16 24 24 36 6 9 9 17 9 26 0 17-14 30-33 30S17 83 17 66c0-11 5-20 12-28 1 8 4 13 9 16-2-20 4-36 12-50z"/><path d="M50 50a8 8 0 0 0-4.6 14.5L42 82h16l-3.4-17.5A8 8 0 0 0 50 50z"/></svg>
   <div class="lb">Cloak Forge<br>Forging the model locally…</div>
   <div class="ct" id="ct">0</div>
 </div>
 
-<canvas id="fx"></canvas>
+<canvas id="fx" aria-hidden="true"></canvas>
 <div class="grain"></div>
 <div id="bar"></div>
 <div class="cur"></div><div class="cur-ring"></div>
 
-<nav id="nav">
+<header>
+<nav id="nav" aria-label="Primary">
   <a class="brand mag" href="#hero"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="fe" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffab66"/><stop offset="1" stop-color="#ff7a1f"/></linearGradient></defs><path fill="url(#fe)" fill-rule="evenodd" d="M50 4c4 16 16 24 24 36 6 9 9 17 9 26 0 17-14 30-33 30S17 83 17 66c0-11 5-20 12-28 1 8 4 13 9 16-2-20 4-36 12-50z M50 50a8 8 0 0 0-4.6 14.5L42 82h16l-3.4-17.5A8 8 0 0 0 50 50z"/></svg>Cloak Forge</a>
   <ul class="links">
     <li><a href="#why"><span data-t="Why local">Why local</span></a></li>
@@ -262,22 +264,23 @@ footer{position:relative;z-index:2;padding:10vh var(--gut) 40px;border-top:1px s
   </ul>
   <a class="btn sm mag" href="offerings.html#contact">Get in touch <i>→</i></a>
 </nav>
+</header>
 
 <main>
 <!-- each section tells the bead field what to become: data-shape, screen offset (data-x/-y), scale, alpha -->
-<section id="hero" data-shape="flame" data-x="0" data-y="-0.04" data-s="0.86" data-ring="LOCAL · AIR-GAPPED · YOURS · NO CLOUD">
-  <div class="side l shadow"><h1 class="h1" data-split>Private AI automation,</h1></div>
-  <div class="side r shadow"><h1 class="h1 em" data-split>forged on your machine.</h1></div>
+<section id="hero" data-shape="flame" data-x="0" data-y="-0.04" data-s="0.86" data-ring="LOCAL · PRIVATE MODE · YOURS · NO CLOUD">
+  <h1 class="split-h"><span class="side l shadow"><span class="h1" data-split>Private AI automation,</span></span>
+  <span class="side r shadow"><span class="h1 em" data-split>forged on your machine.</span></span></h1>
   <div class="chip rv"><span><b>●</b> OFFLINE</span><span>APPLE SILICON</span><span>ZERO CLOUD</span></div>
   <div class="bot">
-    <p class="lead shadow rv">We build custom AI automations and deliver them ready to run on your Apple Silicon Mac. Nothing routes through the cloud, because there is no cloud.</p>
+    <p class="lead shadow rv">We build custom AI automations and deliver them ready to run on your Apple Silicon Mac. The AI runs on your Mac, not in a cloud. Fully private when you want it to be.</p>
     <div class="cta-row rv"><a class="btn mag" href="#contact" data-cursor="GO">Start a build <i>→</i></a><a class="btn ghost mag" href="offerings.html">See what we offer</a></div>
   </div>
   <div class="scrollcue">SCROLL</div>
 </section>
 
 <section class="marq" data-shape="flame" data-x="0" data-y="-0.04" data-s="0.86">
-  <div class="mrow" data-dir="-1"><span>No cloud</span><span>No API costs</span><span>Runs offline</span><span>Nothing leaves the machine</span><span>No cloud</span><span>No API costs</span><span>Runs offline</span><span>Nothing leaves the machine</span></div>
+  <div class="mrow" data-dir="-1"><span>No cloud</span><span>No API costs</span><span>Runs offline</span><span>Private when you want it</span><span>No cloud</span><span>No API costs</span><span>Runs offline</span><span>Private when you want it</span></div>
   <div class="mrow o" data-dir="1"><span>Built for your Mac</span><span>One-time setup</span><span>Yours to keep</span><span>Built for your Mac</span><span>One-time setup</span><span>Yours to keep</span></div>
 </section>
 
@@ -287,7 +290,7 @@ footer{position:relative;z-index:2;padding:10vh var(--gut) 40px;border-top:1px s
       <div class="eye">Why local</div>
       <div class="steps">
         <div class="step on"><span class="num">01</span><h2 class="h2">The cloud sees <span class="em">everything.</span></h2><p class="lead">Most AI tools send your files to someone else’s servers, bill you per request, and stop working when the internet does.</p></div>
-        <div class="step"><span class="num">02</span><h2 class="h2">So we take it <span class="em">out of the loop.</span></h2><p class="lead">No accounts, no API keys, no monthly plan. The model, the automations and your data never touch a third party.</p></div>
+        <div class="step"><span class="num">02</span><h2 class="h2">So we take it <span class="em">out of the loop.</span></h2><p class="lead">No accounts, no API keys, no monthly plan. The model runs on your Mac, and your data reaches a third party only if you connect it to one.</p></div>
         <div class="step"><span class="num">03</span><h2 class="h2">It all runs <span class="em">on your chip.</span></h2><p class="lead">We pick a model sized to your Mac’s chip and memory, build and test everything on our end, then send it to you ready to run.</p></div>
       </div>
       <div class="dots"><i></i><i></i><i></i></div>
@@ -354,7 +357,7 @@ footer{position:relative;z-index:2;padding:10vh var(--gut) 40px;border-top:1px s
       <ul class="feats"><li><span>SCAN</span>Reads your chip and unified memory</li><li><span>PICK</span>Matches a model tier to your hardware</li><li><span>RUN</span>Serves it locally — offline, no account</li></ul><p style="margin:28px 0 0"><a class="btn ghost sm mag" href="launcher.html">Explore the Launcher <i>→</i></a></p></article>
     <article class="prod"><div class="top"><h3>Cloak Forge Email</h3><span class="pill">COMING SOON</span></div>
       <p>Reads your inbox, drafts replies, and sends on rules you set — powered by the same local model, through the Launcher.</p>
-      <ul class="feats"><li><span>READ</span>Understands threads without uploading them</li><li><span>DRAFT</span>Replies in your voice, for you to review</li><li><span>SEND</span>Auto-sends only on rules you approve</li></ul><p style="margin:28px 0 0"><a class="btn ghost sm mag" href="email.html">About Cloak Forge Email <i>→</i></a></p></article>
+      <ul class="feats"><li><span>READ</span>Understands threads with local AI only</li><li><span>DRAFT</span>Replies in your voice, for you to review</li><li><span>SEND</span>Auto-sends only on rules you approve</li></ul><p style="margin:28px 0 0"><a class="btn ghost sm mag" href="email.html">About Cloak Forge Email <i>→</i></a></p></article>
   </div>
 </section>
 
@@ -366,12 +369,12 @@ footer{position:relative;z-index:2;padding:10vh var(--gut) 40px;border-top:1px s
 </section>
 
 <section id="contact" data-shape="flame" data-x="0" data-y="-0.06" data-s="0.86" data-ring="IT’S YOURS · CLOAKFORGEAI.COM">
-  <div class="side l shadow"><h2 class="h1" data-split>Tell us what</h2></div>
-  <div class="side r shadow"><h2 class="h1" data-split>you want <span class="em">to automate.</span></h2></div>
+  <h2 class="split-h"><span class="side l shadow"><span class="h1" data-split>Tell us what</span></span>
+  <span class="side r shadow"><span class="h1" data-split>you want <span class="em">to automate.</span></span></span></h2>
   <div class="bot">
     <p class="lead shadow rv">We reply within one business day, then set up a 20-minute call. No sales script.</p>
     <div class="cta-row rv"><a class="btn mag" href="offerings.html#contact" data-cursor="HELLO">Get in touch <i>→</i></a></div>
-    <a class="mail rv" href="mailto:jonsagent8@gmail.com">JONSAGENT8@GMAIL.COM</a>
+    <a class="mail rv" href="mailto:jonsagent8@gmail.com">jonsagent8@gmail.com</a>
   </div>
 </section>
 </main>
@@ -381,6 +384,7 @@ footer{position:relative;z-index:2;padding:10vh var(--gut) 40px;border-top:1px s
   <div class="fgrid"><span>© 2026 Cloak Forge</span><a href="about.html">About</a><a href="offerings.html">What we offer</a><a href="launcher.html">Launcher</a><a href="email.html">Email</a><a href="privacy.html">Privacy</a><a href="#hero">Back to top ↑</a></div>
 </footer>
 
+<script src="vendor/lenis.min.js"></script>
 <script>
 /* =====================================================================
    CLOAK FORGE — site mockup
