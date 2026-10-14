@@ -18,7 +18,7 @@ Key facts:
 
 ## Products
 
-- [Cloak Forge Launcher](https://cloakforgeai.com/launcher.html): $50 one-time, free updates (checkout opens soon). A macOS app for Apple Silicon that scans your Mac, picks the largest language model it can run well, and runs it on-device with a bundled Ollama. Includes local chat, Private Mode, and add-on Connections.
+- [Cloak Forge Launcher](https://cloakforgeai.com/launcher.html): $50 one-time, free updates. Buy: https://buy.stripe.com/4gM00c0mobOy6Ov3lGdEs00 A macOS app for Apple Silicon that scans your Mac, picks the largest language model it can run well, and runs it on-device with a bundled Ollama. Includes local chat, Private Mode, and add-on Connections.
 - [Cloak Forge Email](https://cloakforgeai.com/email.html): a Launcher add-on (pricing not yet set). Reads your inbox, drafts replies with the Launcher's local AI, and auto-sends only on rules you turn on.
 
 ## More

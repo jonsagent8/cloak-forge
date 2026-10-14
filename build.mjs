@@ -124,7 +124,7 @@ const PRODUCTS = {
     operatingSystem: "macOS (Apple Silicon)",
     description: "A terminal dashboard that scans your Mac, recommends the largest language model it can run well, and runs it on-device through a bundled Ollama, with local chat, Private Mode and add-on Connections.",
     screenshot: `${SITE_URL}/media/launcher-dashboard.webp`,
-    offers: { "@type": "Offer", price: 50, priceCurrency: "USD", description: "One-time purchase with free updates. Checkout opens soon." },
+    offers: { "@type": "Offer", price: 50, priceCurrency: "USD", description: "One-time purchase with free updates.", url: "https://buy.stripe.com/4gM00c0mobOy6Ov3lGdEs00", availability: "https://schema.org/InStock" },
     publisher: { "@id": ORG_ID },
   },
   "/email.html": {
