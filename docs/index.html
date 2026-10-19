@@ -9,7 +9,7 @@
 :root{--deep:#040610;--bg:#0a1428;--navy:#0e1c40;--line:#223a5c;--ink:#f1eee7;--dim:#aeb9cf;--steel:#93a8bd;--ember:#ff8a33;--ember-soft:#ffab66;--rw:300px;
   --fd:Archivo,"Helvetica Neue",sans-serif;--fm:Plex,Menlo,monospace;--fs:PlexSans,"Helvetica Neue",sans-serif;--gut:clamp(20px,4vw,72px)}
 *{box-sizing:border-box}
-html{background:var(--deep)}
+html{background:var(--deep);overflow-x:hidden;overflow-x:clip}
 html.lenis,html.lenis body{height:auto}.lenis.lenis-smooth{scroll-behavior:auto!important}
 body{margin:0;background:var(--deep);color:var(--ink);font-family:var(--fs);-webkit-font-smoothing:antialiased;overflow-x:clip}
 body.loading{overflow:hidden}
@@ -19,9 +19,9 @@ a{color:inherit}
 
 /* ---------- fixed layers ---------- */
 #fx{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block}
-.grain{position:fixed;inset:-50%;z-index:60;pointer-events:none;opacity:.07;mix-blend-mode:overlay;
+.grain{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.07;mix-blend-mode:overlay;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 1s steps(6) infinite}
-@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-4%,3%)}40%{transform:translate(3%,-5%)}60%{transform:translate(-6%,-2%)}80%{transform:translate(5%,4%)}100%{transform:translate(0,0)}}
+@keyframes grain{0%{background-position:0 0}20%{background-position:-40px 30px}40%{background-position:30px -50px}60%{background-position:-60px -20px}80%{background-position:50px 40px}100%{background-position:0 0}}
 #bar{position:fixed;top:0;left:0;right:0;height:2px;z-index:70;background:linear-gradient(90deg,var(--ember),var(--ember-soft));transform-origin:0 50%;transform:scaleX(0)}
 .cur,.cur-ring{position:fixed;left:0;top:0;z-index:90;pointer-events:none;border-radius:50%;opacity:0;transition:opacity .3s}
 .cur{width:6px;height:6px;margin:-3px 0 0 -3px;background:var(--ember)}
@@ -210,8 +210,9 @@ section{position:relative}
 .mail:hover{color:var(--ink);border-color:var(--ember)}
 
 /* ---------- footer ---------- */
-footer{position:relative;z-index:2;padding:10vh var(--gut) 40px;border-top:1px solid rgba(34,58,92,.7);background:linear-gradient(180deg,rgba(4,6,16,.3),var(--deep) 40%)}
+footer{position:relative;z-index:2;padding:10vh var(--gut) 40px;border-top:1px solid rgba(34,58,92,.7);background:linear-gradient(180deg,rgba(4,6,16,.3),var(--deep) 40%);overflow:hidden}
 .wordmark{position:relative;font:900 clamp(64px,15.5vw,300px)/.8 var(--fd);letter-spacing:-.05em;white-space:nowrap;margin:0 0 6vh;user-select:none}
+@media (max-width:600px){.wordmark{font-size:12.4vw}}
 .wordmark .o{color:transparent;-webkit-text-stroke:1px rgba(241,238,231,.18)}
 .wordmark .f{position:absolute;inset:0;color:var(--ember);-webkit-mask-image:radial-gradient(240px circle at var(--mx,-999px) var(--my,-999px),#000 0,#000 30%,transparent 72%);mask-image:radial-gradient(240px circle at var(--mx,-999px) var(--my,-999px),#000 0,#000 30%,transparent 72%)}
 .fgrid{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;font:500 12px/1.9 var(--fm);letter-spacing:.14em;color:var(--steel);text-transform:uppercase}
@@ -548,7 +549,7 @@ footer{position:relative;z-index:2;padding:10vh var(--gut) 40px;border-top:1px s
 
 <footer data-shape="scatter">
   <div class="wordmark" id="wm"><span class="o">CLOAK FORGE</span><span class="f" aria-hidden="true">CLOAK FORGE</span></div>
-  <div class="fgrid"><span>© 2026 Cloak Forge</span><a href="about.html">About</a><a href="offerings.html">What we offer</a><a href="launcher.html">Launcher</a><a href="email.html">Email</a><a href="privacy.html">Privacy</a><a href="#hero">Back to top ↑</a></div>
+  <div class="fgrid"><span>© 2026 Cloak Forge</span><a href="about.html">About</a><a href="offerings.html">What we offer</a><a href="blog/">Blog</a><a href="launcher.html">Launcher</a><a href="email.html">Email</a><a href="privacy.html">Privacy</a><a href="#hero">Back to top ↑</a></div>
 </footer>
 
 <script src="vendor/lenis.min.js"></script>
