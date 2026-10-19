@@ -1,0 +1,164 @@
+<style>
+  .post > *,.post .faq > *{max-width:72ch}
+  .post > .mem{max-width:none}
+  .post p,.post li{color:var(--ink-dim)}
+  .post p+p{margin-top:1rem}
+  .post h2{margin-top:3rem;margin-bottom:.9rem;font-size:1.45rem}
+  .post ul,.post ol{padding-left:1.2rem;display:flex;flex-direction:column;gap:.55rem;margin:1rem 0}
+  .post strong{color:var(--ink)}
+  .post a{color:var(--ember-soft)}
+  .post .mem{margin-top:1.4rem;margin-bottom:1.2rem}
+  .post .mem table{min-width:720px}
+  .post .mem thead th{white-space:normal;line-height:1.5}
+  .post .mem th:nth-child(1){width:8rem}
+  .post .mem th:nth-child(2){width:11rem}
+  .post .updated{font-family:"IBM Plex Mono",monospace;font-size:.8rem;color:var(--ink-faint);margin-top:.6rem}
+  .post h3{margin-top:2rem;margin-bottom:.6rem;font-size:1.12rem}
+  .post .mem.ran th:nth-child(1){width:13rem}
+  .post .mem.ran th:nth-child(2){width:13rem}
+  .post .photo{margin:1.6rem 0;max-width:420px}
+  .post .photo img{display:block;width:100%;height:auto;border-radius:12px;border:1px solid var(--line)}
+  .post .photo figcaption{margin-top:.6rem;font-size:.86rem;color:var(--ink-faint)}
+  .post .ai-note{margin-top:3rem;padding:1rem 1.2rem;border:1px solid var(--line);border-left:3px solid var(--ember-soft);border-radius:8px;background:var(--surface);color:var(--ink-dim);font-size:.92rem}
+</style>
+
+<header class="site-header"></header>
+
+<main>
+  <article class="section" style="border-top:0">
+    <div class="wrap post">
+      <p class="eyebrow">Blog</p>
+      <h1>How Much RAM Do You Need to Run Local AI on a Mac?</h1>
+      <p class="updated">Last updated {{LAST_UPDATED}}</p>
+
+      <h2>The short answer</h2>
+      <p>You don&rsquo;t need 128GB to do real work with local AI on a Mac. In my experience, 32GB is where local models stop being a toy and start being useful.</p>
+      <p>I keep seeing people online say 128GB is the &ldquo;optimal&rdquo; number for local models. I get why. More memory means bigger models. But I&rsquo;ve bought and returned my way through four Macs running local AI: a 16GB Mac mini, a 24GB MacBook Air, a 32GB MacBook Pro, and now a 48GB Mac mini. The jumps between those tiers were bigger than any spec sheet would tell you.</p>
+      <p>This post walks through what each RAM tier actually gets you on Apple Silicon, based on what I&rsquo;ve run myself and what the math says. If you&rsquo;re about to spend money on a Mac for local AI, this is the post I wish I&rsquo;d read first.</p>
+
+      <h2>Why RAM is the whole game on Apple Silicon</h2>
+      <p>On a Mac, the model has to fit in memory or it doesn&rsquo;t run. Apple Silicon uses unified memory, so the CPU and GPU share one pool. That&rsquo;s why Macs are good at local AI, and it&rsquo;s also why the memory you pick at checkout is the ceiling forever. You can&rsquo;t upgrade it later.</p>
+      <p>Three things eat that memory:</p>
+      <ul>
+        <li><strong>The model weights.</strong> A rough rule: at 4-bit quantization (the common Q4 setting), a model needs a bit over half a gigabyte per billion parameters. An 8B model is about 5GB. A 32B model is about 19&ndash;20GB. A 70B model at Q4_K_M is about 42.5GB (<a href="https://aiindigo.com/hardware/apple-m5-max-128gb">source</a>).</li>
+        <li><strong>The context window.</strong> Every token the model is holding in its head (your prompt, files it read, tool results, its own replies) takes memory too. Long context on a big model can cost several more gigabytes.</li>
+        <li><strong>macOS and your other apps.</strong> The system reserves a chunk of unified memory, so the GPU can only use part of it. On smaller Macs that&rsquo;s roughly two-thirds; on bigger ones closer to three-quarters (approximate, and it can be adjusted).</li>
+      </ul>
+      <p>So a model that &ldquo;fits&rdquo; on paper can still leave you with almost no room for context. That&rsquo;s exactly what happened to me on 16GB.</p>
+
+      <h2>My 16GB Mac mini: it could chat, and that&rsquo;s about it</h2>
+      <p>My first local AI setup was a 16GB M4 Mac mini. I loaded a small model, one of the largest it could realistically handle, and got it running.</p>
+      <figure class="photo">
+        <img src="media/mac-mini-box-local-ai.webp" width="900" height="1200" loading="lazy" decoding="async" alt="Jonathan Hansraj holding a sealed Apple Mac mini box, the 16GB M4 Mac mini he first used to run local AI models">
+        <figcaption>Picking up my Mac mini, the machine I first tried running local LLMs on.</figcaption>
+      </figure>
+      <p>It worked, technically. It could go back and forth with me for a couple of messages. But the context window was tiny. Anything longer than a short conversation and it started losing the thread.</p>
+      <p>The real dealbreaker was tool use. I wanted the model to actually do things: read files, run commands, act like an agent. On 16GB, tool use didn&rsquo;t work even slightly. The model was too small to follow tool instructions reliably, and there wasn&rsquo;t enough memory left over for the context those tools need.</p>
+      <p>If all you want is a private chatbot for quick questions, 16GB can do that. If you want an assistant that works on your files, it can&rsquo;t.</p>
+      <p>Even as a chatbot, there&rsquo;s a catch. A 7&ndash;8B model is less capable to begin with, and with so little room for context it loses track fast. Beyond simple back-and-forth, the answers get inconsistent and unreliable.</p>
+      <p>What I did find is that a small model can handle more complex tasks when it&rsquo;s built into code or an application, instead of being used as an open-ended assistant. The program does the heavy lifting: it hands the model one small, well-defined job at a time and checks what comes back. That&rsquo;s a real option for smaller Macs, but it&rsquo;s much more technical, you have to know what you&rsquo;re doing, and the results still vary. Still, if you&rsquo;re stuck on 16GB, you&rsquo;ll get more out of local AI by coding it into a program than by chatting with it.</p>
+      <p>Even so, I don&rsquo;t recommend a 16GB Mac if you want to use local models seriously. Workarounds help, but they don&rsquo;t change the ceiling.</p>
+
+      <h2>My 24GB MacBook Air: I hit the wall on day one</h2>
+      <p>Next I tried a 24GB M4 MacBook Air. I loaded a Qwen model, and I hit the RAM wall on the very first day.</p>
+      <p>24GB sounds like a solid upgrade over 16GB. But once the model loads, there&rsquo;s very little room left for context, and agent work needs a lot of context. For what I wanted to do, it wasn&rsquo;t enough.</p>
+
+      <h2>My 32GB MacBook Pro: night and day</h2>
+      <p>Then I moved to a 32GB M4 MacBook Pro. On paper that&rsquo;s just double the memory. In practice it was night and day.</p>
+      <p>With 32GB I could run 32B models, and they could create, change and organize my folders with ease. I&rsquo;d point the model at a directory and it would parse through it, usually pretty accurately. That&rsquo;s the moment local AI went from a demo to something I actually use for work.</p>
+      <p>On 32GB I&rsquo;ve run real automations: file management, PDF creation through a headless browser, and scheduled directory jobs. It handles them, but the browser shares the same memory as the model, so it&rsquo;s tight.</p>
+      <p>It wasn&rsquo;t perfect. Sometimes it hallucinated about what it had done. One test I ran: I asked it to make 100 documents, each about a different animal. It told me it was done. When I checked, 80 of the 100 files didn&rsquo;t contain anything about the animal at all. It had written the instructions for the task into each file instead of doing the task.</p>
+      <p>It did fix it in the end once I pointed it out. But that taught me the most important rule for local agents: <strong>check the output, not the model&rsquo;s summary of the output.</strong> A model saying &ldquo;done&rdquo; and the work being done are two different things.</p>
+      <p>Why such a big jump from 16GB to 32GB? A 32B model at 4-bit is roughly 20GB. On 16GB that&rsquo;s impossible. On 32GB it fits, with a little room left for context and tools. Model size is what unlocks reliable tool use, and 32GB is the first tier where those mid-size models fit.</p>
+
+      <h2>Where I landed: a 48GB Mac mini</h2>
+      <p>Today I run a 48GB M4 Pro Mac mini. I picked it because it was a good deal: a model a year or two old, with a lot of memory for the price.</p>
+      <p>The surprise was that I didn&rsquo;t need a bigger model. I ran the same Qwen 32B-class model I&rsquo;d used on 32GB, and it got much better. Tool use became robust, and it could hold a lot more context: longer sessions, more files, more tool results, without falling apart.</p>
+      <p>The math explains it. A 32B model at 4-bit takes roughly 20GB just to load. On a 32GB Mac, macOS only lets the GPU use part of the memory, so after the model loads there&rsquo;s very little left for context. On 48GB there&rsquo;s roughly 15GB more headroom, and tool-heavy agent work eats context fast: every tool definition, file it reads, and result it gets back takes up space. Same model, much more room to work.</p>
+      <p>48GB also lets me load a 70B-class model, but I can&rsquo;t use it with tools. The one I run is a mixture-of-experts model that takes about 28GB. macOS only lets the GPU use part of the 48GB, so once it loads there&rsquo;s very little left for context, and tools need a lot of it. It runs, but it&rsquo;s not an agent. For real work on 48GB, a 32B model with room to breathe beats a 70B-class model that barely fits.</p>
+      <p>That&rsquo;s a strategy worth copying. For local AI, RAM matters more than having the newest chip. An older Mac with more memory will often beat a newer one with less. For most people, this is the setup I&rsquo;d recommend for value. If you want to do serious work, 48GB and up is where local AI starts to feel professional-grade. My own next step is somewhere between 128GB and 256GB, and the reason is specific: I build local AI systems for other people, which means running several models at the same time and actually using that 70B-class model with tools, not just loading it. That&rsquo;s exactly the kind of work those bigger tiers are for. If you&rsquo;re one person running one agent, you probably don&rsquo;t need it.</p>
+
+      <h2>What I actually ran on each Mac</h2>
+      <p>Here&rsquo;s the short version of my own four machines, before the general breakdown.</p>
+      <div class="mem ran">
+        <table>
+          <thead><tr><th>Mac</th><th>Model I ran</th><th>What happened</th></tr></thead>
+          <tbody>
+            <tr><td>16GB M4 Mac mini</td><td>Small model (around 7&ndash;8B)</td><td>Short chats only. Tiny context, tool use didn&rsquo;t work.</td></tr>
+            <tr><td>24GB M4 MacBook Air</td><td>A Qwen model</td><td>Hit the RAM wall on day one. Too little room for context.</td></tr>
+            <tr><td>32GB M4 MacBook Pro</td><td>32B models</td><td>Reliable file and folder tasks. Still needed checking (80 of 100 files wrong once).</td></tr>
+            <tr><td>48GB M4 Pro Mac mini</td><td>Qwen 32B-class</td><td>Same model size as 32GB, but robust tool use and much longer context.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>What each RAM tier can run</h2>
+      <p>Here&rsquo;s how I&rsquo;d break it down. Model sizes assume 4-bit quantization; the &ldquo;good for&rdquo; column mixes my own experience (16GB, 24GB, 32GB, 48GB) with the memory math for the tiers I haven&rsquo;t owned.</p>
+      <div class="mem">
+        <table>
+          <thead><tr><th>Unified memory</th><th>Largest comfortable model</th><th>Good for</th><th>Current Macs with this option (Oct 2026)</th></tr></thead>
+          <tbody>
+            <tr><td>16GB</td><td>7&ndash;8B</td><td>Private chat, short Q&amp;A. Small context, unreliable tool use.</td><td>Mac mini M6 (base), 14-inch MacBook Pro M5 (base)</td></tr>
+            <tr><td>24GB</td><td>~14B</td><td>Better chat, light coding help, simple tools with care.</td><td>Mac mini M6, 14-inch MacBook Pro M5, Mac mini M5 Pro (base), MacBook Pro M5 Pro (base)</td></tr>
+            <tr><td>32GB</td><td>27&ndash;32B</td><td>Real agent work: file and folder tasks, tool use, coding.</td><td>Mac mini M6 (max), 14-inch MacBook Pro M5 (max)</td></tr>
+            <tr><td>48GB</td><td>32B with long context</td><td>Same models as 32GB, with room for big documents and longer sessions. The sweet spot.</td><td>Mac mini M5 Pro, MacBook Pro M5 Pro, Mac Studio M5 Max</td></tr>
+            <tr><td>64GB</td><td>70B (tight)</td><td>Larger models, or 32B models plus other apps running.</td><td>Mac mini M5 Pro (max), MacBook Pro M5 Pro (max), Mac Studio M5 Max</td></tr>
+            <tr><td>128GB</td><td>70B with long context, large mixture-of-experts models</td><td>Running several models at once, very long context, bigger open models.</td><td>MacBook Pro M5 Max (max), Mac Studio M5 Max (max)</td></tr>
+            <tr><td>256&ndash;512GB</td><td>The largest open-weight models</td><td>Research, serving a team, frontier-size models locally.</td><td>Mac Studio M5 Ultra</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>For reference: the <a href="https://www.iclarified.com/102336/new-mac-mini-and-mac-studio-models-are-now-available">Mac mini M6 starts at 16GB and tops out at 32GB, and the M5 Pro Mac mini goes up to 64GB</a> (sources list its in-between options slightly differently, so check Apple&rsquo;s configurator). On the <a href="https://www.apple.com/macbook-pro/specs/">MacBook Pro</a>, the 14-inch M5 comes with 16, 24 or 32GB, the M5 Pro tops out at 64GB, and only the M5 Max reaches 128GB. The <a href="https://fstoppers.com/gear/apples-new-mac-studio-gets-m5-ultra-512-gb-memory-and-thunderbolt-5-904270">Mac Studio M5 Max maxes out at 128GB and the M5 Ultra at 512GB</a>; some Mac Studio delivery dates have slipped, so check current availability before you buy.</p>
+
+      <h2>So is 128GB the magic number?</h2>
+      <p>For most people, no. 128GB isn&rsquo;t optimal, it&rsquo;s comfortable. It lets you run 70B-class models with long context, or keep a couple of models loaded at once. That&rsquo;s great if you need it.</p>
+      <p>But it&rsquo;s also expensive. A <a href="https://aiindigo.com/hardware/apple-m5-max-128gb">Mac Studio M5 Max with 128GB was listed around $5,099</a> in early October. The Mac mini M6 maxes out at 32GB and starts at $899 before upgrades.</p>
+      <p>Here&rsquo;s how I&rsquo;d think about it:</p>
+      <ul>
+        <li><strong>You want a private chatbot:</strong> 16&ndash;24GB is fine for low-context use.</li>
+        <li><strong>You want an agent that works on your files and runs tools:</strong> get at least 32GB. This is where I saw the biggest jump.</li>
+        <li><strong>You work with huge documents, long sessions, or want 70B models:</strong> 64GB.</li>
+        <li><strong>You&rsquo;re running multiple agents, serving a team, or chasing the biggest open models:</strong> 128GB and up.</li>
+      </ul>
+      <p>The jump from 16GB to 32GB changed what I could do. The jump from 32GB to 128GB mostly changes how big and how long. Spend accordingly.</p>
+
+      <h2>What I&rsquo;d tell anyone starting out</h2>
+      <ol>
+        <li><strong>Buy more RAM than you think.</strong> Memory is fixed at purchase. Storage you can add externally; RAM you can&rsquo;t.</li>
+        <li><strong>Pick the biggest model that leaves room for context.</strong> A model that barely fits is worse than a slightly smaller one with breathing room, especially for tool use.</li>
+        <li><strong>Use 4-bit quantized models.</strong> They&rsquo;re the practical default for running bigger models in less memory.</li>
+        <li><strong>Verify agent work.</strong> Open the files. Count them. Spot-check them. My 80-out-of-100 lesson is real.</li>
+        <li><strong>Close the heavy apps.</strong> Browsers and editors share the same memory pool as your model.</li>
+      </ol>
+
+      <h2>Bottom line</h2>
+      <p>32GB is the minimum I&rsquo;d recommend for local AI that does real work. 128GB is great, but it&rsquo;s a luxury tier, not a requirement.</p>
+      <p>At Cloak Forge AI, I build private, local AI systems that run on hardware you own, with no cloud dependency. If you&rsquo;re trying to figure out what Mac to buy or how to set up a local agent on the one you have, <a href="offerings.html#contact">get in touch</a>.</p>
+
+      <section class="faq">
+        <h2>FAQ</h2>
+        <h3>Can a 16GB Mac run local AI?</h3>
+        <p>Yes, small 7&ndash;8B models for chat. Expect short context and unreliable tool use.</p>
+        <h3>Is 32GB enough for local LLMs?</h3>
+        <p>For lighter work, yes. It runs 27&ndash;32B models that can handle file tasks and tool use, but there&rsquo;s little memory left for long documents or other apps. If you can stretch your budget, I&rsquo;d strongly recommend 48GB. It runs the same models with far more room to work.</p>
+        <h3>Do I need 128GB to run local AI on a Mac?</h3>
+        <p>No. 128GB helps with 70B+ models and very long context, but it&rsquo;s not required for useful local AI.</p>
+        <h3>Can I upgrade RAM on an Apple Silicon Mac later?</h3>
+        <p>No. Unified memory is fixed when you buy the Mac.</p>
+      </section>
+
+      <p class="ai-note"><em>The testing and experiences here are my own. I used AI to help organize and edit the writing, and I checked the facts against the sources below.</em></p>
+
+      <h2>Sources</h2>
+      <ul>
+        <li><a href="https://www.iclarified.com/102336/new-mac-mini-and-mac-studio-models-are-now-available">iClarified: New Mac mini and Mac Studio models are now available</a></li>
+        <li><a href="https://www.apple.com/macbook-pro/specs/">Apple: MacBook Pro technical specifications</a></li>
+        <li><a href="https://fstoppers.com/gear/apples-new-mac-studio-gets-m5-ultra-512-gb-memory-and-thunderbolt-5-904270">Fstoppers: Mac Studio gets M5 Ultra and 512GB memory</a></li>
+        <li><a href="https://aiindigo.com/hardware/apple-m5-max-128gb">AI Indigo: Apple M5 Max 128GB</a></li>
+        <li><a href="https://www.macworld.com/article/3140334">Macworld: M6 or M5 Pro Mac mini</a></li>
+      </ul>
+    </div>
+  </article>
+</main>
+
+<footer class="site-footer"></footer>

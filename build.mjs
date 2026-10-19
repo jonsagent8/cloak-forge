@@ -77,6 +77,39 @@ const PAGES = [
     desc: "How Cloak Forge keeps AI on your Mac: what Private Mode blocks, how we tested it, its known limits, and what this website collects (no tracking at all).",
     type: "WebPage",
   },
+  {
+    path: "/blog/",
+    file: "blog.fragment.html",
+    out: "blog/index.html",
+    crumb: "Blog",
+    title: "Cloak Forge Blog: Running Local AI on Apple Silicon Macs",
+    desc: "Hands-on notes on running local AI on Apple Silicon Macs: how much memory you need, which models each Mac can run, and what works for local agents.",
+    type: "CollectionPage",
+  },
+  {
+    path: "/blog/mac-ram-local-ai/",
+    file: "blog-mac-ram-local-ai.fragment.html",
+    out: "blog/mac-ram-local-ai/index.html",
+    crumb: "How Much RAM Do You Need for Local AI on a Mac?",
+    title: "How Much RAM Do You Need for Local AI on a Mac?",
+    desc: "I ran local AI on four M4 Macs, from 16GB to 48GB. Here's what each RAM tier can really do, and whether you actually need 128GB to run local models.",
+    type: "WebPage",
+    image: "/media/mac-mini-box-local-ai.webp",
+    trail: [{ name: "Blog", path: "/blog/" }],
+    og: {
+      type: "article",
+      image: "/media/mac-mini-og.jpg",
+      alt: "Jonathan Hansraj holding a sealed Apple Mac mini box",
+    },
+    article: {
+      headline: "How Much RAM Do You Need to Run Local AI on a Mac?",
+      author: "Jonathan Hansraj",
+      datePublished: "2026-10-19",
+      dateModified: "2026-10-19",
+      image: { url: "/media/mac-mini-box-local-ai.webp", width: 900, height: 1200 },
+      faq: true,
+    },
+  },
 ];
 
 for (const p of PAGES) {
@@ -95,6 +128,7 @@ const ORGANIZATION = {
   "@type": "LocalBusiness",
   "@id": ORG_ID,
   name: "Cloak Forge",
+  alternateName: "Cloak Forge AI",
   url: `${SITE_URL}/`,
   // No street address is published; region and country only.
   address: { "@type": "PostalAddress", addressRegion: "NY", addressCountry: "US" },
@@ -148,6 +182,10 @@ const PRODUCTS = {
   },
 };
 
+// HTML snippet -> plain text (tags stripped, the entities the fragments use decoded).
+const ENTITIES = { amp: "&", lt: "<", gt: ">", quot: '"', rsquo: "\u2019", lsquo: "\u2018", rdquo: "\u201d", ldquo: "\u201c", ndash: "\u2013", mdash: "\u2014", nbsp: " " };
+const plain = (html) => html.replace(/<[^>]+>/g, "").replace(/&(\w+);/g, (m, e) => ENTITIES[e] ?? m).trim();
+
 function jsonLd(p) {
   const url = SITE_URL + p.path;
   const graph = [ORGANIZATION, WEBSITE];
@@ -168,6 +206,7 @@ function jsonLd(p) {
       const parent = PAGES.find((q) => q.out === `${p.parent}.html`);
       trail.push({ name: parent.crumb, url: SITE_URL + parent.path });
     }
+    for (const t of p.trail || []) trail.push({ name: t.name, url: SITE_URL + t.path });
     trail.push({ name: p.crumb, url });
     webpage.breadcrumb = { "@id": `${url}#breadcrumb` };
     graph.push({
@@ -175,6 +214,40 @@ function jsonLd(p) {
       "@id": `${url}#breadcrumb`,
       itemListElement: trail.map((t, i) => ({ "@type": "ListItem", position: i + 1, name: t.name, item: t.url })),
     });
+  }
+  if (p.article) {
+    const a = p.article;
+    graph.push({
+      "@type": "BlogPosting",
+      "@id": `${url}#article`,
+      headline: a.headline,
+      description: p.desc,
+      inLanguage: "en",
+      author: { "@type": "Person", name: a.author, url: `${SITE_URL}/` },
+      publisher: { "@id": ORG_ID },
+      datePublished: a.datePublished,
+      dateModified: a.dateModified,
+      image: { "@type": "ImageObject", url: SITE_URL + a.image.url, width: a.image.width, height: a.image.height },
+      mainEntityOfPage: { "@id": `${url}#webpage` },
+      isPartOf: { "@id": SITE_ID },
+    });
+    webpage.mainEntity = { "@id": `${url}#article` };
+    if (a.faq) {
+      // Questions and answers are read from the page's own FAQ section, so the
+      // structured data always matches the visible text.
+      const section = p.body.match(/<section class="faq">([\s\S]*?)<\/section>/)[1];
+      const qa = [...section.matchAll(/<h3>([\s\S]*?)<\/h3>\s*<p>([\s\S]*?)<\/p>/g)];
+      graph.push({
+        "@type": "FAQPage",
+        "@id": `${url}#faq`,
+        isPartOf: { "@id": `${url}#webpage` },
+        mainEntity: qa.map(([, q, ans]) => ({
+          "@type": "Question",
+          name: plain(q),
+          acceptedAnswer: { "@type": "Answer", text: plain(ans) },
+        })),
+      });
+    }
   }
   if (PRODUCTS[p.path]) {
     graph.push(PRODUCTS[p.path]);
@@ -185,31 +258,40 @@ function jsonLd(p) {
   return `<script type="application/ld+json">\n${json}\n</script>`;
 }
 
+// Cloudflare Web Analytics: cookie-free visit counts (see privacy page).
+const CF_ANALYTICS = `<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "e941dd285d8a4e43ab0842e58bb7b24b"}'></script><!-- End Cloudflare Web Analytics -->`;
+
 function seoHead(p) {
   const url = SITE_URL + p.path;
   return `
 <meta name="description" content="${esc(p.desc)}">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="${url}">
-<meta property="og:type" content="website">
+<meta property="og:type" content="${p.og?.type || "website"}">
 <meta property="og:site_name" content="Cloak Forge">
 <meta property="og:locale" content="en_US">
 <meta property="og:title" content="${esc(p.title)}">
 <meta property="og:description" content="${esc(p.desc)}">
 <meta property="og:url" content="${url}">
-<meta property="og:image" content="${SITE_URL}/og-image.png">
+<meta property="og:image" content="${SITE_URL}${p.og?.image || "/og-image.png"}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Cloak Forge: private AI automation, forged on your machine">
+<meta property="og:image:alt" content="${esc(p.og?.alt || "Cloak Forge: private AI automation, forged on your machine")}">${p.article ? `
+<meta property="article:published_time" content="${p.article.datePublished}">
+<meta property="article:modified_time" content="${p.article.dateModified}">
+<meta property="article:author" content="${esc(p.article.author)}">
+<meta name="author" content="${esc(p.article.author)}">` : ""}
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${esc(p.title)}">
 <meta name="twitter:description" content="${esc(p.desc)}">
-<meta name="twitter:image" content="${SITE_URL}/og-image.png">
+<meta name="twitter:image" content="${SITE_URL}${p.og?.image || "/og-image.png"}">
+<meta name="twitter:image:alt" content="${esc(p.og?.alt || "Cloak Forge: private AI automation, forged on your machine")}">
 <link rel="icon" href="favicon.ico?v=2" sizes="32x32">
 <link rel="icon" href="favicon.svg?v=2" type="image/svg+xml">
 <link rel="icon" href="favicon-192.png?v=2" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="apple-touch-icon.png?v=2">
-${jsonLd(p)}`.trim();
+${jsonLd(p)}
+${CF_ANALYTICS}`.trim();
 }
 
 // The header and footer live in index.html (the artifact source); every other
@@ -253,23 +335,54 @@ await writeFile(
     .replace("</head>", `${seoHead(homePage)}\n<meta name="theme-color" content="#040610">\n</head>`)
 );
 
+// Pages in a subfolder (e.g. blog/<slug>/index.html) get their relative links
+// and asset paths pointed back up to the site root.
+const toRoot = (html, out) => {
+  const up = "../".repeat(out.split("/").length - 1);
+  if (!up) return html;
+  return html
+    .replace(/(href|src)="(?![a-z]+:|#|\/)/g, `$1="${up}`)
+    .replace(/url\((?![a-z]+:|\/)/g, `url(${up}`);
+};
+
+const prettyDate = (d) => new Date(`${d}T12:00:00Z`).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
+
 for (const p of PAGES.filter((p) => p.file)) {
-  const body = await readFile(new URL(`./${p.file}`, import.meta.url), "utf8");
-  await writeFile(new URL(`./docs/${p.out}`, import.meta.url), page(p, withChrome(body.trim())));
+  let body = await readFile(new URL(`./${p.file}`, import.meta.url), "utf8");
+  if (p.article) {
+    const d = p.article.dateModified;
+    body = body.replace("{{LAST_UPDATED}}", `<time datetime="${d}">${prettyDate(d)}</time>`);
+  }
+  if (body.includes("{{POST_LIST}}")) {
+    // The blog index lists every post (any page with an `article`), newest first.
+    const posts = PAGES.filter((q) => q.article).sort((a, b) => b.article.datePublished.localeCompare(a.article.datePublished));
+    const items = posts.map((q) => `        <li>
+          <time datetime="${q.article.datePublished}">${prettyDate(q.article.datePublished)}</time>
+          <h2><a href="${q.path.slice(1)}">${esc(q.article.headline)}</a></h2>
+          <p>${esc(q.desc)}</p>
+        </li>`);
+    body = body.replace("{{POST_LIST}}", `<ul class="posts">\n${items.join("\n")}\n      </ul>`);
+  }
+  p.body = body;
+  const dest = new URL(`./docs/${p.out}`, import.meta.url);
+  await mkdir(new URL(".", dest), { recursive: true });
+  await writeFile(dest, toRoot(page(p, withChrome(body.trim())), p.out));
 }
 
 // sitemap.xml (lastmod = when the page's source last changed) and robots.txt
-const lastmod = async (p) => (await stat(new URL(`./${p.file || "home.html"}`, import.meta.url))).mtime.toISOString().slice(0, 10);
+const lastmod = async (p) => p.article?.dateModified || (await stat(new URL(`./${p.file || "home.html"}`, import.meta.url))).mtime.toISOString().slice(0, 10);
 const urls = [];
 for (const p of PAGES) urls.push(`  <url><loc>${SITE_URL}${p.path}</loc><lastmod>${await lastmod(p)}</lastmod></url>`);
 await writeFile(
   new URL("./docs/sitemap.xml", import.meta.url),
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join("\n")}\n</urlset>\n`
 );
+// Crawlers named explicitly so each one has its own "allowed" group.
+const ALLOWED_BOTS = ["Googlebot", "Bingbot", "GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-SearchBot", "PerplexityBot", "Google-Extended", "Applebot-Extended"];
 await writeFile(
   new URL("./docs/robots.txt", import.meta.url),
-  `# Every page on this site is public. Search engines and AI assistants
-# (Googlebot, Bingbot, GPTBot, ClaudeBot, PerplexityBot, etc.) are welcome.
+  `# Every page on this site is public. Search engines and AI assistants are welcome.
+${ALLOWED_BOTS.map((bot) => `User-agent: ${bot}\nAllow: /\n`).join("\n")}
 User-agent: *
 Allow: /
 
@@ -283,7 +396,7 @@ await mkdir(new URL("./docs/vendor", import.meta.url), { recursive: true });
 // Self-hosted copies of Google Fonts (the same WOFF2 files and CSS Google
 // serves) and Lenis 1.1.13 from npm, so pages make no third-party requests.
 const googleFonts = (await readdir(new URL("./fonts/google", import.meta.url))).filter((f) => f.endsWith(".woff2")).map((f) => `fonts/google/${f}`);
-for (const asset of ["favicon.svg", "favicon.ico", "favicon-32.png", "favicon-192.png", "favicon-512.png", "apple-touch-icon.png", "og-image.png", "media/waterfall-120.mp4", "media/waterfall-120-portrait.mp4", "media/waterfall-120-720.mp4", "media/waterfall-poster.jpg", "media/waterfall-poster-portrait.jpg", "media/fire-100-portrait.mp4", "media/fire-poster-portrait.jpg", "media/storm-120-tall.mp4", "media/storm-poster-tall.jpg", "fonts/Archivo.woff2", "fonts/IBMPlexMono-Medium.woff2", "fonts/IBMPlexSans.woff2", "media/launcher-dashboard.webp", "media/email-chat.webp", "logo.png", "llms.txt", "fonts/google-fonts.css", "fonts/OFL.txt", ...googleFonts, "vendor/lenis.min.js", "vendor/lenis-LICENSE.txt"]) {
+for (const asset of ["favicon.svg", "favicon.ico", "favicon-32.png", "favicon-192.png", "favicon-512.png", "apple-touch-icon.png", "og-image.png", "media/waterfall-120.mp4", "media/waterfall-120-portrait.mp4", "media/waterfall-120-720.mp4", "media/waterfall-poster.jpg", "media/waterfall-poster-portrait.jpg", "media/fire-100-portrait.mp4", "media/fire-poster-portrait.jpg", "media/storm-120-tall.mp4", "media/storm-poster-tall.jpg", "fonts/Archivo.woff2", "fonts/IBMPlexMono-Medium.woff2", "fonts/IBMPlexSans.woff2", "media/launcher-dashboard.webp", "media/email-chat.webp", "media/mac-mini-box-local-ai.webp", "media/mac-mini-og.jpg", "84c4e52297163e1f9d69b2fedb457eb8.txt", "logo.png", "llms.txt", "fonts/google-fonts.css", "fonts/OFL.txt", ...googleFonts, "vendor/lenis.min.js", "vendor/lenis-LICENSE.txt"]) {
   await copyFile(new URL(`./${asset}`, import.meta.url), new URL(`./docs/${asset}`, import.meta.url));
 }
 await writeFile(new URL("./docs/.nojekyll", import.meta.url), "");

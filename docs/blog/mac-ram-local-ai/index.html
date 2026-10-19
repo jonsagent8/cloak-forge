@@ -1,0 +1,942 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>How Much RAM Do You Need for Local AI on a Mac?</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#081132">
+<link rel="stylesheet" href="../../fonts/google-fonts.css">
+
+<style>
+  :root{
+    /* Tanzanite-blue metallic */
+    --bg:#0a1428;
+    --surface:#122140;
+    --surface-2:#182a52;
+    --ink:#f1eee7;
+    --ink-dim:#aeb9cf;
+    --ink-faint:#7484a1;
+    --ember:#ff8a33;
+    --ember-soft:#ffab66;
+    --steel:#93a8bd;
+    --line:#223a5c;
+    --line-soft:#172845;
+
+    /* the same deep-space navy as the hero, used for the whole page */
+    --paint:
+      radial-gradient(1100px 760px at 80% -6%,#0e1c40 0%,#081029 46%,transparent 72%),
+      radial-gradient(1000px 900px at 4% 106%,#060a1e 0%,transparent 58%),
+      linear-gradient(174deg,#080e26 0%,#05091a 55%,#040610 100%);
+    /* metal plate: soft top-left highlight falling to a shadowed base — no lines */
+    --panel:
+      radial-gradient(130% 100% at 14% -8%,rgba(128,166,222,.13),transparent 52%),
+      linear-gradient(162deg,rgba(108,146,210,.08) 0%,rgba(255,255,255,0) 30%,rgba(0,0,0,.10) 72%,rgba(0,0,0,.22) 100%);
+    --panel-edge:
+      inset 0 1px 0 rgba(180,200,236,.24),
+      inset 0 -1px 0 rgba(0,0,0,.5),
+      0 16px 34px -16px rgba(0,0,0,.6);
+
+    /* tinted orange glass — luminous, translucent, backlit */
+    --glass:linear-gradient(135deg,rgba(255,158,72,.5),rgba(255,142,62,.2) 55%,rgba(255,180,104,.36));
+    --glass-edge:rgba(255,190,124,.55);
+    --glass-inset:inset 0 1px 0 rgba(255,226,198,.5),inset 0 0 70px rgba(255,150,60,.22);
+    --glass-glow:0 26px 80px -28px rgba(255,142,56,.55);
+    --glass-sheen:linear-gradient(115deg,transparent 38%,rgba(255,244,230,.2) 46%,transparent 54%);
+    color-scheme:dark;
+  }
+
+  *,*::before,*::after{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  #top{scroll-margin-top:5rem}
+
+  body{
+    margin:0;
+    background:#070c26;
+    color:var(--ink);
+    font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
+    font-size:1rem;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  /* the page's fixed deep-space background */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;
+    background:var(--paint);
+    background-size:cover;
+  }
+  /* fixed light: a soft top highlight + a gentle edge vignette so text stays legible */
+  body::after{
+    content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background:
+      radial-gradient(1000px 700px at 24% 12%,rgba(120,162,222,.10),transparent 60%),
+      radial-gradient(1400px 1100px at 50% 60%,transparent 40%,rgba(6,10,32,.5) 100%);
+  }
+  @keyframes sheen{
+    0%,100%{filter:opacity(.72)}
+    50%{filter:opacity(1)}
+  }
+  img{max-width:100%;display:block}
+  a{color:var(--ember-soft);text-decoration:none}
+  a:hover{text-decoration:underline}
+  :focus-visible{outline:2px solid var(--steel);outline-offset:3px;border-radius:2px}
+
+  .wrap{max-width:1080px;margin:0 auto;padding-inline:clamp(1.25rem,5vw,2rem)}
+  .section{padding-block:clamp(4rem,10vw,7rem);border-top:1px solid var(--line-soft)}
+
+  .eyebrow{
+    font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:.72rem;font-weight:500;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--ember);margin:0 0 1.1rem;
+  }
+  h1,h2,h3{font-family:"Archivo",system-ui,sans-serif;text-wrap:balance;margin:0}
+  h1{font-size:clamp(2.5rem,6.2vw,4.5rem);font-weight:800;line-height:1.02;letter-spacing:-.022em}
+  h2{font-size:clamp(1.8rem,3.6vw,2.6rem);font-weight:700;line-height:1.08;letter-spacing:-.015em}
+  h3{font-size:1.24rem;font-weight:700;letter-spacing:-.01em}
+  p{margin:0}
+
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:.5em;
+    font-family:"IBM Plex Sans",sans-serif;font-size:.98rem;font-weight:600;
+    line-height:1;padding:.85em 1.4em;border-radius:4px;border:1px solid transparent;
+    cursor:pointer;text-align:center;
+    transition:transform .12s ease,box-shadow .2s ease,background .2s ease,border-color .2s ease,color .2s ease;
+  }
+  .btn-primary{
+    background:linear-gradient(180deg,#ffa457,#f2761f);color:#241004;
+    box-shadow:inset 0 1px 0 rgba(255,226,198,.55),0 8px 24px -10px rgba(255,140,56,.5);
+  }
+  .btn-primary:hover{
+    background:linear-gradient(180deg,#ffb474,#ff8a33);transform:translateY(-1px);
+    box-shadow:inset 0 1px 0 rgba(255,234,212,.6),0 14px 40px -12px rgba(255,142,56,.62);text-decoration:none;
+  }
+  .btn-ghost{background:transparent;color:var(--ember-soft);border-color:var(--line)}
+  .btn-ghost:hover{border-color:var(--ember);background:rgba(255,138,48,.1);text-decoration:none}
+  .btn-block{width:100%}
+  .btn-sm{padding:.6em 1.05em;font-size:.88rem}
+
+  /* header */
+  .site-header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(11,26,48,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line-soft);
+  }
+  .header-inner{display:flex;align-items:center;gap:1rem;padding-block:.8rem}
+  .wordmark{display:inline-flex;align-items:center;gap:.55rem;color:var(--ink);font-family:"Archivo",sans-serif;font-weight:800;font-size:1.02rem}
+  .wordmark:hover{text-decoration:none}
+  .wordmark svg,.footer-brand svg{color:var(--ember)}
+  .wordmark svg{width:36px;height:36px;transform:translateY(-6px)} /* lift so the keyhole, not the flame, sits on the text line */
+  @media (max-width:480px){
+    /* keep logo, Menu and the CTA on one row on phones */
+    .wordmark svg{width:28px;height:28px;transform:translateY(-4px)}
+    .header-inner .btn-sm{padding:.45rem .75rem;font-size:.82rem}
+    .nav-toggle{padding:.4rem .6rem}
+  }
+
+  /* primary nav */
+  .site-nav{display:flex;flex-wrap:wrap;gap:1.5rem;align-items:center;flex:1}
+  .site-nav a{color:var(--ink-dim);font-family:"IBM Plex Sans",sans-serif;font-size:.92rem;font-weight:500}
+  .site-nav a:hover{color:var(--ink);text-decoration:none}
+  .nav-toggle{
+    display:none;background:transparent;border:1px solid var(--line);color:var(--ink);
+    font-family:"IBM Plex Sans",sans-serif;font-size:.85rem;font-weight:600;
+    padding:.5em .9em;border-radius:5px;cursor:pointer;
+  }
+  .nav-toggle:hover{border-color:var(--ember)}
+  @media (max-width:900px){
+    .header-inner{flex-wrap:wrap}
+    .wordmark{order:1}
+    .nav-toggle{display:inline-flex;order:2}
+    .header-inner>.btn{order:3}
+    .site-nav{
+      order:4;flex:1 1 100%;flex-direction:column;align-items:flex-start;gap:.9rem;
+      max-height:0;overflow:hidden;opacity:0;transition:max-height .2s ease,opacity .2s ease;
+    }
+    .site-nav.is-open{max-height:22rem;opacity:1;padding-top:.6rem;padding-bottom:.2rem}
+  }
+
+  /* hero — deep space with a flowing ribbon of light */
+  .hero{
+    position:relative;overflow:hidden;
+    background:
+      radial-gradient(1100px 720px at 80% 6%,#0e1c40 0%,#081029 46%,transparent 72%),
+      radial-gradient(1000px 900px at 6% 116%,#060a1e 0%,transparent 56%),
+      linear-gradient(174deg,#060b1e 0%,#040814 58%,#03040a 100%);
+  }
+  /* soft hand-off into the page below */
+
+
+
+  /* hero video — a real waterfall, graded to the navy palette; the left side is
+     darkened so the headline reads, with a faint forge glow at the base */
+  .hero-video{position:absolute;inset:0;z-index:0;overflow:hidden;background:#040814 url(../../media/waterfall-poster.jpg) center/cover no-repeat}
+  .hero-video video{display:block;width:100%;height:100%;object-fit:cover}
+  .hero-video::after{
+    content:"";position:absolute;inset:0;
+    background:
+      linear-gradient(90deg,rgba(4,8,20,.94) 0%,rgba(4,8,20,.82) 32%,rgba(4,8,20,.34) 62%,rgba(4,8,20,.5) 100%),
+      linear-gradient(180deg,rgba(4,8,20,.55) 0%,transparent 26%),
+      radial-gradient(55% 40% at 70% 104%,rgba(255,138,51,.2),transparent 70%);
+  }
+  .hero-side b,.hero-side span{text-shadow:0 1px 3px rgba(4,8,20,.95),0 0 18px rgba(4,8,20,.9)}
+  .hero .hero-side span{color:var(--ink-dim)}
+  /* orange-tinted glass panels around the hero text. On desktop the padding is
+     cancelled by an equal negative margin, so the panels grow outward and the
+     hero (and the video framing) stays exactly the same size */
+  .hero-main,.hero-side div{
+    background:linear-gradient(135deg,rgba(255,146,58,.3),rgba(255,138,51,.12) 55%,rgba(255,170,92,.24)),rgba(8,12,28,.5);
+    border-radius:14px;
+    box-shadow:inset 0 0 60px rgba(255,138,51,.12),0 24px 60px -28px rgba(255,138,51,.6);
+    -webkit-backdrop-filter:blur(10px) saturate(1.15);backdrop-filter:blur(10px) saturate(1.15);
+  }
+  .hero-main{padding:1.5rem 1.4rem}
+  @media (min-width:920px){
+    .hero .hero-main{padding:2rem 2.2rem;margin:-2rem -2.2rem;max-width:calc(34rem + 4.4rem)}
+    .hero-side div{padding:.6rem 1.1rem;margin:-.6rem -1.1rem}
+  }
+  @media (max-width:919px){
+    .hero-video{background-image:url(../../media/waterfall-poster-portrait.jpg)}
+    .hero-video::after{background:linear-gradient(180deg,rgba(4,8,20,.3),rgba(4,8,20,.5) 60%,rgba(4,8,20,.62))}
+  }
+
+  /* the same waterfall turned on its side, twice: the left copy flows right and
+     the right copy is its mirror, so the two streams meet in the middle. It runs
+     behind the open band under the hero and the two sections below it */
+  /* the zone slides up under the hero's bottom padding and fades in there, so the
+     two waterfalls blend with no gap */
+  .river-zone{position:relative;z-index:1;margin-top:calc(-1 * clamp(4rem,9vw,6rem));pointer-events:none}
+  .river-zone > .section{position:relative;z-index:1;border-top:0;pointer-events:auto}
+  .river-gap{height:calc(clamp(200px,24vw,340px) + clamp(4rem,9vw,6rem))}
+  .river{position:absolute;inset:0;z-index:0;display:grid;grid-template-columns:1fr 1fr;overflow:hidden;
+    pointer-events:none;
+    -webkit-mask:linear-gradient(transparent,#000 clamp(4rem,9vw,6rem),#000 88%,transparent);mask:linear-gradient(transparent,#000 clamp(4rem,9vw,6rem),#000 88%,transparent)}
+  .river-half{position:relative;overflow:hidden;container-type:size}
+  .river-half.mirror{transform:scaleX(-1);margin-left:-1px}
+  .river-half video{
+    /* sized in the half's own units, then turned 90deg: its width becomes the zone's height */
+    position:absolute;top:50%;left:50%;width:calc(100cqh + 8px);height:calc(100cqw + 8px);object-fit:cover;
+    transform:translate(-50%,-50%) rotate(-90deg);
+    background:#040814 url(../../media/waterfall-poster.jpg) center/cover no-repeat;
+  }
+  .river::before{
+    content:"";position:absolute;top:0;bottom:0;left:calc(50% - 28px);width:56px;z-index:1;pointer-events:none;
+    -webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px);
+    -webkit-mask:linear-gradient(90deg,transparent,#000 35%,#000 65%,transparent);mask:linear-gradient(90deg,transparent,#000 35%,#000 65%,transparent);
+  }
+  .river::after{
+    content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+    background:
+      linear-gradient(180deg,rgba(4,8,20,0) 0,rgba(4,8,20,.08) clamp(160px,18vw,280px),rgba(4,8,20,.66) clamp(330px,34vw,520px),rgba(4,8,20,.66) 100%),
+      linear-gradient(90deg,rgba(4,8,20,.5),rgba(4,8,20,.08) 30%,rgba(4,8,20,.08) 70%,rgba(4,8,20,.5));
+  }
+
+  .hero-content{position:relative;z-index:2;padding-block:clamp(7rem,17vw,11rem) clamp(4rem,9vw,6rem)}
+  .hero-grid{display:grid;gap:2.4rem}
+  @media (min-width:920px){
+    .hero-grid{grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:3.4rem}
+  }
+  .hero-main{max-width:34rem}
+  .hero h1{font-size:clamp(2rem,4vw,3rem);line-height:1.08}
+  .lead{margin-top:1.5rem;font-size:clamp(1.05rem,1.6vw,1.26rem);color:var(--ink-dim);max-width:46ch}
+  .hero-cta{margin-top:2.3rem;display:flex;flex-wrap:wrap;gap:.9rem}
+
+  /* right-side labels, echoing the reference's cover text */
+  .hero-side{display:flex;flex-direction:column;gap:1.6rem;text-align:right}
+  .hero-side div{display:flex;flex-direction:column;gap:.22rem}
+  .hero-side b{font-family:"Archivo",sans-serif;font-weight:700;font-size:.94rem;color:var(--ink)}
+  .hero-side span{
+    font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink-faint);
+  }
+  @media (max-width:919px){ .hero-side{display:none} }
+
+  /* services */
+  .cards{margin-top:2.6rem;display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(255px,1fr))}
+  .card{
+    display:flex;flex-direction:column;gap:.85rem;
+    background:var(--panel),var(--surface);border:1px solid var(--line);border-radius:10px;padding:1.7rem;
+    box-shadow:var(--panel-edge);
+    transition:transform .15s ease,border-color .2s ease;
+  }
+  .card:hover{
+    transform:translateY(-3px);border-color:rgba(255,158,80,.42);
+    background:
+      radial-gradient(130% 100% at 14% -8%,rgba(170,208,255,.26),transparent 52%),
+      linear-gradient(162deg,rgba(140,182,255,.14) 0%,rgba(255,255,255,0) 30%,rgba(0,0,0,.10) 72%,rgba(0,0,0,.22) 100%),
+      var(--surface);
+  }
+  .card-kicker{font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ember)}
+  .card-desc{color:var(--ink-dim);font-size:.96rem}
+  .price{margin-top:auto;padding-top:.5rem;display:flex;flex-direction:column;gap:.15rem}
+  .price-num{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:1.5rem;color:var(--ink);font-variant-numeric:tabular-nums}
+  .price-unit{font-size:.82rem;color:var(--ink-faint)}
+  .card .btn{margin-top:.5rem}
+
+  /* why-local */
+  .benefits{margin-top:2.6rem;display:grid;gap:2rem;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+  .benefit{display:flex;flex-direction:column;gap:.7rem}
+  .benefit svg{width:30px;height:30px;color:var(--ember)}
+  .benefit h3{font-size:1.12rem}
+  .benefit p{color:var(--ink-dim);font-size:.96rem}
+  .benefit .alt{
+    margin-top:.2rem;padding-left:.9rem;border-left:2px solid var(--line);
+    color:var(--ink-faint);font-size:.92rem;
+  }
+  .benefit .alt b{color:var(--ink-dim);font-weight:600}
+
+  /* hardware */
+  .hw-intro{margin-top:1rem;color:var(--ink-dim);max-width:60ch}
+  .mem{margin-top:2.6rem;overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--panel),var(--surface);box-shadow:var(--panel-edge)}
+  .mem table{border-collapse:collapse;width:100%;min-width:660px;font-size:.95rem;table-layout:fixed}
+  .mem col.c-mem{width:12rem}
+  .mem col.c-fit{width:12rem}
+  .mem th,.mem td{text-align:left;padding:.95rem 1.15rem;border-bottom:1px solid var(--line-soft);vertical-align:top}
+  .mem thead th{
+    font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--ember);background:var(--surface);white-space:nowrap;
+  }
+  .mem tbody tr:last-child td{border-bottom:0}
+  .mem tbody tr:hover td{background:var(--surface-2)}
+  .mem .m-cap{
+    font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;
+    color:var(--ink);white-space:nowrap;font-weight:500;
+  }
+  .mem .m-mid{color:var(--ink-dim)}
+  .mem .m-note{color:var(--ink-dim)}
+
+  .rigs{margin-top:1.75rem;display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+  .rig{
+    background:var(--panel),var(--surface);border:1px solid var(--line);border-radius:10px;
+    box-shadow:var(--panel-edge);
+    padding:1.7rem;display:flex;flex-direction:column;gap:.65rem;
+  }
+  .rig.is-rec{
+    border-color:var(--glass-edge);
+    background:var(--glass),var(--surface);
+    box-shadow:var(--glass-inset),var(--glass-glow);
+    position:relative;overflow:hidden;
+  }
+  .rig.is-rec::after{
+    content:"";position:absolute;inset:0 -45%;pointer-events:none;z-index:0;background:var(--glass-sheen);
+    transform:translateX(calc(-22% + var(--sy,0) * .028));will-change:transform;
+  }
+  .rig.is-rec > *{position:relative;z-index:1}
+  .rig.is-rec p{color:#ece3d6}
+  .rig-tag{font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ember)}
+  .rig h3{font-size:1.1rem}
+  .rig p{color:var(--ink-dim);font-size:.95rem}
+  .rig p + p{margin-top:.15rem}
+  .hw-foot{margin-top:1.9rem;color:var(--ink-dim);max-width:58ch;font-size:.96rem}
+
+  /* fit checker */
+  .spec-tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1.8rem}
+  .spec-tab{
+    font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;
+    padding:.55em 1.1em;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink-dim);cursor:pointer;
+  }
+  .spec-tab:hover{border-color:var(--ember)}
+  .spec-tab.is-active{background:var(--surface-2);border-color:var(--ember);color:var(--ink)}
+  .spec-panel{display:none;margin-top:1.4rem}
+  .spec-panel.is-active{display:block}
+  .spec-panel ol{margin:0;padding-left:1.3rem;display:flex;flex-direction:column;gap:.6rem;color:var(--ink-dim);font-size:.95rem}
+  .spec-panel code{font-family:"IBM Plex Mono",monospace;font-size:.88em;background:var(--surface-2);padding:.1em .4em;border-radius:3px;color:var(--ink)}
+
+  .fit-tool{
+    margin-top:2.6rem;background:var(--panel),var(--surface);border:1px solid var(--line);border-radius:12px;
+    box-shadow:var(--panel-edge);padding:clamp(1.6rem,3.5vw,2.4rem);
+  }
+  .fit-form{display:grid;gap:1.3rem;max-width:34rem;margin-top:1.4rem}
+  .fit-group{display:flex;flex-direction:column;gap:.5rem}
+  .fit-group>span{font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim)}
+  .fit-radios{display:flex;flex-direction:column;gap:.55rem}
+  .fit-radios label{display:flex;align-items:center;gap:.6rem;font-size:.95rem;color:var(--ink-dim);cursor:pointer}
+  .fit-radios input{accent-color:var(--ember)}
+  .fit-form select{
+    font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);
+    border-radius:5px;padding:.7em .8em;width:100%;max-width:16rem;
+  }
+  .fit-form select:focus{border-color:var(--ember);outline:none;box-shadow:0 0 0 3px rgba(255,138,48,.18)}
+  .fit-result{margin-top:1.8rem;padding-top:1.6rem;border-top:1px solid var(--line-soft);display:none}
+  .fit-result.is-visible{display:block}
+  .fit-result-tier{font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ember);margin-bottom:.5rem}
+  .fit-result h3{margin-bottom:.5rem}
+  .fit-result p{color:var(--ink-dim);margin-top:.5rem}
+  .fit-result .case-cta{margin-top:1.3rem}
+
+  /* showcase */
+  .case{
+    margin-top:2.6rem;position:relative;overflow:hidden;
+    background:linear-gradient(160deg,rgba(255,138,48,.13),rgba(255,138,48,.03) 55%),var(--surface);
+    border:1px solid var(--glass-edge);border-radius:12px;
+    box-shadow:var(--glass-glow);
+    padding:clamp(1.6rem,3.5vw,2.4rem);
+    display:grid;gap:clamp(1.6rem,4vw,2.6rem);
+  }
+  .case::before{
+    content:"";position:absolute;inset:0 -45%;pointer-events:none;z-index:0;
+    background:linear-gradient(118deg,transparent 46%,rgba(255,238,220,.13) 54%,transparent 62%);
+    transform:translateX(calc(-20% + var(--sy,0) * .022));will-change:transform;
+  }
+  .case > *{position:relative;z-index:1}
+  @media (min-width:860px){ .case{grid-template-columns:1.05fr 1fr;align-items:start} }
+  .case-head h3{font-size:1.5rem}
+  .case-kicker{
+    font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--ember);margin-bottom:.7rem;
+  }
+  .case-head > p{margin-top:.9rem;color:var(--ink-dim)}
+  .case-specs{
+    list-style:none;padding:0;margin:1.5rem 0 0;
+    display:flex;flex-wrap:wrap;gap:.5rem;
+  }
+  .case-specs li{
+    font-family:"IBM Plex Mono",monospace;font-size:.74rem;
+    color:var(--ink-dim);border:1px solid var(--line);border-radius:999px;
+    padding:.32em .8em;
+  }
+  .case-cta{margin-top:1.6rem;display:flex;flex-wrap:wrap;gap:.8rem;align-items:center}
+  .case-note{margin-top:.9rem;font-size:.82rem;color:var(--ink-faint);max-width:44ch}
+
+  /* launcher */
+  .launcher{
+    margin-top:2.6rem;
+    background:var(--panel),var(--surface);border:1px solid var(--line);border-radius:12px;
+    box-shadow:var(--panel-edge);
+    padding:clamp(1.6rem,3.5vw,2.4rem);
+    display:grid;gap:clamp(1.4rem,4vw,2.4rem);
+  }
+  @media (min-width:760px){ .launcher{grid-template-columns:1fr auto;align-items:start} }
+  .launcher-body{margin-top:1rem;color:var(--ink-dim);font-size:.95rem;max-width:54ch}
+  .launcher-buy{display:flex;flex-direction:column;gap:.9rem;min-width:min(15rem,100%)}
+  @media (min-width:760px){
+    .launcher-buy{border-left:1px solid var(--line);padding-left:clamp(1.4rem,3vw,2rem)}
+  }
+  .launcher-buy .price{margin:0}
+  .btn[disabled]{opacity:.5;cursor:not-allowed}
+  .buy-soon{font-size:.8rem;color:var(--ink-faint)}
+  .buy-soon a{color:var(--ember-soft)}
+
+  .caps{display:grid;gap:1.1rem}
+  .cap{display:grid;grid-template-columns:auto 1fr;gap:.5rem 1rem;align-items:start}
+  .cap svg{width:22px;height:22px;color:var(--ember);margin-top:.15rem}
+  .cap h4{margin:0;font-family:"Archivo",sans-serif;font-size:1rem;font-weight:700}
+  .cap p{margin:.2rem 0 0;color:var(--ink-dim);font-size:.92rem;grid-column:2}
+
+  .section-note{margin-top:1rem;color:var(--ink-dim);max-width:54ch}
+
+  /* contact */
+  .contact-grid{display:grid;grid-template-columns:1fr;gap:clamp(2rem,5vw,3.5rem)}
+  .contact-intro>p{margin-top:1rem;color:var(--ink-dim);max-width:46ch}
+  .contact-facts{list-style:none;padding:0;margin:1.8rem 0 0;display:flex;flex-direction:column;gap:.85rem;font-size:.95rem}
+  .contact-facts li{display:flex;flex-direction:column;gap:.15rem}
+  .contact-facts li>span{font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint)}
+
+  .booking{
+    background:var(--panel),var(--surface);border:1px solid var(--line);border-radius:10px;
+    box-shadow:var(--panel-edge);
+    padding:clamp(1.4rem,3vw,2rem);display:flex;flex-direction:column;gap:1.1rem;
+  }
+  .field{display:flex;flex-direction:column;gap:.4rem}
+  .field label{font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim)}
+  .field input,.field select,.field textarea{
+    font:inherit;color:var(--ink);background:var(--bg);
+    border:1px solid var(--line);border-radius:5px;padding:.7em .8em;width:100%;
+  }
+  .field textarea{resize:vertical;min-height:6.5em}
+  .field input:focus,.field select:focus,.field textarea:focus{
+    border-color:var(--ember);outline:none;box-shadow:0 0 0 3px rgba(255,138,48,.18);
+  }
+  .form-status{font-size:.9rem;margin:.2rem 0 0;min-height:1.2em}
+  .form-status.is-err{color:#ffa47c}
+  .form-status.is-ok{color:var(--ink-dim)}
+
+  @media (min-width:820px){
+    .contact-grid{grid-template-columns:1fr 1fr;align-items:start}
+  }
+
+  /* footer */
+  .site-footer{border-top:1px solid var(--line);background:var(--panel),var(--surface)}
+  .footer-inner{padding-block:clamp(2.5rem,6vw,4rem);display:grid;gap:2rem}
+  .footer-brand{display:flex;align-items:center;gap:.55rem;font-family:"Archivo",sans-serif;font-weight:800}
+  .footer-cols{display:grid;gap:1.5rem;grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+  .footer-cols span{display:block;font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:.45rem}
+  .footer-cols div{color:var(--ink-dim);font-size:.92rem;line-height:1.7}
+  .footer-legal{margin:0;color:var(--ink-faint);font-size:.82rem;border-top:1px solid var(--line-soft);padding-top:1.5rem}
+
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *{animation-duration:.001ms!important;transition-duration:.001ms!important}
+    .rig.is-rec::after,.case::before,body::after{animation:none!important}
+  }
+</style>
+<meta name="description" content="I ran local AI on four M4 Macs, from 16GB to 48GB. Here's what each RAM tier can really do, and whether you actually need 128GB to run local models.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://cloakforgeai.com/blog/mac-ram-local-ai/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Cloak Forge">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="How Much RAM Do You Need for Local AI on a Mac?">
+<meta property="og:description" content="I ran local AI on four M4 Macs, from 16GB to 48GB. Here's what each RAM tier can really do, and whether you actually need 128GB to run local models.">
+<meta property="og:url" content="https://cloakforgeai.com/blog/mac-ram-local-ai/">
+<meta property="og:image" content="https://cloakforgeai.com/media/mac-mini-og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Jonathan Hansraj holding a sealed Apple Mac mini box">
+<meta property="article:published_time" content="2026-10-19">
+<meta property="article:modified_time" content="2026-10-19">
+<meta property="article:author" content="Jonathan Hansraj">
+<meta name="author" content="Jonathan Hansraj">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How Much RAM Do You Need for Local AI on a Mac?">
+<meta name="twitter:description" content="I ran local AI on four M4 Macs, from 16GB to 48GB. Here's what each RAM tier can really do, and whether you actually need 128GB to run local models.">
+<meta name="twitter:image" content="https://cloakforgeai.com/media/mac-mini-og.jpg">
+<meta name="twitter:image:alt" content="Jonathan Hansraj holding a sealed Apple Mac mini box">
+<link rel="icon" href="../../favicon.ico?v=2" sizes="32x32">
+<link rel="icon" href="../../favicon.svg?v=2" type="image/svg+xml">
+<link rel="icon" href="../../favicon-192.png?v=2" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="../../apple-touch-icon.png?v=2">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "LocalBusiness",
+   "@id": "https://cloakforgeai.com/#organization",
+   "name": "Cloak Forge",
+   "alternateName": "Cloak Forge AI",
+   "url": "https://cloakforgeai.com/",
+   "address": {
+    "@type": "PostalAddress",
+    "addressRegion": "NY",
+    "addressCountry": "US"
+   },
+   "areaServed": [
+    {
+     "@type": "AdministrativeArea",
+     "name": "Rockland County, New York"
+    },
+    {
+     "@type": "Place",
+     "name": "Hudson Valley, New York"
+    },
+    {
+     "@type": "Country",
+     "name": "United States",
+     "description": "Remote setup, done-for-you processing, mail-in SSD service and tutoring"
+    }
+   ],
+   "logo": {
+    "@type": "ImageObject",
+    "url": "https://cloakforgeai.com/logo.png",
+    "width": 512,
+    "height": 512
+   },
+   "image": "https://cloakforgeai.com/og-image.png",
+   "description": "Cloak Forge builds private AI automations that run on the customer's own Apple Silicon Mac, with no cloud AI service, plus remote setup, done-for-you processing, mail-in SSD processing, tutoring, and the Cloak Forge Launcher app.",
+   "email": "jonsagent8@gmail.com",
+   "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "customer service",
+    "email": "jonsagent8@gmail.com",
+    "availableLanguage": "English"
+   },
+   "knowsAbout": [
+    "Local AI",
+    "On-device large language models",
+    "AI automation",
+    "Apple Silicon",
+    "Ollama",
+    "Data privacy"
+   ],
+   "makesOffer": [
+    {
+     "@type": "Offer",
+     "itemOffered": {
+      "@type": "Service",
+      "name": "Remote setup",
+      "description": "A custom AI automation built and tested by Cloak Forge, then sent to you ready to run on your Apple Silicon Mac.",
+      "provider": {
+       "@id": "https://cloakforgeai.com/#organization"
+      }
+     },
+     "priceSpecification": {
+      "@type": "UnitPriceSpecification",
+      "priceCurrency": "USD",
+      "minPrice": 400
+     }
+    },
+    {
+     "@type": "Offer",
+     "itemOffered": {
+      "@type": "Service",
+      "name": "Done-for-you processing",
+      "description": "Send your documents or data and Cloak Forge runs them through local AI on its own Mac, then sends back the results. Quoted per job.",
+      "provider": {
+       "@id": "https://cloakforgeai.com/#organization"
+      }
+     }
+    },
+    {
+     "@type": "Offer",
+     "itemOffered": {
+      "@type": "Service",
+      "name": "Mail-in SSD service",
+      "description": "Ship an encrypted SSD; it is processed on an air-gapped machine and returned with the results. No copies retained.",
+      "provider": {
+       "@id": "https://cloakforgeai.com/#organization"
+      }
+     },
+     "priceSpecification": {
+      "@type": "UnitPriceSpecification",
+      "priceCurrency": "USD",
+      "minPrice": 650
+     }
+    },
+    {
+     "@type": "Offer",
+     "itemOffered": {
+      "@type": "Service",
+      "name": "One-on-one tutoring",
+      "description": "Learn to run local AI yourself on your own Apple Silicon Mac.",
+      "provider": {
+       "@id": "https://cloakforgeai.com/#organization"
+      }
+     },
+     "priceSpecification": {
+      "@type": "UnitPriceSpecification",
+      "priceCurrency": "USD",
+      "price": 250,
+      "unitText": "hour"
+     }
+    }
+   ]
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://cloakforgeai.com/#website",
+   "url": "https://cloakforgeai.com/",
+   "name": "Cloak Forge",
+   "inLanguage": "en",
+   "publisher": {
+    "@id": "https://cloakforgeai.com/#organization"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "@id": "https://cloakforgeai.com/blog/mac-ram-local-ai/#breadcrumb",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Home",
+     "item": "https://cloakforgeai.com/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Blog",
+     "item": "https://cloakforgeai.com/blog/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 3,
+     "name": "How Much RAM Do You Need for Local AI on a Mac?",
+     "item": "https://cloakforgeai.com/blog/mac-ram-local-ai/"
+    }
+   ]
+  },
+  {
+   "@type": "BlogPosting",
+   "@id": "https://cloakforgeai.com/blog/mac-ram-local-ai/#article",
+   "headline": "How Much RAM Do You Need to Run Local AI on a Mac?",
+   "description": "I ran local AI on four M4 Macs, from 16GB to 48GB. Here's what each RAM tier can really do, and whether you actually need 128GB to run local models.",
+   "inLanguage": "en",
+   "author": {
+    "@type": "Person",
+    "name": "Jonathan Hansraj",
+    "url": "https://cloakforgeai.com/"
+   },
+   "publisher": {
+    "@id": "https://cloakforgeai.com/#organization"
+   },
+   "datePublished": "2026-10-19",
+   "dateModified": "2026-10-19",
+   "image": {
+    "@type": "ImageObject",
+    "url": "https://cloakforgeai.com/media/mac-mini-box-local-ai.webp",
+    "width": 900,
+    "height": 1200
+   },
+   "mainEntityOfPage": {
+    "@id": "https://cloakforgeai.com/blog/mac-ram-local-ai/#webpage"
+   },
+   "isPartOf": {
+    "@id": "https://cloakforgeai.com/#website"
+   }
+  },
+  {
+   "@type": "FAQPage",
+   "@id": "https://cloakforgeai.com/blog/mac-ram-local-ai/#faq",
+   "isPartOf": {
+    "@id": "https://cloakforgeai.com/blog/mac-ram-local-ai/#webpage"
+   },
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "Can a 16GB Mac run local AI?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes, small 7–8B models for chat. Expect short context and unreliable tool use."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Is 32GB enough for local LLMs?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "For lighter work, yes. It runs 27–32B models that can handle file tasks and tool use, but there’s little memory left for long documents or other apps. If you can stretch your budget, I’d strongly recommend 48GB. It runs the same models with far more room to work."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Do I need 128GB to run local AI on a Mac?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "No. 128GB helps with 70B+ models and very long context, but it’s not required for useful local AI."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Can I upgrade RAM on an Apple Silicon Mac later?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "No. Unified memory is fixed when you buy the Mac."
+     }
+    }
+   ]
+  },
+  {
+   "@type": "WebPage",
+   "@id": "https://cloakforgeai.com/blog/mac-ram-local-ai/#webpage",
+   "url": "https://cloakforgeai.com/blog/mac-ram-local-ai/",
+   "name": "How Much RAM Do You Need for Local AI on a Mac?",
+   "description": "I ran local AI on four M4 Macs, from 16GB to 48GB. Here's what each RAM tier can really do, and whether you actually need 128GB to run local models.",
+   "inLanguage": "en",
+   "isPartOf": {
+    "@id": "https://cloakforgeai.com/#website"
+   },
+   "about": {
+    "@id": "https://cloakforgeai.com/#organization"
+   },
+   "primaryImageOfPage": {
+    "@type": "ImageObject",
+    "url": "https://cloakforgeai.com/media/mac-mini-box-local-ai.webp"
+   },
+   "breadcrumb": {
+    "@id": "https://cloakforgeai.com/blog/mac-ram-local-ai/#breadcrumb"
+   },
+   "mainEntity": {
+    "@id": "https://cloakforgeai.com/blog/mac-ram-local-ai/#article"
+   }
+  }
+ ]
+}
+</script>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "e941dd285d8a4e43ab0842e58bb7b24b"}'></script><!-- End Cloudflare Web Analytics -->
+</head>
+<body>
+<style>
+  .post > *,.post .faq > *{max-width:72ch}
+  .post > .mem{max-width:none}
+  .post p,.post li{color:var(--ink-dim)}
+  .post p+p{margin-top:1rem}
+  .post h2{margin-top:3rem;margin-bottom:.9rem;font-size:1.45rem}
+  .post ul,.post ol{padding-left:1.2rem;display:flex;flex-direction:column;gap:.55rem;margin:1rem 0}
+  .post strong{color:var(--ink)}
+  .post a{color:var(--ember-soft)}
+  .post .mem{margin-top:1.4rem;margin-bottom:1.2rem}
+  .post .mem table{min-width:720px}
+  .post .mem thead th{white-space:normal;line-height:1.5}
+  .post .mem th:nth-child(1){width:8rem}
+  .post .mem th:nth-child(2){width:11rem}
+  .post .updated{font-family:"IBM Plex Mono",monospace;font-size:.8rem;color:var(--ink-faint);margin-top:.6rem}
+  .post h3{margin-top:2rem;margin-bottom:.6rem;font-size:1.12rem}
+  .post .mem.ran th:nth-child(1){width:13rem}
+  .post .mem.ran th:nth-child(2){width:13rem}
+  .post .photo{margin:1.6rem 0;max-width:420px}
+  .post .photo img{display:block;width:100%;height:auto;border-radius:12px;border:1px solid var(--line)}
+  .post .photo figcaption{margin-top:.6rem;font-size:.86rem;color:var(--ink-faint)}
+  .post .ai-note{margin-top:3rem;padding:1rem 1.2rem;border:1px solid var(--line);border-left:3px solid var(--ember-soft);border-radius:8px;background:var(--surface);color:var(--ink-dim);font-size:.92rem}
+</style>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a href="../.././" class="wordmark" aria-label="Cloak Forge home">
+      <svg width="24" height="24" viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M50 4c4 16 16 24 24 36 6 9 9 17 9 26 0 17-14 30-33 30S17 83 17 66c0-11 5-20 12-28 1 8 4 13 9 16-2-20 4-36 12-50z M50 50a8 8 0 0 0-4.6 14.5L42 82h16l-3.4-17.5A8 8 0 0 0 50 50z"/></svg>
+      <span>Cloak Forge</span>
+    </a>
+    <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="site-nav" id="site-nav" aria-label="Primary">
+      <a href="../../about.html">About</a>
+      <a href="../../offerings.html">What we offer</a>
+      <a href="../../launcher.html">Launcher</a>
+      <a href="../../blog/">Blog</a>
+    </nav>
+    <a href="../../offerings.html#contact" class="btn btn-primary btn-sm">Get in touch</a>
+  </div>
+</header>
+
+<main>
+  <article class="section" style="border-top:0">
+    <div class="wrap post">
+      <p class="eyebrow">Blog</p>
+      <h1>How Much RAM Do You Need to Run Local AI on a Mac?</h1>
+      <p class="updated">Last updated <time datetime="2026-10-19">October 19, 2026</time></p>
+
+      <h2>The short answer</h2>
+      <p>You don&rsquo;t need 128GB to do real work with local AI on a Mac. In my experience, 32GB is where local models stop being a toy and start being useful.</p>
+      <p>I keep seeing people online say 128GB is the &ldquo;optimal&rdquo; number for local models. I get why. More memory means bigger models. But I&rsquo;ve bought and returned my way through four Macs running local AI: a 16GB Mac mini, a 24GB MacBook Air, a 32GB MacBook Pro, and now a 48GB Mac mini. The jumps between those tiers were bigger than any spec sheet would tell you.</p>
+      <p>This post walks through what each RAM tier actually gets you on Apple Silicon, based on what I&rsquo;ve run myself and what the math says. If you&rsquo;re about to spend money on a Mac for local AI, this is the post I wish I&rsquo;d read first.</p>
+
+      <h2>Why RAM is the whole game on Apple Silicon</h2>
+      <p>On a Mac, the model has to fit in memory or it doesn&rsquo;t run. Apple Silicon uses unified memory, so the CPU and GPU share one pool. That&rsquo;s why Macs are good at local AI, and it&rsquo;s also why the memory you pick at checkout is the ceiling forever. You can&rsquo;t upgrade it later.</p>
+      <p>Three things eat that memory:</p>
+      <ul>
+        <li><strong>The model weights.</strong> A rough rule: at 4-bit quantization (the common Q4 setting), a model needs a bit over half a gigabyte per billion parameters. An 8B model is about 5GB. A 32B model is about 19&ndash;20GB. A 70B model at Q4_K_M is about 42.5GB (<a href="https://aiindigo.com/hardware/apple-m5-max-128gb">source</a>).</li>
+        <li><strong>The context window.</strong> Every token the model is holding in its head (your prompt, files it read, tool results, its own replies) takes memory too. Long context on a big model can cost several more gigabytes.</li>
+        <li><strong>macOS and your other apps.</strong> The system reserves a chunk of unified memory, so the GPU can only use part of it. On smaller Macs that&rsquo;s roughly two-thirds; on bigger ones closer to three-quarters (approximate, and it can be adjusted).</li>
+      </ul>
+      <p>So a model that &ldquo;fits&rdquo; on paper can still leave you with almost no room for context. That&rsquo;s exactly what happened to me on 16GB.</p>
+
+      <h2>My 16GB Mac mini: it could chat, and that&rsquo;s about it</h2>
+      <p>My first local AI setup was a 16GB M4 Mac mini. I loaded a small model, one of the largest it could realistically handle, and got it running.</p>
+      <figure class="photo">
+        <img src="../../media/mac-mini-box-local-ai.webp" width="900" height="1200" loading="lazy" decoding="async" alt="Jonathan Hansraj holding a sealed Apple Mac mini box, the 16GB M4 Mac mini he first used to run local AI models">
+        <figcaption>Picking up my Mac mini, the machine I first tried running local LLMs on.</figcaption>
+      </figure>
+      <p>It worked, technically. It could go back and forth with me for a couple of messages. But the context window was tiny. Anything longer than a short conversation and it started losing the thread.</p>
+      <p>The real dealbreaker was tool use. I wanted the model to actually do things: read files, run commands, act like an agent. On 16GB, tool use didn&rsquo;t work even slightly. The model was too small to follow tool instructions reliably, and there wasn&rsquo;t enough memory left over for the context those tools need.</p>
+      <p>If all you want is a private chatbot for quick questions, 16GB can do that. If you want an assistant that works on your files, it can&rsquo;t.</p>
+      <p>Even as a chatbot, there&rsquo;s a catch. A 7&ndash;8B model is less capable to begin with, and with so little room for context it loses track fast. Beyond simple back-and-forth, the answers get inconsistent and unreliable.</p>
+      <p>What I did find is that a small model can handle more complex tasks when it&rsquo;s built into code or an application, instead of being used as an open-ended assistant. The program does the heavy lifting: it hands the model one small, well-defined job at a time and checks what comes back. That&rsquo;s a real option for smaller Macs, but it&rsquo;s much more technical, you have to know what you&rsquo;re doing, and the results still vary. Still, if you&rsquo;re stuck on 16GB, you&rsquo;ll get more out of local AI by coding it into a program than by chatting with it.</p>
+      <p>Even so, I don&rsquo;t recommend a 16GB Mac if you want to use local models seriously. Workarounds help, but they don&rsquo;t change the ceiling.</p>
+
+      <h2>My 24GB MacBook Air: I hit the wall on day one</h2>
+      <p>Next I tried a 24GB M4 MacBook Air. I loaded a Qwen model, and I hit the RAM wall on the very first day.</p>
+      <p>24GB sounds like a solid upgrade over 16GB. But once the model loads, there&rsquo;s very little room left for context, and agent work needs a lot of context. For what I wanted to do, it wasn&rsquo;t enough.</p>
+
+      <h2>My 32GB MacBook Pro: night and day</h2>
+      <p>Then I moved to a 32GB M4 MacBook Pro. On paper that&rsquo;s just double the memory. In practice it was night and day.</p>
+      <p>With 32GB I could run 32B models, and they could create, change and organize my folders with ease. I&rsquo;d point the model at a directory and it would parse through it, usually pretty accurately. That&rsquo;s the moment local AI went from a demo to something I actually use for work.</p>
+      <p>On 32GB I&rsquo;ve run real automations: file management, PDF creation through a headless browser, and scheduled directory jobs. It handles them, but the browser shares the same memory as the model, so it&rsquo;s tight.</p>
+      <p>It wasn&rsquo;t perfect. Sometimes it hallucinated about what it had done. One test I ran: I asked it to make 100 documents, each about a different animal. It told me it was done. When I checked, 80 of the 100 files didn&rsquo;t contain anything about the animal at all. It had written the instructions for the task into each file instead of doing the task.</p>
+      <p>It did fix it in the end once I pointed it out. But that taught me the most important rule for local agents: <strong>check the output, not the model&rsquo;s summary of the output.</strong> A model saying &ldquo;done&rdquo; and the work being done are two different things.</p>
+      <p>Why such a big jump from 16GB to 32GB? A 32B model at 4-bit is roughly 20GB. On 16GB that&rsquo;s impossible. On 32GB it fits, with a little room left for context and tools. Model size is what unlocks reliable tool use, and 32GB is the first tier where those mid-size models fit.</p>
+
+      <h2>Where I landed: a 48GB Mac mini</h2>
+      <p>Today I run a 48GB M4 Pro Mac mini. I picked it because it was a good deal: a model a year or two old, with a lot of memory for the price.</p>
+      <p>The surprise was that I didn&rsquo;t need a bigger model. I ran the same Qwen 32B-class model I&rsquo;d used on 32GB, and it got much better. Tool use became robust, and it could hold a lot more context: longer sessions, more files, more tool results, without falling apart.</p>
+      <p>The math explains it. A 32B model at 4-bit takes roughly 20GB just to load. On a 32GB Mac, macOS only lets the GPU use part of the memory, so after the model loads there&rsquo;s very little left for context. On 48GB there&rsquo;s roughly 15GB more headroom, and tool-heavy agent work eats context fast: every tool definition, file it reads, and result it gets back takes up space. Same model, much more room to work.</p>
+      <p>48GB also lets me load a 70B-class model, but I can&rsquo;t use it with tools. The one I run is a mixture-of-experts model that takes about 28GB. macOS only lets the GPU use part of the 48GB, so once it loads there&rsquo;s very little left for context, and tools need a lot of it. It runs, but it&rsquo;s not an agent. For real work on 48GB, a 32B model with room to breathe beats a 70B-class model that barely fits.</p>
+      <p>That&rsquo;s a strategy worth copying. For local AI, RAM matters more than having the newest chip. An older Mac with more memory will often beat a newer one with less. For most people, this is the setup I&rsquo;d recommend for value. If you want to do serious work, 48GB and up is where local AI starts to feel professional-grade. My own next step is somewhere between 128GB and 256GB, and the reason is specific: I build local AI systems for other people, which means running several models at the same time and actually using that 70B-class model with tools, not just loading it. That&rsquo;s exactly the kind of work those bigger tiers are for. If you&rsquo;re one person running one agent, you probably don&rsquo;t need it.</p>
+
+      <h2>What I actually ran on each Mac</h2>
+      <p>Here&rsquo;s the short version of my own four machines, before the general breakdown.</p>
+      <div class="mem ran">
+        <table>
+          <thead><tr><th>Mac</th><th>Model I ran</th><th>What happened</th></tr></thead>
+          <tbody>
+            <tr><td>16GB M4 Mac mini</td><td>Small model (around 7&ndash;8B)</td><td>Short chats only. Tiny context, tool use didn&rsquo;t work.</td></tr>
+            <tr><td>24GB M4 MacBook Air</td><td>A Qwen model</td><td>Hit the RAM wall on day one. Too little room for context.</td></tr>
+            <tr><td>32GB M4 MacBook Pro</td><td>32B models</td><td>Reliable file and folder tasks. Still needed checking (80 of 100 files wrong once).</td></tr>
+            <tr><td>48GB M4 Pro Mac mini</td><td>Qwen 32B-class</td><td>Same model size as 32GB, but robust tool use and much longer context.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>What each RAM tier can run</h2>
+      <p>Here&rsquo;s how I&rsquo;d break it down. Model sizes assume 4-bit quantization; the &ldquo;good for&rdquo; column mixes my own experience (16GB, 24GB, 32GB, 48GB) with the memory math for the tiers I haven&rsquo;t owned.</p>
+      <div class="mem">
+        <table>
+          <thead><tr><th>Unified memory</th><th>Largest comfortable model</th><th>Good for</th><th>Current Macs with this option (Oct 2026)</th></tr></thead>
+          <tbody>
+            <tr><td>16GB</td><td>7&ndash;8B</td><td>Private chat, short Q&amp;A. Small context, unreliable tool use.</td><td>Mac mini M6 (base), 14-inch MacBook Pro M5 (base)</td></tr>
+            <tr><td>24GB</td><td>~14B</td><td>Better chat, light coding help, simple tools with care.</td><td>Mac mini M6, 14-inch MacBook Pro M5, Mac mini M5 Pro (base), MacBook Pro M5 Pro (base)</td></tr>
+            <tr><td>32GB</td><td>27&ndash;32B</td><td>Real agent work: file and folder tasks, tool use, coding.</td><td>Mac mini M6 (max), 14-inch MacBook Pro M5 (max)</td></tr>
+            <tr><td>48GB</td><td>32B with long context</td><td>Same models as 32GB, with room for big documents and longer sessions. The sweet spot.</td><td>Mac mini M5 Pro, MacBook Pro M5 Pro, Mac Studio M5 Max</td></tr>
+            <tr><td>64GB</td><td>70B (tight)</td><td>Larger models, or 32B models plus other apps running.</td><td>Mac mini M5 Pro (max), MacBook Pro M5 Pro (max), Mac Studio M5 Max</td></tr>
+            <tr><td>128GB</td><td>70B with long context, large mixture-of-experts models</td><td>Running several models at once, very long context, bigger open models.</td><td>MacBook Pro M5 Max (max), Mac Studio M5 Max (max)</td></tr>
+            <tr><td>256&ndash;512GB</td><td>The largest open-weight models</td><td>Research, serving a team, frontier-size models locally.</td><td>Mac Studio M5 Ultra</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>For reference: the <a href="https://www.iclarified.com/102336/new-mac-mini-and-mac-studio-models-are-now-available">Mac mini M6 starts at 16GB and tops out at 32GB, and the M5 Pro Mac mini goes up to 64GB</a> (sources list its in-between options slightly differently, so check Apple&rsquo;s configurator). On the <a href="https://www.apple.com/macbook-pro/specs/">MacBook Pro</a>, the 14-inch M5 comes with 16, 24 or 32GB, the M5 Pro tops out at 64GB, and only the M5 Max reaches 128GB. The <a href="https://fstoppers.com/gear/apples-new-mac-studio-gets-m5-ultra-512-gb-memory-and-thunderbolt-5-904270">Mac Studio M5 Max maxes out at 128GB and the M5 Ultra at 512GB</a>; some Mac Studio delivery dates have slipped, so check current availability before you buy.</p>
+
+      <h2>So is 128GB the magic number?</h2>
+      <p>For most people, no. 128GB isn&rsquo;t optimal, it&rsquo;s comfortable. It lets you run 70B-class models with long context, or keep a couple of models loaded at once. That&rsquo;s great if you need it.</p>
+      <p>But it&rsquo;s also expensive. A <a href="https://aiindigo.com/hardware/apple-m5-max-128gb">Mac Studio M5 Max with 128GB was listed around $5,099</a> in early October. The Mac mini M6 maxes out at 32GB and starts at $899 before upgrades.</p>
+      <p>Here&rsquo;s how I&rsquo;d think about it:</p>
+      <ul>
+        <li><strong>You want a private chatbot:</strong> 16&ndash;24GB is fine for low-context use.</li>
+        <li><strong>You want an agent that works on your files and runs tools:</strong> get at least 32GB. This is where I saw the biggest jump.</li>
+        <li><strong>You work with huge documents, long sessions, or want 70B models:</strong> 64GB.</li>
+        <li><strong>You&rsquo;re running multiple agents, serving a team, or chasing the biggest open models:</strong> 128GB and up.</li>
+      </ul>
+      <p>The jump from 16GB to 32GB changed what I could do. The jump from 32GB to 128GB mostly changes how big and how long. Spend accordingly.</p>
+
+      <h2>What I&rsquo;d tell anyone starting out</h2>
+      <ol>
+        <li><strong>Buy more RAM than you think.</strong> Memory is fixed at purchase. Storage you can add externally; RAM you can&rsquo;t.</li>
+        <li><strong>Pick the biggest model that leaves room for context.</strong> A model that barely fits is worse than a slightly smaller one with breathing room, especially for tool use.</li>
+        <li><strong>Use 4-bit quantized models.</strong> They&rsquo;re the practical default for running bigger models in less memory.</li>
+        <li><strong>Verify agent work.</strong> Open the files. Count them. Spot-check them. My 80-out-of-100 lesson is real.</li>
+        <li><strong>Close the heavy apps.</strong> Browsers and editors share the same memory pool as your model.</li>
+      </ol>
+
+      <h2>Bottom line</h2>
+      <p>32GB is the minimum I&rsquo;d recommend for local AI that does real work. 128GB is great, but it&rsquo;s a luxury tier, not a requirement.</p>
+      <p>At Cloak Forge AI, I build private, local AI systems that run on hardware you own, with no cloud dependency. If you&rsquo;re trying to figure out what Mac to buy or how to set up a local agent on the one you have, <a href="../../offerings.html#contact">get in touch</a>.</p>
+
+      <section class="faq">
+        <h2>FAQ</h2>
+        <h3>Can a 16GB Mac run local AI?</h3>
+        <p>Yes, small 7&ndash;8B models for chat. Expect short context and unreliable tool use.</p>
+        <h3>Is 32GB enough for local LLMs?</h3>
+        <p>For lighter work, yes. It runs 27&ndash;32B models that can handle file tasks and tool use, but there&rsquo;s little memory left for long documents or other apps. If you can stretch your budget, I&rsquo;d strongly recommend 48GB. It runs the same models with far more room to work.</p>
+        <h3>Do I need 128GB to run local AI on a Mac?</h3>
+        <p>No. 128GB helps with 70B+ models and very long context, but it&rsquo;s not required for useful local AI.</p>
+        <h3>Can I upgrade RAM on an Apple Silicon Mac later?</h3>
+        <p>No. Unified memory is fixed when you buy the Mac.</p>
+      </section>
+
+      <p class="ai-note"><em>The testing and experiences here are my own. I used AI to help organize and edit the writing, and I checked the facts against the sources below.</em></p>
+
+      <h2>Sources</h2>
+      <ul>
+        <li><a href="https://www.iclarified.com/102336/new-mac-mini-and-mac-studio-models-are-now-available">iClarified: New Mac mini and Mac Studio models are now available</a></li>
+        <li><a href="https://www.apple.com/macbook-pro/specs/">Apple: MacBook Pro technical specifications</a></li>
+        <li><a href="https://fstoppers.com/gear/apples-new-mac-studio-gets-m5-ultra-512-gb-memory-and-thunderbolt-5-904270">Fstoppers: Mac Studio gets M5 Ultra and 512GB memory</a></li>
+        <li><a href="https://aiindigo.com/hardware/apple-m5-max-128gb">AI Indigo: Apple M5 Max 128GB</a></li>
+        <li><a href="https://www.macworld.com/article/3140334">Macworld: M6 or M5 Pro Mac mini</a></li>
+      </ul>
+    </div>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <a href="../.././" class="footer-brand" style="color:inherit;text-decoration:none">
+      <svg width="24" height="24" viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M50 4c4 16 16 24 24 36 6 9 9 17 9 26 0 17-14 30-33 30S17 83 17 66c0-11 5-20 12-28 1 8 4 13 9 16-2-20 4-36 12-50z M50 50a8 8 0 0 0-4.6 14.5L42 82h16l-3.4-17.5A8 8 0 0 0 50 50z"/></svg>
+      <span>Cloak Forge</span>
+    </a>
+    <div class="footer-cols">
+      <div><span>Pages</span><a href="../../about.html">About</a><br><a href="../../offerings.html">What we offer</a></div>
+      <div><span>Products</span><a href="../../launcher.html">Launcher</a><br><a href="../../email.html">Cloak Forge Email</a></div>
+      <div><span>Contact</span><a href="mailto:jonsagent8@gmail.com">jonsagent8@gmail.com</a><br><a href="../../offerings.html#contact">Get in touch</a></div>
+      <div><span>Legal</span><a href="../../privacy.html">Privacy</a></div>
+    </div>
+    <p class="footer-legal">&copy; 2026 Cloak Forge &middot; Local AI automation, set up on your machine &middot; No cloud, by design.</p>
+  </div>
+</footer>
+</body>
+</html>

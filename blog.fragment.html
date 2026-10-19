@@ -1,0 +1,26 @@
+<style>
+  .blog > *{max-width:72ch}
+  .blog .lead{color:var(--ink-dim);margin-top:.6rem}
+  .posts{list-style:none;padding:0;margin-top:2.4rem;display:flex;flex-direction:column;gap:1.25rem}
+  .posts li{padding:1.4rem 1.3rem;border:1px solid var(--line);border-radius:12px;background:var(--panel),var(--surface)}
+  .posts time{display:block;font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--ink-faint);margin-bottom:.45rem}
+  .posts h2{font-size:1.2rem;margin-bottom:.45rem}
+  .posts h2 a{color:var(--ink);text-decoration:none}
+  .posts h2 a:hover{color:var(--ember-soft)}
+  .posts p{color:var(--ink-dim);font-size:.95rem}
+</style>
+
+<header class="site-header"></header>
+
+<main>
+  <section class="section" style="border-top:0">
+    <div class="wrap blog">
+      <p class="eyebrow">Blog</p>
+      <h1>Cloak Forge blog</h1>
+      <p class="lead">Notes from running local AI on Apple Silicon Macs.</p>
+      {{POST_LIST}}
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer"></footer>

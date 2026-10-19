@@ -1,0 +1,723 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cloak Forge Blog: Running Local AI on Apple Silicon Macs</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#081132">
+<link rel="stylesheet" href="../fonts/google-fonts.css">
+
+<style>
+  :root{
+    /* Tanzanite-blue metallic */
+    --bg:#0a1428;
+    --surface:#122140;
+    --surface-2:#182a52;
+    --ink:#f1eee7;
+    --ink-dim:#aeb9cf;
+    --ink-faint:#7484a1;
+    --ember:#ff8a33;
+    --ember-soft:#ffab66;
+    --steel:#93a8bd;
+    --line:#223a5c;
+    --line-soft:#172845;
+
+    /* the same deep-space navy as the hero, used for the whole page */
+    --paint:
+      radial-gradient(1100px 760px at 80% -6%,#0e1c40 0%,#081029 46%,transparent 72%),
+      radial-gradient(1000px 900px at 4% 106%,#060a1e 0%,transparent 58%),
+      linear-gradient(174deg,#080e26 0%,#05091a 55%,#040610 100%);
+    /* metal plate: soft top-left highlight falling to a shadowed base — no lines */
+    --panel:
+      radial-gradient(130% 100% at 14% -8%,rgba(128,166,222,.13),transparent 52%),
+      linear-gradient(162deg,rgba(108,146,210,.08) 0%,rgba(255,255,255,0) 30%,rgba(0,0,0,.10) 72%,rgba(0,0,0,.22) 100%);
+    --panel-edge:
+      inset 0 1px 0 rgba(180,200,236,.24),
+      inset 0 -1px 0 rgba(0,0,0,.5),
+      0 16px 34px -16px rgba(0,0,0,.6);
+
+    /* tinted orange glass — luminous, translucent, backlit */
+    --glass:linear-gradient(135deg,rgba(255,158,72,.5),rgba(255,142,62,.2) 55%,rgba(255,180,104,.36));
+    --glass-edge:rgba(255,190,124,.55);
+    --glass-inset:inset 0 1px 0 rgba(255,226,198,.5),inset 0 0 70px rgba(255,150,60,.22);
+    --glass-glow:0 26px 80px -28px rgba(255,142,56,.55);
+    --glass-sheen:linear-gradient(115deg,transparent 38%,rgba(255,244,230,.2) 46%,transparent 54%);
+    color-scheme:dark;
+  }
+
+  *,*::before,*::after{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  #top{scroll-margin-top:5rem}
+
+  body{
+    margin:0;
+    background:#070c26;
+    color:var(--ink);
+    font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
+    font-size:1rem;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  /* the page's fixed deep-space background */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;
+    background:var(--paint);
+    background-size:cover;
+  }
+  /* fixed light: a soft top highlight + a gentle edge vignette so text stays legible */
+  body::after{
+    content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background:
+      radial-gradient(1000px 700px at 24% 12%,rgba(120,162,222,.10),transparent 60%),
+      radial-gradient(1400px 1100px at 50% 60%,transparent 40%,rgba(6,10,32,.5) 100%);
+  }
+  @keyframes sheen{
+    0%,100%{filter:opacity(.72)}
+    50%{filter:opacity(1)}
+  }
+  img{max-width:100%;display:block}
+  a{color:var(--ember-soft);text-decoration:none}
+  a:hover{text-decoration:underline}
+  :focus-visible{outline:2px solid var(--steel);outline-offset:3px;border-radius:2px}
+
+  .wrap{max-width:1080px;margin:0 auto;padding-inline:clamp(1.25rem,5vw,2rem)}
+  .section{padding-block:clamp(4rem,10vw,7rem);border-top:1px solid var(--line-soft)}
+
+  .eyebrow{
+    font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:.72rem;font-weight:500;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--ember);margin:0 0 1.1rem;
+  }
+  h1,h2,h3{font-family:"Archivo",system-ui,sans-serif;text-wrap:balance;margin:0}
+  h1{font-size:clamp(2.5rem,6.2vw,4.5rem);font-weight:800;line-height:1.02;letter-spacing:-.022em}
+  h2{font-size:clamp(1.8rem,3.6vw,2.6rem);font-weight:700;line-height:1.08;letter-spacing:-.015em}
+  h3{font-size:1.24rem;font-weight:700;letter-spacing:-.01em}
+  p{margin:0}
+
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:.5em;
+    font-family:"IBM Plex Sans",sans-serif;font-size:.98rem;font-weight:600;
+    line-height:1;padding:.85em 1.4em;border-radius:4px;border:1px solid transparent;
+    cursor:pointer;text-align:center;
+    transition:transform .12s ease,box-shadow .2s ease,background .2s ease,border-color .2s ease,color .2s ease;
+  }
+  .btn-primary{
+    background:linear-gradient(180deg,#ffa457,#f2761f);color:#241004;
+    box-shadow:inset 0 1px 0 rgba(255,226,198,.55),0 8px 24px -10px rgba(255,140,56,.5);
+  }
+  .btn-primary:hover{
+    background:linear-gradient(180deg,#ffb474,#ff8a33);transform:translateY(-1px);
+    box-shadow:inset 0 1px 0 rgba(255,234,212,.6),0 14px 40px -12px rgba(255,142,56,.62);text-decoration:none;
+  }
+  .btn-ghost{background:transparent;color:var(--ember-soft);border-color:var(--line)}
+  .btn-ghost:hover{border-color:var(--ember);background:rgba(255,138,48,.1);text-decoration:none}
+  .btn-block{width:100%}
+  .btn-sm{padding:.6em 1.05em;font-size:.88rem}
+
+  /* header */
+  .site-header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(11,26,48,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line-soft);
+  }
+  .header-inner{display:flex;align-items:center;gap:1rem;padding-block:.8rem}
+  .wordmark{display:inline-flex;align-items:center;gap:.55rem;color:var(--ink);font-family:"Archivo",sans-serif;font-weight:800;font-size:1.02rem}
+  .wordmark:hover{text-decoration:none}
+  .wordmark svg,.footer-brand svg{color:var(--ember)}
+  .wordmark svg{width:36px;height:36px;transform:translateY(-6px)} /* lift so the keyhole, not the flame, sits on the text line */
+  @media (max-width:480px){
+    /* keep logo, Menu and the CTA on one row on phones */
+    .wordmark svg{width:28px;height:28px;transform:translateY(-4px)}
+    .header-inner .btn-sm{padding:.45rem .75rem;font-size:.82rem}
+    .nav-toggle{padding:.4rem .6rem}
+  }
+
+  /* primary nav */
+  .site-nav{display:flex;flex-wrap:wrap;gap:1.5rem;align-items:center;flex:1}
+  .site-nav a{color:var(--ink-dim);font-family:"IBM Plex Sans",sans-serif;font-size:.92rem;font-weight:500}
+  .site-nav a:hover{color:var(--ink);text-decoration:none}
+  .nav-toggle{
+    display:none;background:transparent;border:1px solid var(--line);color:var(--ink);
+    font-family:"IBM Plex Sans",sans-serif;font-size:.85rem;font-weight:600;
+    padding:.5em .9em;border-radius:5px;cursor:pointer;
+  }
+  .nav-toggle:hover{border-color:var(--ember)}
+  @media (max-width:900px){
+    .header-inner{flex-wrap:wrap}
+    .wordmark{order:1}
+    .nav-toggle{display:inline-flex;order:2}
+    .header-inner>.btn{order:3}
+    .site-nav{
+      order:4;flex:1 1 100%;flex-direction:column;align-items:flex-start;gap:.9rem;
+      max-height:0;overflow:hidden;opacity:0;transition:max-height .2s ease,opacity .2s ease;
+    }
+    .site-nav.is-open{max-height:22rem;opacity:1;padding-top:.6rem;padding-bottom:.2rem}
+  }
+
+  /* hero — deep space with a flowing ribbon of light */
+  .hero{
+    position:relative;overflow:hidden;
+    background:
+      radial-gradient(1100px 720px at 80% 6%,#0e1c40 0%,#081029 46%,transparent 72%),
+      radial-gradient(1000px 900px at 6% 116%,#060a1e 0%,transparent 56%),
+      linear-gradient(174deg,#060b1e 0%,#040814 58%,#03040a 100%);
+  }
+  /* soft hand-off into the page below */
+
+
+
+  /* hero video — a real waterfall, graded to the navy palette; the left side is
+     darkened so the headline reads, with a faint forge glow at the base */
+  .hero-video{position:absolute;inset:0;z-index:0;overflow:hidden;background:#040814 url(../media/waterfall-poster.jpg) center/cover no-repeat}
+  .hero-video video{display:block;width:100%;height:100%;object-fit:cover}
+  .hero-video::after{
+    content:"";position:absolute;inset:0;
+    background:
+      linear-gradient(90deg,rgba(4,8,20,.94) 0%,rgba(4,8,20,.82) 32%,rgba(4,8,20,.34) 62%,rgba(4,8,20,.5) 100%),
+      linear-gradient(180deg,rgba(4,8,20,.55) 0%,transparent 26%),
+      radial-gradient(55% 40% at 70% 104%,rgba(255,138,51,.2),transparent 70%);
+  }
+  .hero-side b,.hero-side span{text-shadow:0 1px 3px rgba(4,8,20,.95),0 0 18px rgba(4,8,20,.9)}
+  .hero .hero-side span{color:var(--ink-dim)}
+  /* orange-tinted glass panels around the hero text. On desktop the padding is
+     cancelled by an equal negative margin, so the panels grow outward and the
+     hero (and the video framing) stays exactly the same size */
+  .hero-main,.hero-side div{
+    background:linear-gradient(135deg,rgba(255,146,58,.3),rgba(255,138,51,.12) 55%,rgba(255,170,92,.24)),rgba(8,12,28,.5);
+    border-radius:14px;
+    box-shadow:inset 0 0 60px rgba(255,138,51,.12),0 24px 60px -28px rgba(255,138,51,.6);
+    -webkit-backdrop-filter:blur(10px) saturate(1.15);backdrop-filter:blur(10px) saturate(1.15);
+  }
+  .hero-main{padding:1.5rem 1.4rem}
+  @media (min-width:920px){
+    .hero .hero-main{padding:2rem 2.2rem;margin:-2rem -2.2rem;max-width:calc(34rem + 4.4rem)}
+    .hero-side div{padding:.6rem 1.1rem;margin:-.6rem -1.1rem}
+  }
+  @media (max-width:919px){
+    .hero-video{background-image:url(../media/waterfall-poster-portrait.jpg)}
+    .hero-video::after{background:linear-gradient(180deg,rgba(4,8,20,.3),rgba(4,8,20,.5) 60%,rgba(4,8,20,.62))}
+  }
+
+  /* the same waterfall turned on its side, twice: the left copy flows right and
+     the right copy is its mirror, so the two streams meet in the middle. It runs
+     behind the open band under the hero and the two sections below it */
+  /* the zone slides up under the hero's bottom padding and fades in there, so the
+     two waterfalls blend with no gap */
+  .river-zone{position:relative;z-index:1;margin-top:calc(-1 * clamp(4rem,9vw,6rem));pointer-events:none}
+  .river-zone > .section{position:relative;z-index:1;border-top:0;pointer-events:auto}
+  .river-gap{height:calc(clamp(200px,24vw,340px) + clamp(4rem,9vw,6rem))}
+  .river{position:absolute;inset:0;z-index:0;display:grid;grid-template-columns:1fr 1fr;overflow:hidden;
+    pointer-events:none;
+    -webkit-mask:linear-gradient(transparent,#000 clamp(4rem,9vw,6rem),#000 88%,transparent);mask:linear-gradient(transparent,#000 clamp(4rem,9vw,6rem),#000 88%,transparent)}
+  .river-half{position:relative;overflow:hidden;container-type:size}
+  .river-half.mirror{transform:scaleX(-1);margin-left:-1px}
+  .river-half video{
+    /* sized in the half's own units, then turned 90deg: its width becomes the zone's height */
+    position:absolute;top:50%;left:50%;width:calc(100cqh + 8px);height:calc(100cqw + 8px);object-fit:cover;
+    transform:translate(-50%,-50%) rotate(-90deg);
+    background:#040814 url(../media/waterfall-poster.jpg) center/cover no-repeat;
+  }
+  .river::before{
+    content:"";position:absolute;top:0;bottom:0;left:calc(50% - 28px);width:56px;z-index:1;pointer-events:none;
+    -webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px);
+    -webkit-mask:linear-gradient(90deg,transparent,#000 35%,#000 65%,transparent);mask:linear-gradient(90deg,transparent,#000 35%,#000 65%,transparent);
+  }
+  .river::after{
+    content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+    background:
+      linear-gradient(180deg,rgba(4,8,20,0) 0,rgba(4,8,20,.08) clamp(160px,18vw,280px),rgba(4,8,20,.66) clamp(330px,34vw,520px),rgba(4,8,20,.66) 100%),
+      linear-gradient(90deg,rgba(4,8,20,.5),rgba(4,8,20,.08) 30%,rgba(4,8,20,.08) 70%,rgba(4,8,20,.5));
+  }
+
+  .hero-content{position:relative;z-index:2;padding-block:clamp(7rem,17vw,11rem) clamp(4rem,9vw,6rem)}
+  .hero-grid{display:grid;gap:2.4rem}
+  @media (min-width:920px){
+    .hero-grid{grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:3.4rem}
+  }
+  .hero-main{max-width:34rem}
+  .hero h1{font-size:clamp(2rem,4vw,3rem);line-height:1.08}
+  .lead{margin-top:1.5rem;font-size:clamp(1.05rem,1.6vw,1.26rem);color:var(--ink-dim);max-width:46ch}
+  .hero-cta{margin-top:2.3rem;display:flex;flex-wrap:wrap;gap:.9rem}
+
+  /* right-side labels, echoing the reference's cover text */
+  .hero-side{display:flex;flex-direction:column;gap:1.6rem;text-align:right}
+  .hero-side div{display:flex;flex-direction:column;gap:.22rem}
+  .hero-side b{font-family:"Archivo",sans-serif;font-weight:700;font-size:.94rem;color:var(--ink)}
+  .hero-side span{
+    font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink-faint);
+  }
+  @media (max-width:919px){ .hero-side{display:none} }
+
+  /* services */
+  .cards{margin-top:2.6rem;display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(255px,1fr))}
+  .card{
+    display:flex;flex-direction:column;gap:.85rem;
+    background:var(--panel),var(--surface);border:1px solid var(--line);border-radius:10px;padding:1.7rem;
+    box-shadow:var(--panel-edge);
+    transition:transform .15s ease,border-color .2s ease;
+  }
+  .card:hover{
+    transform:translateY(-3px);border-color:rgba(255,158,80,.42);
+    background:
+      radial-gradient(130% 100% at 14% -8%,rgba(170,208,255,.26),transparent 52%),
+      linear-gradient(162deg,rgba(140,182,255,.14) 0%,rgba(255,255,255,0) 30%,rgba(0,0,0,.10) 72%,rgba(0,0,0,.22) 100%),
+      var(--surface);
+  }
+  .card-kicker{font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ember)}
+  .card-desc{color:var(--ink-dim);font-size:.96rem}
+  .price{margin-top:auto;padding-top:.5rem;display:flex;flex-direction:column;gap:.15rem}
+  .price-num{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:1.5rem;color:var(--ink);font-variant-numeric:tabular-nums}
+  .price-unit{font-size:.82rem;color:var(--ink-faint)}
+  .card .btn{margin-top:.5rem}
+
+  /* why-local */
+  .benefits{margin-top:2.6rem;display:grid;gap:2rem;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+  .benefit{display:flex;flex-direction:column;gap:.7rem}
+  .benefit svg{width:30px;height:30px;color:var(--ember)}
+  .benefit h3{font-size:1.12rem}
+  .benefit p{color:var(--ink-dim);font-size:.96rem}
+  .benefit .alt{
+    margin-top:.2rem;padding-left:.9rem;border-left:2px solid var(--line);
+    color:var(--ink-faint);font-size:.92rem;
+  }
+  .benefit .alt b{color:var(--ink-dim);font-weight:600}
+
+  /* hardware */
+  .hw-intro{margin-top:1rem;color:var(--ink-dim);max-width:60ch}
+  .mem{margin-top:2.6rem;overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--panel),var(--surface);box-shadow:var(--panel-edge)}
+  .mem table{border-collapse:collapse;width:100%;min-width:660px;font-size:.95rem;table-layout:fixed}
+  .mem col.c-mem{width:12rem}
+  .mem col.c-fit{width:12rem}
+  .mem th,.mem td{text-align:left;padding:.95rem 1.15rem;border-bottom:1px solid var(--line-soft);vertical-align:top}
+  .mem thead th{
+    font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--ember);background:var(--surface);white-space:nowrap;
+  }
+  .mem tbody tr:last-child td{border-bottom:0}
+  .mem tbody tr:hover td{background:var(--surface-2)}
+  .mem .m-cap{
+    font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;
+    color:var(--ink);white-space:nowrap;font-weight:500;
+  }
+  .mem .m-mid{color:var(--ink-dim)}
+  .mem .m-note{color:var(--ink-dim)}
+
+  .rigs{margin-top:1.75rem;display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+  .rig{
+    background:var(--panel),var(--surface);border:1px solid var(--line);border-radius:10px;
+    box-shadow:var(--panel-edge);
+    padding:1.7rem;display:flex;flex-direction:column;gap:.65rem;
+  }
+  .rig.is-rec{
+    border-color:var(--glass-edge);
+    background:var(--glass),var(--surface);
+    box-shadow:var(--glass-inset),var(--glass-glow);
+    position:relative;overflow:hidden;
+  }
+  .rig.is-rec::after{
+    content:"";position:absolute;inset:0 -45%;pointer-events:none;z-index:0;background:var(--glass-sheen);
+    transform:translateX(calc(-22% + var(--sy,0) * .028));will-change:transform;
+  }
+  .rig.is-rec > *{position:relative;z-index:1}
+  .rig.is-rec p{color:#ece3d6}
+  .rig-tag{font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ember)}
+  .rig h3{font-size:1.1rem}
+  .rig p{color:var(--ink-dim);font-size:.95rem}
+  .rig p + p{margin-top:.15rem}
+  .hw-foot{margin-top:1.9rem;color:var(--ink-dim);max-width:58ch;font-size:.96rem}
+
+  /* fit checker */
+  .spec-tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1.8rem}
+  .spec-tab{
+    font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;
+    padding:.55em 1.1em;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink-dim);cursor:pointer;
+  }
+  .spec-tab:hover{border-color:var(--ember)}
+  .spec-tab.is-active{background:var(--surface-2);border-color:var(--ember);color:var(--ink)}
+  .spec-panel{display:none;margin-top:1.4rem}
+  .spec-panel.is-active{display:block}
+  .spec-panel ol{margin:0;padding-left:1.3rem;display:flex;flex-direction:column;gap:.6rem;color:var(--ink-dim);font-size:.95rem}
+  .spec-panel code{font-family:"IBM Plex Mono",monospace;font-size:.88em;background:var(--surface-2);padding:.1em .4em;border-radius:3px;color:var(--ink)}
+
+  .fit-tool{
+    margin-top:2.6rem;background:var(--panel),var(--surface);border:1px solid var(--line);border-radius:12px;
+    box-shadow:var(--panel-edge);padding:clamp(1.6rem,3.5vw,2.4rem);
+  }
+  .fit-form{display:grid;gap:1.3rem;max-width:34rem;margin-top:1.4rem}
+  .fit-group{display:flex;flex-direction:column;gap:.5rem}
+  .fit-group>span{font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim)}
+  .fit-radios{display:flex;flex-direction:column;gap:.55rem}
+  .fit-radios label{display:flex;align-items:center;gap:.6rem;font-size:.95rem;color:var(--ink-dim);cursor:pointer}
+  .fit-radios input{accent-color:var(--ember)}
+  .fit-form select{
+    font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);
+    border-radius:5px;padding:.7em .8em;width:100%;max-width:16rem;
+  }
+  .fit-form select:focus{border-color:var(--ember);outline:none;box-shadow:0 0 0 3px rgba(255,138,48,.18)}
+  .fit-result{margin-top:1.8rem;padding-top:1.6rem;border-top:1px solid var(--line-soft);display:none}
+  .fit-result.is-visible{display:block}
+  .fit-result-tier{font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ember);margin-bottom:.5rem}
+  .fit-result h3{margin-bottom:.5rem}
+  .fit-result p{color:var(--ink-dim);margin-top:.5rem}
+  .fit-result .case-cta{margin-top:1.3rem}
+
+  /* showcase */
+  .case{
+    margin-top:2.6rem;position:relative;overflow:hidden;
+    background:linear-gradient(160deg,rgba(255,138,48,.13),rgba(255,138,48,.03) 55%),var(--surface);
+    border:1px solid var(--glass-edge);border-radius:12px;
+    box-shadow:var(--glass-glow);
+    padding:clamp(1.6rem,3.5vw,2.4rem);
+    display:grid;gap:clamp(1.6rem,4vw,2.6rem);
+  }
+  .case::before{
+    content:"";position:absolute;inset:0 -45%;pointer-events:none;z-index:0;
+    background:linear-gradient(118deg,transparent 46%,rgba(255,238,220,.13) 54%,transparent 62%);
+    transform:translateX(calc(-20% + var(--sy,0) * .022));will-change:transform;
+  }
+  .case > *{position:relative;z-index:1}
+  @media (min-width:860px){ .case{grid-template-columns:1.05fr 1fr;align-items:start} }
+  .case-head h3{font-size:1.5rem}
+  .case-kicker{
+    font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--ember);margin-bottom:.7rem;
+  }
+  .case-head > p{margin-top:.9rem;color:var(--ink-dim)}
+  .case-specs{
+    list-style:none;padding:0;margin:1.5rem 0 0;
+    display:flex;flex-wrap:wrap;gap:.5rem;
+  }
+  .case-specs li{
+    font-family:"IBM Plex Mono",monospace;font-size:.74rem;
+    color:var(--ink-dim);border:1px solid var(--line);border-radius:999px;
+    padding:.32em .8em;
+  }
+  .case-cta{margin-top:1.6rem;display:flex;flex-wrap:wrap;gap:.8rem;align-items:center}
+  .case-note{margin-top:.9rem;font-size:.82rem;color:var(--ink-faint);max-width:44ch}
+
+  /* launcher */
+  .launcher{
+    margin-top:2.6rem;
+    background:var(--panel),var(--surface);border:1px solid var(--line);border-radius:12px;
+    box-shadow:var(--panel-edge);
+    padding:clamp(1.6rem,3.5vw,2.4rem);
+    display:grid;gap:clamp(1.4rem,4vw,2.4rem);
+  }
+  @media (min-width:760px){ .launcher{grid-template-columns:1fr auto;align-items:start} }
+  .launcher-body{margin-top:1rem;color:var(--ink-dim);font-size:.95rem;max-width:54ch}
+  .launcher-buy{display:flex;flex-direction:column;gap:.9rem;min-width:min(15rem,100%)}
+  @media (min-width:760px){
+    .launcher-buy{border-left:1px solid var(--line);padding-left:clamp(1.4rem,3vw,2rem)}
+  }
+  .launcher-buy .price{margin:0}
+  .btn[disabled]{opacity:.5;cursor:not-allowed}
+  .buy-soon{font-size:.8rem;color:var(--ink-faint)}
+  .buy-soon a{color:var(--ember-soft)}
+
+  .caps{display:grid;gap:1.1rem}
+  .cap{display:grid;grid-template-columns:auto 1fr;gap:.5rem 1rem;align-items:start}
+  .cap svg{width:22px;height:22px;color:var(--ember);margin-top:.15rem}
+  .cap h4{margin:0;font-family:"Archivo",sans-serif;font-size:1rem;font-weight:700}
+  .cap p{margin:.2rem 0 0;color:var(--ink-dim);font-size:.92rem;grid-column:2}
+
+  .section-note{margin-top:1rem;color:var(--ink-dim);max-width:54ch}
+
+  /* contact */
+  .contact-grid{display:grid;grid-template-columns:1fr;gap:clamp(2rem,5vw,3.5rem)}
+  .contact-intro>p{margin-top:1rem;color:var(--ink-dim);max-width:46ch}
+  .contact-facts{list-style:none;padding:0;margin:1.8rem 0 0;display:flex;flex-direction:column;gap:.85rem;font-size:.95rem}
+  .contact-facts li{display:flex;flex-direction:column;gap:.15rem}
+  .contact-facts li>span{font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint)}
+
+  .booking{
+    background:var(--panel),var(--surface);border:1px solid var(--line);border-radius:10px;
+    box-shadow:var(--panel-edge);
+    padding:clamp(1.4rem,3vw,2rem);display:flex;flex-direction:column;gap:1.1rem;
+  }
+  .field{display:flex;flex-direction:column;gap:.4rem}
+  .field label{font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim)}
+  .field input,.field select,.field textarea{
+    font:inherit;color:var(--ink);background:var(--bg);
+    border:1px solid var(--line);border-radius:5px;padding:.7em .8em;width:100%;
+  }
+  .field textarea{resize:vertical;min-height:6.5em}
+  .field input:focus,.field select:focus,.field textarea:focus{
+    border-color:var(--ember);outline:none;box-shadow:0 0 0 3px rgba(255,138,48,.18);
+  }
+  .form-status{font-size:.9rem;margin:.2rem 0 0;min-height:1.2em}
+  .form-status.is-err{color:#ffa47c}
+  .form-status.is-ok{color:var(--ink-dim)}
+
+  @media (min-width:820px){
+    .contact-grid{grid-template-columns:1fr 1fr;align-items:start}
+  }
+
+  /* footer */
+  .site-footer{border-top:1px solid var(--line);background:var(--panel),var(--surface)}
+  .footer-inner{padding-block:clamp(2.5rem,6vw,4rem);display:grid;gap:2rem}
+  .footer-brand{display:flex;align-items:center;gap:.55rem;font-family:"Archivo",sans-serif;font-weight:800}
+  .footer-cols{display:grid;gap:1.5rem;grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+  .footer-cols span{display:block;font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:.45rem}
+  .footer-cols div{color:var(--ink-dim);font-size:.92rem;line-height:1.7}
+  .footer-legal{margin:0;color:var(--ink-faint);font-size:.82rem;border-top:1px solid var(--line-soft);padding-top:1.5rem}
+
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *{animation-duration:.001ms!important;transition-duration:.001ms!important}
+    .rig.is-rec::after,.case::before,body::after{animation:none!important}
+  }
+</style>
+<meta name="description" content="Hands-on notes on running local AI on Apple Silicon Macs: how much memory you need, which models each Mac can run, and what works for local agents.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://cloakforgeai.com/blog/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Cloak Forge">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="Cloak Forge Blog: Running Local AI on Apple Silicon Macs">
+<meta property="og:description" content="Hands-on notes on running local AI on Apple Silicon Macs: how much memory you need, which models each Mac can run, and what works for local agents.">
+<meta property="og:url" content="https://cloakforgeai.com/blog/">
+<meta property="og:image" content="https://cloakforgeai.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Cloak Forge: private AI automation, forged on your machine">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cloak Forge Blog: Running Local AI on Apple Silicon Macs">
+<meta name="twitter:description" content="Hands-on notes on running local AI on Apple Silicon Macs: how much memory you need, which models each Mac can run, and what works for local agents.">
+<meta name="twitter:image" content="https://cloakforgeai.com/og-image.png">
+<meta name="twitter:image:alt" content="Cloak Forge: private AI automation, forged on your machine">
+<link rel="icon" href="../favicon.ico?v=2" sizes="32x32">
+<link rel="icon" href="../favicon.svg?v=2" type="image/svg+xml">
+<link rel="icon" href="../favicon-192.png?v=2" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png?v=2">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "LocalBusiness",
+   "@id": "https://cloakforgeai.com/#organization",
+   "name": "Cloak Forge",
+   "alternateName": "Cloak Forge AI",
+   "url": "https://cloakforgeai.com/",
+   "address": {
+    "@type": "PostalAddress",
+    "addressRegion": "NY",
+    "addressCountry": "US"
+   },
+   "areaServed": [
+    {
+     "@type": "AdministrativeArea",
+     "name": "Rockland County, New York"
+    },
+    {
+     "@type": "Place",
+     "name": "Hudson Valley, New York"
+    },
+    {
+     "@type": "Country",
+     "name": "United States",
+     "description": "Remote setup, done-for-you processing, mail-in SSD service and tutoring"
+    }
+   ],
+   "logo": {
+    "@type": "ImageObject",
+    "url": "https://cloakforgeai.com/logo.png",
+    "width": 512,
+    "height": 512
+   },
+   "image": "https://cloakforgeai.com/og-image.png",
+   "description": "Cloak Forge builds private AI automations that run on the customer's own Apple Silicon Mac, with no cloud AI service, plus remote setup, done-for-you processing, mail-in SSD processing, tutoring, and the Cloak Forge Launcher app.",
+   "email": "jonsagent8@gmail.com",
+   "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "customer service",
+    "email": "jonsagent8@gmail.com",
+    "availableLanguage": "English"
+   },
+   "knowsAbout": [
+    "Local AI",
+    "On-device large language models",
+    "AI automation",
+    "Apple Silicon",
+    "Ollama",
+    "Data privacy"
+   ],
+   "makesOffer": [
+    {
+     "@type": "Offer",
+     "itemOffered": {
+      "@type": "Service",
+      "name": "Remote setup",
+      "description": "A custom AI automation built and tested by Cloak Forge, then sent to you ready to run on your Apple Silicon Mac.",
+      "provider": {
+       "@id": "https://cloakforgeai.com/#organization"
+      }
+     },
+     "priceSpecification": {
+      "@type": "UnitPriceSpecification",
+      "priceCurrency": "USD",
+      "minPrice": 400
+     }
+    },
+    {
+     "@type": "Offer",
+     "itemOffered": {
+      "@type": "Service",
+      "name": "Done-for-you processing",
+      "description": "Send your documents or data and Cloak Forge runs them through local AI on its own Mac, then sends back the results. Quoted per job.",
+      "provider": {
+       "@id": "https://cloakforgeai.com/#organization"
+      }
+     }
+    },
+    {
+     "@type": "Offer",
+     "itemOffered": {
+      "@type": "Service",
+      "name": "Mail-in SSD service",
+      "description": "Ship an encrypted SSD; it is processed on an air-gapped machine and returned with the results. No copies retained.",
+      "provider": {
+       "@id": "https://cloakforgeai.com/#organization"
+      }
+     },
+     "priceSpecification": {
+      "@type": "UnitPriceSpecification",
+      "priceCurrency": "USD",
+      "minPrice": 650
+     }
+    },
+    {
+     "@type": "Offer",
+     "itemOffered": {
+      "@type": "Service",
+      "name": "One-on-one tutoring",
+      "description": "Learn to run local AI yourself on your own Apple Silicon Mac.",
+      "provider": {
+       "@id": "https://cloakforgeai.com/#organization"
+      }
+     },
+     "priceSpecification": {
+      "@type": "UnitPriceSpecification",
+      "priceCurrency": "USD",
+      "price": 250,
+      "unitText": "hour"
+     }
+    }
+   ]
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://cloakforgeai.com/#website",
+   "url": "https://cloakforgeai.com/",
+   "name": "Cloak Forge",
+   "inLanguage": "en",
+   "publisher": {
+    "@id": "https://cloakforgeai.com/#organization"
+   }
+  },
+  {
+   "@type": "BreadcrumbList",
+   "@id": "https://cloakforgeai.com/blog/#breadcrumb",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Home",
+     "item": "https://cloakforgeai.com/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Blog",
+     "item": "https://cloakforgeai.com/blog/"
+    }
+   ]
+  },
+  {
+   "@type": "CollectionPage",
+   "@id": "https://cloakforgeai.com/blog/#webpage",
+   "url": "https://cloakforgeai.com/blog/",
+   "name": "Cloak Forge Blog: Running Local AI on Apple Silicon Macs",
+   "description": "Hands-on notes on running local AI on Apple Silicon Macs: how much memory you need, which models each Mac can run, and what works for local agents.",
+   "inLanguage": "en",
+   "isPartOf": {
+    "@id": "https://cloakforgeai.com/#website"
+   },
+   "about": {
+    "@id": "https://cloakforgeai.com/#organization"
+   },
+   "breadcrumb": {
+    "@id": "https://cloakforgeai.com/blog/#breadcrumb"
+   }
+  }
+ ]
+}
+</script>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "e941dd285d8a4e43ab0842e58bb7b24b"}'></script><!-- End Cloudflare Web Analytics -->
+</head>
+<body>
+<style>
+  .blog > *{max-width:72ch}
+  .blog .lead{color:var(--ink-dim);margin-top:.6rem}
+  .posts{list-style:none;padding:0;margin-top:2.4rem;display:flex;flex-direction:column;gap:1.25rem}
+  .posts li{padding:1.4rem 1.3rem;border:1px solid var(--line);border-radius:12px;background:var(--panel),var(--surface)}
+  .posts time{display:block;font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--ink-faint);margin-bottom:.45rem}
+  .posts h2{font-size:1.2rem;margin-bottom:.45rem}
+  .posts h2 a{color:var(--ink);text-decoration:none}
+  .posts h2 a:hover{color:var(--ember-soft)}
+  .posts p{color:var(--ink-dim);font-size:.95rem}
+</style>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a href=".././" class="wordmark" aria-label="Cloak Forge home">
+      <svg width="24" height="24" viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M50 4c4 16 16 24 24 36 6 9 9 17 9 26 0 17-14 30-33 30S17 83 17 66c0-11 5-20 12-28 1 8 4 13 9 16-2-20 4-36 12-50z M50 50a8 8 0 0 0-4.6 14.5L42 82h16l-3.4-17.5A8 8 0 0 0 50 50z"/></svg>
+      <span>Cloak Forge</span>
+    </a>
+    <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="site-nav" id="site-nav" aria-label="Primary">
+      <a href="../about.html">About</a>
+      <a href="../offerings.html">What we offer</a>
+      <a href="../launcher.html">Launcher</a>
+      <a href="../blog/">Blog</a>
+    </nav>
+    <a href="../offerings.html#contact" class="btn btn-primary btn-sm">Get in touch</a>
+  </div>
+</header>
+
+<main>
+  <section class="section" style="border-top:0">
+    <div class="wrap blog">
+      <p class="eyebrow">Blog</p>
+      <h1>Cloak Forge blog</h1>
+      <p class="lead">Notes from running local AI on Apple Silicon Macs.</p>
+      <ul class="posts">
+        <li>
+          <time datetime="2026-10-19">October 19, 2026</time>
+          <h2><a href="../blog/mac-ram-local-ai/">How Much RAM Do You Need to Run Local AI on a Mac?</a></h2>
+          <p>I ran local AI on four M4 Macs, from 16GB to 48GB. Here's what each RAM tier can really do, and whether you actually need 128GB to run local models.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <a href=".././" class="footer-brand" style="color:inherit;text-decoration:none">
+      <svg width="24" height="24" viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M50 4c4 16 16 24 24 36 6 9 9 17 9 26 0 17-14 30-33 30S17 83 17 66c0-11 5-20 12-28 1 8 4 13 9 16-2-20 4-36 12-50z M50 50a8 8 0 0 0-4.6 14.5L42 82h16l-3.4-17.5A8 8 0 0 0 50 50z"/></svg>
+      <span>Cloak Forge</span>
+    </a>
+    <div class="footer-cols">
+      <div><span>Pages</span><a href="../about.html">About</a><br><a href="../offerings.html">What we offer</a></div>
+      <div><span>Products</span><a href="../launcher.html">Launcher</a><br><a href="../email.html">Cloak Forge Email</a></div>
+      <div><span>Contact</span><a href="mailto:jonsagent8@gmail.com">jonsagent8@gmail.com</a><br><a href="../offerings.html#contact">Get in touch</a></div>
+      <div><span>Legal</span><a href="../privacy.html">Privacy</a></div>
+    </div>
+    <p class="footer-legal">&copy; 2026 Cloak Forge &middot; Local AI automation, set up on your machine &middot; No cloud, by design.</p>
+  </div>
+</footer>
+</body>
+</html>

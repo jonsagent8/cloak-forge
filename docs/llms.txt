@@ -21,7 +21,14 @@ Key facts:
 - [Cloak Forge Launcher](https://cloakforgeai.com/launcher.html): $50 one-time, free updates. Buy: https://buy.stripe.com/4gM00c0mobOy6Ov3lGdEs00 A macOS app for Apple Silicon that scans your Mac, picks the largest language model it can run well, and runs it on-device with a bundled Ollama. Includes local chat, Private Mode, and add-on Connections.
 - [Cloak Forge Email](https://cloakforgeai.com/email.html): a Launcher add-on (pricing not yet set). Reads your inbox, drafts replies with the Launcher's local AI, and auto-sends only on rules you turn on.
 
+## Blog
+
+- [Blog](https://cloakforgeai.com/blog/): index of Cloak Forge posts on running local AI on Apple Silicon Macs.
+- [How Much RAM Do You Need to Run Local AI on a Mac?](https://cloakforgeai.com/blog/mac-ram-local-ai/): first-hand results from four M4 Macs (16GB, 24GB, 32GB, 48GB), what each unified-memory tier can run, and why 32GB is the practical minimum for local AI agents.
+
 ## More
 
+- [Home](https://cloakforgeai.com/): private local AI automation for Apple Silicon Macs, with services and products at a glance.
+- [What we offer](https://cloakforgeai.com/offerings.html): services, pricing and the contact form.
 - [About](https://cloakforgeai.com/about.html): what Cloak Forge does, why local AI, which Macs qualify, and what each amount of memory can run.
-- [Privacy](https://cloakforgeai.com/privacy.html): how Private Mode works, its known limits, and what this website collects (no analytics, cookies or tracking).
+- [Privacy](https://cloakforgeai.com/privacy.html): how Private Mode works, its known limits, and what this website collects (cookie-free visit counts via Cloudflare Web Analytics; no cookies or tracking pixels).
